@@ -24,10 +24,11 @@ img{
 }
 
 .login{
+    color: aliceblue;
     position: absolute;
     width:25%;
-    height: 65%;
-    background-color: white;
+    height: 75%;
+    background-image: linear-gradient(270deg,rgba(35, 36, 45, 0.85),rgba(35, 36, 45, 0.90)); 
     border-radius: 2mm;
     transform: translateY(50px);
     padding-top: 50px;
@@ -37,9 +38,16 @@ img{
     align-items: center;
     gap: 40px;
 }
+.header{
+    height: 18%;
+    position: relative;
+
+}
+
 .login_info{
     width: 65%;
-    height: 50%;
+    height: 60%;
+    
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -64,12 +72,12 @@ label {
     margin-bottom: 10px;
 }
   
-input[type="text"],
+input[type="text"],select,
 input[type="password"] {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -96,12 +104,11 @@ input[type="submit"]:hover {
     display: flex;
     justify-content: right;
     margin-bottom: 50px;
-    
 }
 .forgot a{
     text-decoration: none;
-    color: black;
+    color: aliceblue;
 }
 .forgot a:hover{
-    color: blue;
+    color:aqua;
 }
