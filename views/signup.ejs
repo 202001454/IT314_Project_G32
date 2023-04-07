@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MealMind/Sign In</title>
+    <link rel="stylesheet" href="../css/signup_css.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="backimage">
+            <img src="../photos/background_signup.png" class="background">
+        </div>
+        <div class="detail">
+            <div class="signin">
+                <div class="text">
+                    <h3>Start something new</h3>
+                    <h1 class="title">Create New account.</h1>
+                    <div>Already A Member? <a href="./login">Log In</a></div>
+                </div>
+                <form class="detail_form" autocomplete="off" method="post" action="./signup"> 
+
+                    <div class="detail1">
+                        <div class="full_name">
+                            <label for="fullname">Full Name</label><br>
+                            <input type="text" id="fullname" name="fullname" placeholder="Michal" required>
+                        </div>
+                        <div class="image1">
+                            <img src="../photos/contact.png">
+                        </div>
+                    </div>
+                    
+                    <br>
+
+                    <div class="detail1">
+                        <div class="full_name">
+                            <label for="username">User name</label><br>
+                            <input type="text" id="username" name="username" placeholder="Michal1234" required>
+                        </div>
+                        <div class="image1">
+                            <img src="../photos/user.jpg">
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="detail1">
+                        <div class="full_name">
+                            <label for="phone">Phone Number</label><br>
+                            <input type="tel" id="phone" name="phone" placeholder="1234567890" pattern="[0-9]{10}" required>
+                        </div>
+                        <div class="image1">
+                            <img src="../photos/phone.png">
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="detail1">
+                        <div class="full_name">
+                            <label for="email">Email</label><br>
+                            <input type="email" id="email" name="email" size="25" placeholder="MichalJordan123@gmail.com" required>
+                        </div>
+                        <div class="image1">
+                            <img src="../photos/mail.png">
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="oneline">
+                        <div class="detail2">
+                            <div class="full_name">
+                                <label for="role">Role</label>
+                                <select name="role" id="role" required>
+                                    <option value="" selected disabled hidden>Select</option>
+                                    <option value="Customer">Customer</option>
+                                    <option value="cadet">Cadet</option>
+                                    <option value="manager">Manager</option>
+                                </select>
+                            </div>
+                            <div class="image2">
+                                <img src="../photos/role.png">
+                            </div>
+                        </div>
+    
+                        <div class="detail2">
+                            <div class="full_name">
+                                <label for="gender">Gender</label>
+                                <select name="gender" id="Gender" required>
+                                    <option value="" selected disabled hidden>Select</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="image2">
+                                <img src="../photos/gender.png">
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="detail1">
+                        <div class="full_name">
+                            <label for="birthdate">Birthdate</label><br>
+                            <input type="date" id="birthdate" name="birthdate" placeholder="dd/mm/yyyy">
+                        </div>
+                        <div class="image1">
+                            <img src="../photos/birthdate.png">
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="detail1">
+                        <div class="full_name">
+                            <label for="password">Password</label><br>
+                            <input type="password" id="password" name="password" placeholder="*************" required>
+                        </div>
+                        <!-- <div class="image1">
+                            <img src="./photos/p12.png">
+                        </div> -->
+                    </div>
+
+                    <br>
+
+                    <div class="detail1">
+                        <div class="full_name">
+                            <label for="cpassword">Confirm Password</label><br>
+                            <input type="password" id="confirm_password" name="cpassword" placeholder="*************" required>
+                        </div>
+                        <!-- <div class="image1">
+                            <img src="./photos/p12.png">
+                        </div> -->
+                    </div>
+
+                    <br>
+                    <div class="result">
+                        <input type="submit" value="Create account">
+                    </div>
+                    
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
