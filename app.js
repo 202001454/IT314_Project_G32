@@ -65,6 +65,26 @@ app.get('/login', (req, res) => {
 }
 );
 
+app.post('/login', async (req, res) => {
+    try {
+        const username = req.body.username;
+        const password = req.body.password;
+        const role = req.body.role;
+
+        const ok = await User.findOne({ username: username, password: password, role: role });
+        console.log(ok);
+        if (ok) {
+            res.status(201).render('home');
+        } else {
+            res.send("Invalid Login Details");
+        }
+
+
+    } catch (error) {
+        res.status(400);
+    }
+});
+
 app.get('/signup', (req, res) => {
     res.render('signup', { title: 'Signup' });
 }
@@ -100,6 +120,8 @@ app.post('/signup', async (req, res) => {
 
 
 })
+
+
 app.use((req, res) => {
     res.status(404);
     res.render('404', { title: '404' });
