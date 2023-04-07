@@ -1,0 +1,114 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.container{
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    position: relative;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+
+.backimage{
+    width: 100%;
+}
+img{
+    width:100%;
+    position: absolute;
+    object-fit: cover;
+}
+
+.login{
+    color: aliceblue;
+    position: absolute;
+    width:25%;
+    height: 75%;
+    background-image: linear-gradient(270deg,rgba(35, 36, 45, 0.85),rgba(35, 36, 45, 0.90)); 
+    border-radius: 2mm;
+    transform: translateY(50px);
+    padding-top: 50px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-evenly; */
+    align-items: center;
+    gap: 40px;
+}
+.header{
+    height: 18%;
+    position: relative;
+
+}
+
+.login_info{
+    width: 65%;
+    height: 60%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.container1{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
+    margin-top: 10px;
+}
+  
+label {
+    margin-bottom: 10px;
+}
+  
+input[type="text"],select,
+input[type="password"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+input[type="password"]{
+    margin-bottom: 0px;
+}
+  
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+  
+input[type="submit"]:hover {
+    background-color: #3e8e41;
+}
+
+.forgot{
+    display: flex;
+    justify-content: right;
+    margin-bottom: 50px;
+}
+.forgot a{
+    text-decoration: none;
+    color: aliceblue;
+}
+.forgot a:hover{
+    color:aqua;
+}
