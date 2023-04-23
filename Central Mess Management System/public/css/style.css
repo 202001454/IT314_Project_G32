@@ -1,0 +1,35 @@
+.carousel-inner{
+    border-radius: 35px 35px 35px 35px;
+    overflow: hidden;
+}
+
+.card img{
+    height: 250px;
+}
+
+.text{
+    /* padding-top:30px; */
+    color: white;
+    align-items: center;
+    text-align: center;
+    border-radius: 5px;
+    /* font-size: 50px; */
+    background-color: rgb(81, 100, 242);
+    height: 80%;
+    width: 100%;
+    margin:5px;
+}
+.sticky-top{
+    background-color: white;
+    border-radius: 5px;   
+}
+
+a{
+    text-decoration: none;
+}
+
+.make-sticky{
+	position: sticky;
+	top: 16%;
+
+}
