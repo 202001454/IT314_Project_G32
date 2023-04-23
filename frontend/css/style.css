@@ -24,6 +24,20 @@
     border-radius: 5px;   
 }
 
-/* a{
+a{
     text-decoration: none;
-} */
+}
+
+.make-sticky{
+	position: sticky;
+	top: 16%;
+
+}
+p,
+label {
+    font: 1rem 'Fira Sans', sans-serif;
+}
+
+input {
+    margin: 0.4rem;
+}
