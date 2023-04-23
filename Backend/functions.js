@@ -23,6 +23,8 @@ const manager_view_get = async (req,res) => {
 
 }
 
+
+
 const manager_edit_get = async(req,res) => {
     try{
         const {username} = req.params;
@@ -116,3 +118,4 @@ const manager_customercheck_get = async (req,res) => {
     <% } %>
   </body> */}
 }
+
