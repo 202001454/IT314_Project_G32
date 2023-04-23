@@ -37,6 +37,17 @@ router.post('/customer/:username/feedback', authController.customer_feedback_pos
 
 router.get('/customer/:username/paymenthistory', authController.customer_paymenthistory_get);
 
+router.get('/manager/:username', authController.manager_get);
+
+router.get('/manager/:username/edit', authController.manager_edit_get);
+router.patch('/manager/:username/edit', authController.manager_edit_patch);
+
+router.get('/manager/:username/view', authController.manager_view_get);
+
+// router.get('/manager/:username/changepassword', authController.manager_changepassword_get);
+// router.patch('/manager/:username/changepassword', authController.manager_changepassword_patch);
+
+
 router.get('/add-user', authController.add_user_get);
 router.get('/', (req, res) => {
     res.render('home', { title: 'Home' });
