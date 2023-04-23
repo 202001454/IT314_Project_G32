@@ -44,38 +44,31 @@ const manager_edit_get = async(req,res) => {
 const manager_edit_patch = async(req,res) => {
     try {
         const { username } = req.params; // use req.params.username to get the username
-        const customer = await User.findOne({ username: username });
+        const manager = await User.findOne({ username: username ,role : 'manager' });
 
-        customer.password = req.body.password;
-        customer.fullname = req.body.fullname;
-        customer.date = req.body.date;
-        customer.email = req.body.email;
-        customer.phone = req.body.phone;
-        customer.gender = req.body.gender;
-        // console.log(customer);
+        // manager.password = req.body.password;
+        manager.fullname = req.body.fullname;
+        manager.date = req.body.date;
+        manager.email = req.body.email;
+        manager.phone = req.body.phone;
+        manager.gender = req.body.gender;
+        // console.log(manager);
         // res.send(username);
 
-        User.updateOne({ username: username },
-            { $set: { password: req.body.password, fullname: req.body.fullname, date: req.body.date, email: req.body.email, phone: req.body.phone, gender: req.body.gender }, validate: true }).then((result) => {
+        User.updateOne({ username: username,role:'manager'},
+            { $set: { fullname: req.body.fullname, date: req.body.date, email: req.body.email, phone: req.body.phone, gender: req.body.gender }, validate: true })
+            .then((result) => {
                 console.log(result);
-                res.render('customer/index', { customer: customer });
-            }).catch((err) => {
+                res.render('manager/index', { manager: manager });
+            })
+            .catch((err) => {
                 console.log(err);
+                res.send('cannot update');
             }
             );
-
-        // User.save().then((result) => {
-        //     console.log(result);
-        //     res.render('customer/index', { customer: customer });
-        // }).catch((err) => {
-        //     console.log(err);
-        // }
-        // );
-
        
-
     } catch (error) {
         console.log(error);
-        res.send('An error occurred while finding the customer.');
+        res.send('An error occurred while finding the manager.');
     }
 }
