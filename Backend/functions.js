@@ -22,3 +22,21 @@ const manager_view_get = async (req,res) => {
     }
 
 }
+
+const manager_edit_get = async(req,res) => {
+    try{
+        const {username} = req.params;
+        const manager = await User.findOne({username:username,role:'manager'});
+        if(manager)
+        {
+            // res.render('manager/edit',{manager:manager});
+            res.send(manager);
+        }
+        else
+        {
+            res.send("Error occured!");
+        }
+    } catch(error) {
+        res.send("Unable to find Manager");
+    }
+}
