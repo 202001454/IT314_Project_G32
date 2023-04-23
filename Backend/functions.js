@@ -84,10 +84,11 @@ const manager_customercheck_get = async (req,res) => {
             res.render('manager/customercheck',{manager});
         }
         else {
-            res.send('error occured!');
+            res.status(404).send('Manager not found');
         }
     } catch (error) {
         console.log(error);
+        res.status(500).send('Internal server error');
     }
 
     
