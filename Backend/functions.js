@@ -72,3 +72,7 @@ const manager_edit_patch = async(req,res) => {
         res.send('An error occurred while finding the manager.');
     }
 }
+
+const manager_customercheck_get = async (req,res) => {
+    
+}
