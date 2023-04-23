@@ -233,20 +233,20 @@ const manager_inventoryupgrade_patch = async (req,res) => {
 
 const manager_inventorydegrade_patch = async (req,res) => {
     try{
-        const name_ = req.body.name; //of item's
-        const name = name_.toLowerCase();
-        const qty = req.body.qty;// of item's
+        const item_ = req.body.item; //of item's
+        const item = item_.toLowerCase();
+        const quantity = req.body.quantity;// of item's
 
         const username = req.params.username; //manager's
 
-        const inventory = await Inventory.findOne({name:name});//finding inventory
+        const inventory = await Inventory.findOne({item:item});//finding inventory
         const manager = await User.findOne({username:username,role: 'manager'});
         if(inventory && manager)
         {
             //if both found
-            let quantity = (inventory.qty-qty >= 0) ? inventory.qty-qty :0;
+            let qty = (inventory.quantity-quantity >= 0) ? inventory.quantity-quantity :0;
             
-            Inventory.updateOne({name:name}, {$set : {qty:quantity}})
+            Inventory.updateOne({item:item}, {$set : {quantity:qty}})
             .then((result) => {
                 console.log(result);
                 // res.render('manager/inventorydegrade', { manager: manager });
