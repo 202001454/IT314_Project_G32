@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Inventory = require('../models/inventory');
 const Feedback = require('../models/feedback');
 const Payment = require('../models/payment');
 const Paymenthistory = require('../models/paymenthistory');
@@ -575,6 +576,61 @@ const manager_changepassword_patch = async (req, res) => {
     }
 }
 
+const manager_inventoryupgrade_get = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username,role:'manager'});
+        res.render('/manager/inventoryupgrade',{manager});
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+const manager_inventoryupgrade_patch = async (req,res) => {
+    try{
+        const item_ = req.body.item; //of item's
+        const item = item_.toLowerCase();
+        const quantity = req.body.quantity; //of item's quantity'of item's
+        const username = req.params.username; //manager's
+        const inventory = await Inventory.findOne({item:item});//finding inventory
+        const manager = await User.findOne({username:username,role: 'manager'});
+        if(inventory && manager)
+        {
+            //if both found
+            Inventory.updateOne({item:item}, {$set : {quantity:inventory.quantity+quantity}})
+            .then((result) => {
+                console.log(result);
+                // res.render('manager/inventoryupgrade', { manager: manager });
+                res.send("Updated successfully");
+            })
+            .catch((error) => {
+                console.log(error);
+                res.send("In 1st catch");
+            });
+        }
+        else if(manager && (!inventory))
+        {
+            const _inventory = new Inventory({
+                item:item,
+                quantity:quantity
+            });
+            const response = await _inventory.save();
+            // res.render('manager/inventoryupgrade', { manager: manager });
+            res.send("New added");
+        }
+        else
+        {
+            console.log("Error");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 
 
 const add_user_get = (req, res) => {
@@ -627,7 +683,9 @@ module.exports = {
     manager_view_get,
     manager_changepassword_get,
     manager_changepassword_patch,
-    logout_get
-
-
+    logout_get,
+    manager_inventoryupgrade_get,
+    manager_inventoryupgrade_patch,
+    manager_inventorydegrade_get,
+    manager_inventorydegrade_patch
 };

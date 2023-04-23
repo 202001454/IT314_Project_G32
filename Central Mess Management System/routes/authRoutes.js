@@ -48,8 +48,11 @@ router.get('/manager/:username/view', requireAuth, authController.manager_view_g
 router.get('/manager/:username/changepassword', requireAuth, authController.manager_changepassword_get);
 router.patch('/manager/:username/changepassword', requireAuth, authController.manager_changepassword_patch);
 
+router.get('/manager/:username/inventoryupgrade', authController.manager_inventoryupgrade_get);
+router.patch('/manager/:username/inventoryupgrade', authController.manager_inventoryupgrade_patch);
 
-
+// router.get('/manager/:username/inventorydegrade', authController.manager_inventorydegrade_get);
+// router.patch('/manager/:username/inventorydegrade', authController.manager_inventorydegrade_patch);
 
 router.get('/add-user', requireAuth, authController.add_user_get);
 router.get('/logout', authController.logout_get);
