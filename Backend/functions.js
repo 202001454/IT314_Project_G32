@@ -197,6 +197,9 @@ const manager_inventoryupgrade_get = async (req,res) => {
 
 const manager_inventorydegrade_get = async (req,res) => {
     try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username,role:'manager'});
+        res.render('/manager/inventoryupgrade',{manager});
 
     } catch (error) {
         console.log(error);
@@ -217,7 +220,7 @@ const manager_inventoryupgrade_patch = async (req,res) => {
             Inventory.updateOne({name:name}, {$set : {qty:inventory.qty+qty}})
             .then((result) => {
                 console.log(result);
-                // res.render('manager/index', { manager: manager });
+                // res.render('manager/inventoryupgrade', { manager: manager });
                 res.send("Updated successfully");
             })
             .catch((error) => {
