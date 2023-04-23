@@ -76,4 +76,13 @@ const manager_edit_patch = async(req,res) => {
 const manager_customercheck_get = async (req,res) => {
     const today = new Date();
     const data = { currentDate: today };
+    //when I amm requesting for the page , what I have to provide is the things
+    // date from myside
+    // username that I will get
+    // and time duration that I will get
+    //based on what I have to update the database
+
+
+    
+
 }
