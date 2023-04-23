@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 const { json } = require('express');
 const methodoverride = require('method-override');
 const path = require('path');
@@ -50,6 +51,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(static_path));
 app.use(morgan('dev'));
 app.use(methodoverride('_method'));
+app.use(cookieParser());
+
+
+
+
 app.use(authRoutes);
 
 
