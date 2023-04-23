@@ -447,6 +447,27 @@ const manager_edit_patch = async(req,res) => {
 }
 
 
+const manager_view_get = async (req,res) => {
+    try{
+        const {username} = req.params;
+        const manager = await User.findOne({username:username,role:'manager'});
+        if(manager)
+        {
+            // res.render('manager/view',{manager:manager});
+            res.send(manager);
+        }
+        else
+        {
+            res.send('No Manager found.');
+        }
+    } catch(error) {
+        res.send('An error occurred while finding the customer.');
+
+    }
+
+}
+
+
 
 const add_user_get = (req, res) => {
     const user = new User({
@@ -491,7 +512,8 @@ module.exports = {
     customer_paymenthistory_get,
     manager_get,
     manager_edit_get,
-    manager_edit_patch
+    manager_edit_patch,
+    manager_view_get
 
 
 };
