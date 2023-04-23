@@ -320,3 +320,5 @@ const sendVerifyMail = async (name, email, user_id, userrole) => {
         console.log(error.message);
     }
 }
+
+//-> update your below file in authController.js
