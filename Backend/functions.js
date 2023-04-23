@@ -322,3 +322,60 @@ const sendVerifyMail = async (name, email, user_id, userrole) => {
 }
 
 //-> update your below file in authController.js
+const signup_post = async (req, res) => {
+    try {
+        const password = req.body.password;
+        const cpassword = req.body.cpassword;
+
+        //validate password
+        const validpassword = validatepassword(password);
+        if (!validpassword) {
+            res.render('signup', { err: "Password must be between 6 to 16 characters and must contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character" });
+        }
+
+        if (password === cpassword) {
+            const user = new User({
+                fullname: req.body.fullname,
+                username: req.body.username,
+                email: req.body.email,
+                password: req.body.password,
+                phone: req.body.phone,
+                role: req.body.role,
+                gender: req.body.gender,
+                date: req.body.birthdate,
+            });
+            //verify username and email in the database if already exists
+
+            const foundUser = await User.findOne({ username: user.username });
+            console.log(foundUser);
+            if (foundUser) {
+                res.render('signup', { err: "Username already exists" });
+            }
+            const foundEmail = await User.findOne({ email: user.email });
+            console.log(foundEmail);
+
+            if (foundEmail) {
+                res.render('signup', { err: "Email already exists" });
+            }
+
+            //if not exists then save the user in the database
+            user.save().then((result) => {
+                sendVerifyMail(req.body.fullname,req.body.email,result._id,req.body.role);
+                res.status(201).render('login');
+            }).catch((err) => {
+                console.log(err);
+            }
+            );
+        } else {
+            res.send("Password are not matching");
+        }
+
+    } catch (error) {
+        res.status(400);
+        res.send(error);
+    }
+}
+
+
+//--> Update the route as below
+router.get('/verify/:id', authController.verifyMail);
