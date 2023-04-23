@@ -469,6 +469,56 @@ const manager_view_get = async (req,res) => {
 
 
 
+const manager_changepassword_get = async (req, res) => {
+    try {
+        const username = req.params.username; // use req.params.username to get the username
+        const manager = await User.findOne({ username: username, role: 'manager' });
+
+
+        if (manager) {
+
+
+
+            // res.render('manager/changepassword', { manager: manager });
+            res.send(manager);
+        } else {
+            res.send('No manager found.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
+const manager_changepassword_patch = async (req, res) => {
+    try {
+        const { username } = req.params; // use req.params.username to get the username
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        manager.password = req.body.password;
+        const cpassword = req.body.cpassword;
+
+        if (manager.password === cpassword && cpassword) {
+            User.updateOne({ username: username },
+                { $set: { password: req.body.password }, validate: true }).then((result) => {
+                    console.log(result);
+                    res.render('manager/index', { manager: manager });
+                }).catch((err) => {
+                    console.log(err);
+                    res.send(err);
+                }
+                );
+        }
+        else {
+            res.send("Password are not matching");
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
+
+
 const add_user_get = (req, res) => {
     const user = new User({
         fullname: 'Gaurang',
@@ -513,7 +563,9 @@ module.exports = {
     manager_get,
     manager_edit_get,
     manager_edit_patch,
-    manager_view_get
+    manager_view_get,
+    manager_changepassword_get,
+    manager_changepassword_patch
 
 
 };
