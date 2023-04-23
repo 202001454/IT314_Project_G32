@@ -221,12 +221,22 @@ const manager_inventoryupgrade_patch = async (req,res) => {
                 res.send("Updated successfully");
             })
             .catch((error) => {
-                
+                console.log(error);
+                res.send("In 1st catch");
             });
+        }
+        else if(manager && (!Inventory))
+        {
+            const _inventory = new Inventory({
+                name:name,
+                qty:qty
+            });
+            const response = await _inventory.save();
+            res.send("New added");
         }
         else
         {
-            res.send("No manager or inventory found");
+            console.log("Error");
         }
     } catch (error) {
         console.log(error);
