@@ -74,37 +74,37 @@ const manager_edit_patch = async(req,res) => {
 }
 
 const manager_customercheck_get = async (req,res) => {
-    const today = new Date();
-    const data = { currentDate: today };
+    const username = req.params.username;
+    const manager = await User.findOne({username:username, role:'manager'});
+    if(manager)
+    {
+        const today = new Date();
+        const data = { currentDate: today };
+        manager.push({data:data});
+        res.render('manager/customercheck',{manager});
+    }
+    
     //when I amm requesting for the page , what I have to provide is the things
     // date from myside
     // username that I will get
     // and time duration that I will get
     //based on what I have to update the database
 
+    
 
     //here is the html logic for the page that is going to be loaded
-//     <html lang="en">
-// <head>
-//     <meta charset="UTF-8">
-//     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <title>Date</title>
-// </head>
-// <body>
-//     <label for="date">Choose a date:</label>
-//     <input type="date" id="date" name="date" value="<%= currentDate.toISOString().slice(0,10) %>" />
-//     <% var hour = currentDate.getHours(); %>
-//     <% if (hour >= 6 && hour < 10) { %>
-//     <p>It's breakfast time!</p>
-//     <% } else if (hour >= 10 && hour < 14) { %>
-//     <p>It's lunch time!</p>
-//     <% } else if (hour >= 14 && hour < 21) { %>
-//     <p>It's dinner time!</p>
-//     <% } else { %>
-//     <p>It's not meal time.</p>
-//     <% } %>
-// </body>
-// </html>
-
+{/* <body>
+    <label for="date">Choose a date:</label>
+    <input type="date" id="date" name="date" value="<%= manager.currentDate.toISOString().slice(0,10) %>" />
+    <% var hour = manager.currentDate.getHours(); %>
+    <% if (hour >= 6 && hour < 10) { %>
+      <p>It's breakfast time!</p>
+    <% } else if (hour >= 10 && hour < 14) { %>
+      <p>It's lunch time!</p>
+    <% } else if (hour >= 14 && hour < 21) { %>
+      <p>It's dinner time!</p>
+    <% } else { %>
+      <p>It's not meal time.</p>
+    <% } %>
+  </body> */}
 }
