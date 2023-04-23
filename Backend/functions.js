@@ -4,7 +4,7 @@ const Paymenthistory = require('../models/paymenthistory');
 const Feedback = require('../models/feedback');
 
 
-const mamnager_view_get = async (req,res) => {
+const manager_view_get = async (req,res) => {
     try{
         const {username} = req.params;
         const manager = await User.findOne({username:username,role:'manager'});
