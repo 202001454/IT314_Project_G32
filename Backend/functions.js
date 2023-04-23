@@ -171,10 +171,15 @@ const manager_changepassword_patch = async (req, res) => {
 const manager_inventoryupgrade_get = async (req,res) => {
     try {
         //check if the inventory is present or not?
-        
+        // if not then create it
+        // if exist the add this to them
+
+       
+
         const username = req.params.username; // use req.params.username to get the username
-        const manager = await User.findOne({ username: username, role: 'manager' });
-        if (manager) {
+        const manager = await User.findOne({ username: username, role: 'manager' });//we are going to pass this object to function call.
+
+        if (inventory) {
             // res.render('manager/view', { manager: manager });
 
             res.send(manager);
@@ -200,7 +205,18 @@ const manager_inventorydegrade_get = async (req,res) => {
 
 const manager_inventoryupgrade_patch = async (req,res) => {
     try{
-
+        const name = req.body.name; //of item's
+        const username = req.params.username; //manager's
+        const inventory = await Inventory.findOne({name:name});//finding inventory
+        const manager = await User.findOne({username:username,role: 'manager'});
+        if(inventory && manager)
+        {
+            
+        }
+        else
+        {
+            res.send("No manager or inventory found");
+        }
     } catch (error) {
         console.log(error);
     }
