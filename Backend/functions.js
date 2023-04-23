@@ -5,6 +5,19 @@ const Feedback = require('../models/feedback');
 
 
 const mamnager_view_get = async (req,res) => {
-    const {username} = req.params;
-    
+    try{
+        const {username} = req.params;
+        const manager = await User.findOne({username:username,role:'manager'});
+        if(manager)
+        {
+            
+        }
+        else
+        {
+            
+        }
+    } catch(error) {
+        res.send("Unable to find Manager");
+    }
+
 }
