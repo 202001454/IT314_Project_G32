@@ -265,3 +265,48 @@ const manager_inventorydegrade_patch = async (req,res) => {
         console.log(error);
     }
 }
+
+
+//--> start from here
+const nodemailer = require("nodemailer");
+const sendVerifyMail = async (name, email, user_id, userrole) => {
+    try {
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        requireTLS: true,
+        auth: {
+          user: process.env.MAIL,
+          pass: process.env.PASS,
+        },
+      });
+  
+      let mailOptions = {
+        from: process.env.MAIL,
+        to: email,
+        subject: '',
+        html: '',
+      };
+  
+      if (userrole === 'customer') {
+        mailOptions.subject = 'For verification mail';
+        mailOptions.html = `<p>Hii '${name}', please click <a href="http://localhost:3000/verify/${user_id}">here</a> to verify your mail</p>`;
+      } else if (userrole === 'manager') {
+        mailOptions.to = process.env.MANAGER_MAIL;
+        mailOptions.subject = `For verification mail for manager named ${name}`;
+        mailOptions.html = `<p>Dear Manager, ${name} wants to be a manager, please click <a href="http://localhost:3000/verify/${user_id}">here</a> to verify their mail</p>`;
+      } else if (userrole === 'cadet') {
+        mailOptions.to = process.env.MANAGER_MAIL;
+        mailOptions.subject = `For verification mail for cadet named ${name}`;
+        mailOptions.html = `<p>Dear Manager, ${name} wants to be a cadet, please click <a href="http://localhost:3000/verify/${user_id}">here</a> to verify their mail</p>`;
+      } else {
+        throw new Error(`Invalid user role: ${userrole}`);
+      }
+  
+      const info = await transporter.sendMail(mailOptions);
+      console.log(`Email has been sent to ${email}: ${info.messageId}`);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
