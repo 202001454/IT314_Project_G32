@@ -166,3 +166,36 @@ const manager_changepassword_patch = async (req, res) => {
         res.send('An error occurred while finding the manager.');
     }
 }
+
+const manager_inventoryupgrade_get = async (req,res) => {
+    try{
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const manager_inventorydegrade_get = async (req,res) => {
+    try{
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const manager_inventoryupgrade_patch = async (req,res) => {
+    try{
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const manager_inventorydegrade_patch = async (req,res) => {
+    try{
+
+    } catch (error) {
+        console.log(error);
+    }
+}
