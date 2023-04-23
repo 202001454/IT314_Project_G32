@@ -310,3 +310,13 @@ const sendVerifyMail = async (name, email, user_id, userrole) => {
       console.error(error.message);
     }
   };
+
+  const verifyMail = async (req, res) => {
+    try {
+        const updateInfo = await User.updateOne({ _id: req.params.id }, { $set: { isVarified: Boolean(true) } });
+        console.log(updateInfo);
+        res.render('home');
+    } catch (error) {
+        console.log(error.message);
+    }
+}
