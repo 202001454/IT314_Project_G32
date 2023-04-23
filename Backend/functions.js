@@ -179,7 +179,6 @@ const manager_inventoryupgrade_get = async (req,res) => {
     }
 }
 
-
 const manager_inventorydegrade_get = async (req,res) => {
     try{
         const username = req.params.username;
