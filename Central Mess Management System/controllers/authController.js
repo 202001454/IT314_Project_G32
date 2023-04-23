@@ -588,6 +588,16 @@ const manager_inventoryupgrade_get = async (req,res) => {
 }
 
 
+const manager_inventorydegrade_get = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username,role:'manager'});
+        res.render('/manager/inventorydegrade',{manager});
+
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 const manager_inventoryupgrade_patch = async (req,res) => {
     try{
@@ -630,6 +640,40 @@ const manager_inventoryupgrade_patch = async (req,res) => {
     }
 }
 
+const manager_inventorydegrade_patch = async (req,res) => {
+    try{
+        const item_ = req.body.item; //of item's
+        const item = item_.toLowerCase();
+        const quantity = req.body.quantity;// of item's
+
+        const username = req.params.username; //manager's
+
+        const inventory = await Inventory.findOne({item:item});//finding inventory
+        const manager = await User.findOne({username:username,role: 'manager'});
+        if(inventory && manager)
+        {
+            //if both found
+            let qty = (inventory.quantity-quantity >= 0) ? inventory.quantity-quantity :0;
+            
+            Inventory.updateOne({item:item}, {$set : {quantity:qty}})
+            .then((result) => {
+                console.log(result);
+                // res.render('manager/inventorydegrade', { manager: manager });
+                res.send("Updated successfully");
+            })
+            .catch((error) => {
+                console.log(error);
+                res.send("In 1st catch");
+            });
+        }
+        else
+        {
+            console.log("Error");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
 
