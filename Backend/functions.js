@@ -74,15 +74,22 @@ const manager_edit_patch = async(req,res) => {
 }
 
 const manager_customercheck_get = async (req,res) => {
-    const username = req.params.username;
-    const manager = await User.findOne({username:username, role:'manager'});
-    if(manager)
-    {
-        const today = new Date();
-        const data = { currentDate: today };
-        manager.push({data:data});
-        res.render('manager/customercheck',{manager});
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username, role:'manager'});
+        if(manager)
+        {
+            const today = new Date();
+            manager.currentDate = today;
+            res.render('manager/customercheck',{manager});
+        }
+        else {
+            res.send('error occured!');
+        }
+    } catch (error) {
+        console.log(error);
     }
+
     
     //when I amm requesting for the page , what I have to provide is the things
     // date from myside
