@@ -199,7 +199,7 @@ const manager_inventorydegrade_get = async (req,res) => {
     try{
         const username = req.params.username;
         const manager = await User.findOne({username:username,role:'manager'});
-        res.render('/manager/inventoryupgrade',{manager});
+        res.render('/manager/inventorydegrade',{manager});
 
     } catch (error) {
         console.log(error);
