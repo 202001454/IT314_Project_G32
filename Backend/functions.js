@@ -220,6 +220,7 @@ const manager_inventoryupgrade_patch = async (req,res) => {
                 qty:qty
             });
             const response = await _inventory.save();
+            // res.render('manager/inventoryupgrade', { manager: manager });
             res.send("New added");
         }
         else
@@ -233,7 +234,34 @@ const manager_inventoryupgrade_patch = async (req,res) => {
 
 const manager_inventorydegrade_patch = async (req,res) => {
     try{
+        const name_ = req.body.name; //of item's
+        const name = name_.toLowerCase();
+        const qty = req.body.qty;// of item's
 
+        const username = req.params.username; //manager's
+
+        const inventory = await Inventory.findOne({name:name});//finding inventory
+        const manager = await User.findOne({username:username,role: 'manager'});
+        if(inventory && manager)
+        {
+            //if both found
+            let quantity = (inventory.qty-qty >= 0) ? inventory.qty-qty :0;
+            
+            Inventory.updateOne({name:name}, {$set : {qty:quantity}})
+            .then((result) => {
+                console.log(result);
+                // res.render('manager/inventorydegrade', { manager: manager });
+                res.send("Updated successfully");
+            })
+            .catch((error) => {
+                console.log(error);
+                res.send("In 1st catch");
+            });
+        }
+        else
+        {
+            console.log("Error");
+        }
     } catch (error) {
         console.log(error);
     }
