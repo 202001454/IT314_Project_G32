@@ -4,7 +4,6 @@ const Payment = require('../models/payment');
 const Paymenthistory = require('../models/paymenthistory');
 const nodedmailer = require("nodemailer");
 
-
 const sendVerifyMail = async (name, email, user_id) => {
     try {
 
@@ -385,6 +384,18 @@ const customer_paymenthistory_get = async (req, res) => {
     }
 }
 
+const manager_get = async (req, res) => {
+    try {
+        const username = req.params.username; // use req.params.username to get the username
+        const manager = await User.findOne({ username: username });
+        console.log(manager);
+        res.render('manager/index', { manager: manager });
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
 
 const add_user_get = (req, res) => {
     const user = new User({
@@ -426,7 +437,7 @@ module.exports = {
     customer_edit_patch,
     customer_feedback_get,
     customer_feedback_post,
-    customer_paymenthistory_get
-
+    customer_paymenthistory_get,
+    manager_get
 
 };

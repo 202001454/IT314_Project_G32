@@ -37,6 +37,8 @@ router.post('/customer/:username/feedback', authController.customer_feedback_pos
 
 router.get('/customer/:username/paymenthistory', authController.customer_paymenthistory_get);
 
+router.get('/manager/:username', authController.manager_get);
+
 router.get('/add-user', authController.add_user_get);
 router.get('/', (req, res) => {
     res.render('home', { title: 'Home' });
