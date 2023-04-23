@@ -192,16 +192,16 @@ const manager_inventorydegrade_get = async (req,res) => {
 
 const manager_inventoryupgrade_patch = async (req,res) => {
     try{
-        const name_ = req.body.name; //of item's
-        const name = name_.toLowerCase();
-        const qty = req.body.qty;// of item's
+        const item_ = req.body.item; //of item's
+        const item = item_.toLowerCase();
+        const quantity = req.body.quantity; //of item's quantity'of item's
         const username = req.params.username; //manager's
-        const inventory = await Inventory.findOne({name:name});//finding inventory
+        const inventory = await Inventory.findOne({item:item});//finding inventory
         const manager = await User.findOne({username:username,role: 'manager'});
         if(inventory && manager)
         {
             //if both found
-            Inventory.updateOne({name:name}, {$set : {qty:inventory.qty+qty}})
+            Inventory.updateOne({item:item}, {$set : {quantity:inventory.quantity+quantity}})
             .then((result) => {
                 console.log(result);
                 // res.render('manager/inventoryupgrade', { manager: manager });
@@ -212,11 +212,11 @@ const manager_inventoryupgrade_patch = async (req,res) => {
                 res.send("In 1st catch");
             });
         }
-        else if(manager && (!Inventory))
+        else if(manager && (!inventory))
         {
             const _inventory = new Inventory({
-                name:name,
-                qty:qty
+                item:item,
+                quantity:quantity
             });
             const response = await _inventory.save();
             // res.render('manager/inventoryupgrade', { manager: manager });
