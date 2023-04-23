@@ -75,7 +75,7 @@ const manager_edit_patch = async(req,res) => {
     }
 }
 
-const manager_managercheck_get = async (req,res) => {
+const manager_customercheck_get = async (req,res) => {
     try{
         const username = req.params.username;
         const manager = await User.findOne({username:username, role:'manager'});
