@@ -74,5 +74,6 @@ const manager_edit_patch = async(req,res) => {
 }
 
 const manager_customercheck_get = async (req,res) => {
-
+    const today = new Date();
+    const data = { currentDate: today };
 }
