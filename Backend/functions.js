@@ -2,7 +2,7 @@ const User = require('../models/user');
 const Payment = require('../models/payment');
 const Paymenthistory = require('../models/paymenthistory');
 const Feedback = require('../models/feedback');
-
+const Customercheck = require('../models/customercheck');
 
 const manager_view_get = async (req,res) => {
     try{
@@ -74,5 +74,5 @@ const manager_edit_patch = async(req,res) => {
 }
 
 const manager_customercheck_get = async (req,res) => {
-    
+
 }
