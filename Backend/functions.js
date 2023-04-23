@@ -2,7 +2,7 @@ const User = require('../models/user');
 const Payment = require('../models/payment');
 const Paymenthistory = require('../models/paymenthistory');
 const Feedback = require('../models/feedback');
-const Customercheck = require('../models/customercheck');
+const managercheck = require('../models/managercheck');
 
 const manager_view_get = async (req,res) => {
     try{
@@ -22,6 +22,8 @@ const manager_view_get = async (req,res) => {
     }
 
 }
+
+
 
 const manager_edit_get = async(req,res) => {
     try{
@@ -81,7 +83,7 @@ const manager_customercheck_get = async (req,res) => {
         {
             const today = new Date();
             manager.currentDate = today;
-            res.render('manager/customercheck',{manager});
+            res.render('manager/managercheck',{manager});
         }
         else {
             res.status(404).send('Manager not found');
@@ -115,4 +117,85 @@ const manager_customercheck_get = async (req,res) => {
       <p>It's not meal time.</p>
     <% } %>
   </body> */}
+}
+
+const manager_changepassword_get = async (req, res) => {
+    try {
+        const username = req.params.username; // use req.params.username to get the username
+        const manager = await User.findOne({ username: username, role: 'manager' });
+
+
+        if (manager) {
+
+
+
+            // res.render('manager/changepassword', { manager: manager });
+            res.send(manager);
+        } else {
+            res.send('No manager found.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
+const manager_changepassword_patch = async (req, res) => {
+    try {
+        const { username } = req.params; // use req.params.username to get the username
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        manager.password = req.body.password;
+        const cpassword = req.body.cpassword;
+
+        if (manager.password === cpassword && cpassword) {
+            User.updateOne({ username: username },
+                { $set: { password: req.body.password }, validate: true }).then((result) => {
+                    console.log(result);
+                    res.render('manager/index', { manager: manager });
+                }).catch((err) => {
+                    console.log(err);
+                    res.send(err);
+                }
+                );
+        }
+        else {
+            res.send("Password are not matching");
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
+const manager_inventoryupgrade_get = async (req,res) => {
+    try{
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const manager_inventorydegrade_get = async (req,res) => {
+    try{
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const manager_inventoryupgrade_patch = async (req,res) => {
+    try{
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const manager_inventorydegrade_patch = async (req,res) => {
+    try{
+
+    } catch (error) {
+        console.log(error);
+    }
 }
