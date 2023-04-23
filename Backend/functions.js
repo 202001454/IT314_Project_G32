@@ -2,7 +2,8 @@ const User = require('../models/user');
 const Payment = require('../models/payment');
 const Paymenthistory = require('../models/paymenthistory');
 const Feedback = require('../models/feedback');
-const managercheck = require('../models/managercheck');
+const Managercheck = require('../models/managercheck');
+const Inventory = require('../models/invontory');
 
 const manager_view_get = async (req,res) => {
     try{
@@ -75,7 +76,7 @@ const manager_edit_patch = async(req,res) => {
     }
 }
 
-const manager_customercheck_get = async (req,res) => {
+const manager_managercheck_get = async (req,res) => {
     try{
         const username = req.params.username;
         const manager = await User.findOne({username:username, role:'manager'});
@@ -168,17 +169,30 @@ const manager_changepassword_patch = async (req, res) => {
 }
 
 const manager_inventoryupgrade_get = async (req,res) => {
-    try{
+    try {
+        //check if the inventory is present or not?
+        
+        const username = req.params.username; // use req.params.username to get the username
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            // res.render('manager/view', { manager: manager });
+
+            res.send(manager);
+        } else {
+            res.send('No manager found.');
+        }
+
 
     } catch (error) {
         console.log(error);
+        res.send('An error occurred while finding the manager.');
     }
 }
 
 
 const manager_inventorydegrade_get = async (req,res) => {
     try{
-        
+
     } catch (error) {
         console.log(error);
     }
