@@ -4,7 +4,6 @@ const Payment = require('../models/payment');
 const Paymenthistory = require('../models/paymenthistory');
 const nodedmailer = require("nodemailer");
 
-
 const sendVerifyMail = async (name, email, user_id) => {
     try {
 
@@ -385,6 +384,90 @@ const customer_paymenthistory_get = async (req, res) => {
     }
 }
 
+const manager_get = async (req, res) => {
+    try {
+        const username = req.params.username; // use req.params.username to get the username
+        const manager = await User.findOne({ username: username , role: 'manager'});
+        console.log(manager);
+        res.render('manager/index', { manager: manager });
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
+const manager_edit_get = async(req,res) => {
+    try{
+        const {username} = req.params;
+        const manager = await User.findOne({username:username,role:'manager'});
+        if(manager)
+        {
+            // res.render('manager/edit',{manager:manager});
+            res.send(manager);
+        }
+        else
+        {
+            res.send("Error occured!");
+        }
+    } catch(error) {
+        res.send("Unable to find Manager");
+    }
+}
+
+const manager_edit_patch = async(req,res) => {
+    try {
+        const { username } = req.params; // use req.params.username to get the username
+        const manager = await User.findOne({ username: username ,role : 'manager' });
+
+        // manager.password = req.body.password;
+        manager.fullname = req.body.fullname;
+        manager.date = req.body.date;
+        manager.email = req.body.email;
+        manager.phone = req.body.phone;
+        manager.gender = req.body.gender;
+        // console.log(manager);
+        // res.send(username);
+
+        User.updateOne({ username: username,role:'manager'},
+            { $set: { fullname: req.body.fullname, date: req.body.date, email: req.body.email, phone: req.body.phone, gender: req.body.gender }, validate: true })
+            .then((result) => {
+                console.log(result);
+                res.render('manager/index', { manager: manager });
+            })
+            .catch((err) => {
+                console.log(err);
+                res.send('cannot update');
+            }
+            );
+       
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
+
+const manager_view_get = async (req,res) => {
+    try{
+        const {username} = req.params;
+        const manager = await User.findOne({username:username,role:'manager'});
+        if(manager)
+        {
+            // res.render('manager/view',{manager:manager});
+            res.send(manager);
+        }
+        else
+        {
+            res.send('No Manager found.');
+        }
+    } catch(error) {
+        res.send('An error occurred while finding the customer.');
+
+    }
+
+}
+
+
 
 const add_user_get = (req, res) => {
     const user = new User({
@@ -426,7 +509,11 @@ module.exports = {
     customer_edit_patch,
     customer_feedback_get,
     customer_feedback_post,
-    customer_paymenthistory_get
+    customer_paymenthistory_get,
+    manager_get,
+    manager_edit_get,
+    manager_edit_patch,
+    manager_view_get
 
 
 };
