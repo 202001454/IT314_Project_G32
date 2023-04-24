@@ -543,17 +543,33 @@ const customer_faq_get = async (req, res) => {
 const manager_faq_get = async (req, res) => {
     try{
         const username = req.params.username;
-        const manager = await User.findOne({username:username,role: 'customer'});
+        const manager = await User.findOne({username:username,role: 'manager'});
         if(manager)
         {
             res.render('manager/faq', { manager: manager });
         }
         else
         {
-            res.send("Customer not found");
+            res.send("Manager not found");
         }
     } catch (error) {
         console.log(error);
     }
 }
 
+const cadet_faq_get = async (req, res) => {
+    try{
+        const username = req.params.username;
+        const cadet = await User.findOne({username:username,role: 'cadet'});
+        if(cadet)
+        {
+            res.render('cadet/faq', { cadet: cadet });
+        }
+        else
+        {
+            res.send("Cadet not found");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
