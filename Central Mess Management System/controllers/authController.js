@@ -74,9 +74,9 @@ const sendVerifyMail = async (name, email, user_id) => {
 
 const verifyMail = async (req, res) => {
     try {
-        const updateInfo = await User.updateOne({ _id: req.query.id }, { $set: { is_varified: 1 } });
+        const updateInfo = await User.updateOne({ _id: req.params.id }, { $set: { isVarified: Boolean(true) } });
         console.log(updateInfo);
-        res.render('emailverified');
+        res.render('home');
     } catch (error) {
         console.log(error.message);
     }
@@ -90,12 +90,13 @@ const login_get = (req, res) => {
 }
 const login_post = async (req, res) => {
     try {
+
         const username = req.body.username;
         const password = req.body.password;
         const role = req.body.role;
-        
-        
-        
+        console.log("Parth");
+        console.log(role);
+
         if (role === 'customer') {
             // console.log(req.body);
             const customer = await User.findOne({ username, role });
@@ -105,6 +106,7 @@ const login_post = async (req, res) => {
 
                 // req.session.user_id = user._id;
                 // const user = await User.login(username, password, role);
+                res.cookie('jwt', '', { maxAge: 1 });
                 const token = createToken(customer._id);
                 res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
                 res.status(201).render(`${role}/index`, { customer });
@@ -115,18 +117,19 @@ const login_post = async (req, res) => {
         else if (role === 'manager') {
             const manager = await User.findOne({ username: username, role: role });
             const auth = await bcrypt.compare(password, manager.password);
-
-
+            // console.log(manager)
             if (manager && auth && manager.role === role) {
-                const user = await User.login(username, password, role);
-                const token = createToken(user._id);
+                // const user = await User.login(username, password, role);
+                res.cookie('jwt', '', { maxAge: 1 });
+                const token = createToken(manager._id);
                 res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
                 res.status(201).render(`${role}/index`, { manager });
             }
             else {
                 console.log(username);
                 res.status(400).send('Invalid manager');
-            }
+            };
+
         }
         else if (role === 'cadet') {
             const cadet = await User.findOne({ username, role });
@@ -228,13 +231,13 @@ const customer_get = async (req, res) => {
         console.log(customer);
         // if(res.locals.user.username === username)
         // {
-            res.render('customer/index', { customer: customer });
+        res.render('customer/index', { customer: customer });
         // }
         // else
         // {
         //     res.render('login');
         // }
-    } catch (error) {   
+    } catch (error) {
         console.log(error);
         res.send('An error occurred while finding the customer.');
     }
@@ -246,9 +249,8 @@ const customer_view_get = async (req, res) => {
         const username = req.params.username; // use req.params.username to get the username
         const customer = await User.findOne({ username: username, role: 'customer' });
         if (customer) {
-            // res.render('customer/view', { customer: customer });
-
-            res.send(customer);
+            res.render('customer/view', { customer: customer });
+            // res.send(customer);
         } else {
             res.send('No customer found.');
         }
@@ -271,8 +273,8 @@ const customer_changepassword_get = async (req, res) => {
 
 
 
-            // res.render('customer/changepassword', { customer: customer });
-            res.send(customer);
+            res.render('customer/changepassword', { customer: customer });
+            // res.send(customer);
         } else {
             res.send('No customer found.');
         }
@@ -286,24 +288,26 @@ const customer_changepassword_patch = async (req, res) => {
     try {
         const { username } = req.params; // use req.params.username to get the username
         let customer = await User.findOne({ username: username, role: 'customer' });
-        
+
         // customer.password = req.body.password;
         // const cpassword = req.body.cpassword;
 
         // const auth = bcrypt.compare(req.body.oldpassword, customer.password);
-        if (req.body.password === req.body.cpassword && req.body.cpassword ) {
+        if (req.body.password === req.body.cpassword && req.body.cpassword) {
             const validpassword = validatepassword(req.body.password);
             if (!validpassword) {
                 res.render('signup', { err: "Password must be between 6 to 16 characters and must contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character" });
             }
             const bcryptPass = await bcrypt.hash(req.body.password, 12);
-        
+
             User.updateOne({ username: username },
                 { $set: { password: bcryptPass }, validate: true }).then((result) => {
                     console.log("Gaurang");
                     customer.password = bcryptPass;
                     res.render('customer/index', { customer: customer });
                 }).catch((err) => {
+                    console.log("Gaurang");
+
                     console.log(err);
                     res.send(err);
                 }
@@ -325,8 +329,8 @@ const customer_edit_get = async (req, res) => {
         const customer = await User.findOne({ username: username, role: 'customer' });
         if (customer) {
 
-            // res.render('customer/edit', { customer: customer });
-            res.send(customer);
+            res.render('customer/edit', { customer: customer });
+            // res.send(customer);
         } else {
             res.send('No customer found.');
         }
@@ -354,7 +358,7 @@ const customer_edit_patch = async (req, res) => {
         // res.send(username);
 
         User.updateOne({ username: username },
-            { $set: { password: req.body.password, fullname: req.body.fullname, date: req.body.date, email: req.body.email, phone: req.body.phone, gender: req.body.gender }, validate: true }).then((result) => {
+            { $set: {  fullname: req.body.fullname, date: req.body.date, email: req.body.email, phone: req.body.phone, gender: req.body.gender }, validate: true }).then((result) => {
                 console.log(result);
                 res.render('customer/index', { customer: customer });
             }).catch((err) => {
@@ -385,8 +389,8 @@ const customer_feedback_get = async (req, res) => {
         const username = req.params.username; // use req.params.username to get the username
         const customer = await User.findOne({ username: username, role: 'customer' });
         if (customer) {
-            // res.render('customer/feedback', { customer: customer });
-            res.send(customer);
+            res.render('customer/feedback', { customer: customer });
+            // res.send(customer);
         } else {
             res.send('No customer found.');
         }
@@ -413,7 +417,10 @@ const customer_feedback_post = async (req, res) => {
             food: req.body.food,
             comment: req.body.comment,
             username: username,
-            date: req.body.date
+
+            //date baki
+
+            date: new Date()
 
         });
         const fb = await feedback.save();
@@ -436,8 +443,8 @@ const customer_paymenthistory_get = async (req, res) => {
         const customer = await User.findOne({ username: username, role: 'customer' });
         if (customer) {
             const found = await Paymenthistory.findMany({ username: username, role: 'customer' }).sort({ startdate: -1 });
-            // res.render('customer/paymenthistory', { customer: customer  , found: found});
-            res.send(found);
+            res.render('customer/paymenthistory', { customer: customer  , found: found});
+            // res.send(found);
         } else {
             res.send('No customer found.');
         }
@@ -452,7 +459,7 @@ const manager_get = async (req, res) => {
     try {
         const username = req.params.username; // use req.params.username to get the username
         const manager = await User.findOne({ username: username, role: 'manager' });
-        console.log(manager);
+        // console.log(manager);
         res.render('manager/index', { manager: manager });
     } catch (error) {
         console.log(error);
@@ -465,8 +472,8 @@ const manager_edit_get = async (req, res) => {
         const { username } = req.params;
         const manager = await User.findOne({ username: username, role: 'manager' });
         if (manager) {
-            // res.render('manager/edit',{manager:manager});
-            res.send(manager);
+            res.render('manager/edit',{manager:manager});
+            // res.send(manager);
         }
         else {
             res.send("Error occured!");
@@ -514,8 +521,8 @@ const manager_view_get = async (req, res) => {
         const { username } = req.params;
         const manager = await User.findOne({ username: username, role: 'manager' });
         if (manager) {
-            // res.render('manager/view',{manager:manager});
-            res.send(manager);
+            res.render('manager/view',{manager:manager});
+            // res.send(manager);
         }
         else {
             res.send('No Manager found.');
@@ -536,8 +543,8 @@ const manager_changepassword_get = async (req, res) => {
 
         if (manager) {
 
-            // res.render('manager/changepassword', { manager: manager });
-            res.send(manager);
+            res.render('manager/changepassword', { manager: manager });
+            // res.send(manager);
         } else {
             res.send('No manager found.');
         }
@@ -550,7 +557,7 @@ const manager_changepassword_get = async (req, res) => {
 const manager_changepassword_patch = async (req, res) => {
     try {
         const { username } = req.params; // use req.params.username to get the username
-        
+
         // manager.password = req.body.password;
         // const cpassword = req.body.cpassword;
 
@@ -576,11 +583,11 @@ const manager_changepassword_patch = async (req, res) => {
     }
 }
 
-const manager_inventoryupgrade_get = async (req,res) => {
-    try{
+const manager_inventoryupgrade_get = async (req, res) => {
+    try {
         const username = req.params.username;
-        const manager = await User.findOne({username:username,role:'manager'});
-        res.render('/manager/inventoryupgrade',{manager});
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        res.render('/manager/inventoryupgrade', { manager });
 
     } catch (error) {
         console.log(error);
@@ -588,51 +595,48 @@ const manager_inventoryupgrade_get = async (req,res) => {
 }
 
 
-const manager_inventorydegrade_get = async (req,res) => {
-    try{
+const manager_inventorydegrade_get = async (req, res) => {
+    try {
         const username = req.params.username;
-        const manager = await User.findOne({username:username,role:'manager'});
-        res.render('/manager/inventorydegrade',{manager});
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        res.render('/manager/inventorydegrade', { manager });
 
     } catch (error) {
         console.log(error);
     }
 }
 
-const manager_inventoryupgrade_patch = async (req,res) => {
-    try{
+const manager_inventoryupgrade_patch = async (req, res) => {
+    try {
         const item_ = req.body.item; //of item's
         const item = item_.toLowerCase();
         const quantity = req.body.quantity; //of item's quantity'of item's
         const username = req.params.username; //manager's
-        const inventory = await Inventory.findOne({item:item});//finding inventory
-        const manager = await User.findOne({username:username,role: 'manager'});
-        if(inventory && manager)
-        {
+        const inventory = await Inventory.findOne({ item: item });//finding inventory
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (inventory && manager) {
             //if both found
-            Inventory.updateOne({item:item}, {$set : {quantity:inventory.quantity+quantity}})
-            .then((result) => {
-                console.log(result);
-                // res.render('manager/inventoryupgrade', { manager: manager });
-                res.send("Updated successfully");
-            })
-            .catch((error) => {
-                console.log(error);
-                res.send("In 1st catch");
-            });
+            Inventory.updateOne({ item: item }, { $set: { quantity: inventory.quantity + quantity } })
+                .then((result) => {
+                    console.log(result);
+                    // res.render('manager/inventoryupgrade', { manager: manager });
+                    res.send("Updated successfully");
+                })
+                .catch((error) => {
+                    console.log(error);
+                    res.send("In 1st catch");
+                });
         }
-        else if(manager && (!inventory))
-        {
+        else if (manager && (!inventory)) {
             const _inventory = new Inventory({
-                item:item,
-                quantity:quantity
+                item: item,
+                quantity: quantity
             });
             const response = await _inventory.save();
             // res.render('manager/inventoryupgrade', { manager: manager });
             res.send("New added");
         }
-        else
-        {
+        else {
             console.log("Error");
         }
     } catch (error) {
@@ -640,34 +644,32 @@ const manager_inventoryupgrade_patch = async (req,res) => {
     }
 }
 
-const manager_inventorydegrade_patch = async (req,res) => {
-    try{
+const manager_inventorydegrade_patch = async (req, res) => {
+    try {
         const item_ = req.body.item; //of item's
         const item = item_.toLowerCase();
         const quantity = req.body.quantity;// of item's
 
         const username = req.params.username; //manager's
 
-        const inventory = await Inventory.findOne({item:item});//finding inventory
-        const manager = await User.findOne({username:username,role: 'manager'});
-        if(inventory && manager)
-        {
+        const inventory = await Inventory.findOne({ item: item });//finding inventory
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (inventory && manager) {
             //if both found
-            let qty = (inventory.quantity-quantity >= 0) ? inventory.quantity-quantity :0;
-            
-            Inventory.updateOne({item:item}, {$set : {quantity:qty}})
-            .then((result) => {
-                console.log(result);
-                // res.render('manager/inventorydegrade', { manager: manager });
-                res.send("Updated successfully");
-            })
-            .catch((error) => {
-                console.log(error);
-                res.send("In 1st catch");
-            });
+            let qty = (inventory.quantity - quantity >= 0) ? inventory.quantity - quantity : 0;
+
+            Inventory.updateOne({ item: item }, { $set: { quantity: qty } })
+                .then((result) => {
+                    console.log(result);
+                    // res.render('manager/inventorydegrade', { manager: manager });
+                    res.send("Updated successfully");
+                })
+                .catch((error) => {
+                    console.log(error);
+                    res.send("In 1st catch");
+                });
         }
-        else
-        {
+        else {
             console.log("Error");
         }
     } catch (error) {
@@ -731,5 +733,6 @@ module.exports = {
     manager_inventoryupgrade_get,
     manager_inventoryupgrade_patch,
     manager_inventorydegrade_get,
-    manager_inventorydegrade_patch
+    manager_inventorydegrade_patch,
+    verifyMail
 };
