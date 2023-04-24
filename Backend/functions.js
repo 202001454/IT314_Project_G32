@@ -655,3 +655,84 @@ const manager_addpayment_get = async (req,res) => {
     }
 
 }
+
+const manager_addpayment_post = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username,role: 'manager'});
+        if(manager)
+        {
+            const customerusername = req.body.username;
+            const oldPayment = await Payment.findOne({username:customerusername});
+            if(oldPayment)
+            {
+                oldPayment.startdate = req.body.startdate;
+                oldPayment.enddate = req.body.enddate;
+                oldPayment.amount = req.body.amount;
+
+                const updated = await Payment.updateOne({username:customerusername},{$set : {startdate:oldPayment.startdate,enddate:oldPayment.enddate,amount:oldPayment.amount}, validate: true});
+                if(updated)
+                {
+                    const updateHistory = new Paymenthistory({
+                        username: customerusername,
+                        startdate: oldPayment.startdate,
+                        enddate: oldPayment.enddate,
+                        amount: oldPayment.amount
+                    });
+                    const historysave = await updateHistory.save();
+                    if(historysave)
+                    {
+                        res.status(201).render('manager/addpayment', { manager: manager });
+                    }
+                    else
+                    {
+                        res.send("An error occurred while updating the payment history.");
+                    }
+                }
+                else
+                {
+                    res.send("An error occurred while updating the payment details.");
+                }
+            }
+            else
+            {
+                const customer = User.findone({username:customerusername,role:'customer'});
+                if(customer)
+                {
+                    const payment = new Payment({
+                        username: req.body.username,
+                        startdate: req.body.startdate,
+                        enddate: req.body.enddate,
+                        amount: req.body.amount
+                    });
+                    const customerpaymentadded = await payment.save();
+                    if(customerpaymentadded)
+                    {
+                        const paymenthistory = new Paymenthistory({
+                            username: customerusername,
+                            startdate: req.body.startdate,
+                            enddate: req.body.enddate,
+                            amount: req.body.amount
+                        });
+                        const historysave = await paymenthistory.save();
+                        if(historysave)
+                        {
+                            res.status(201).render('manager/addpayment', { manager: manager });
+                        }
+                        else
+                        {
+                            res.send("An error occurred while updating the payment history.");
+                        }
+                    }
+                    else
+                    {
+                        res.send("An error occurred while updating the payment details.");
+                    }
+                    
+                }
+            }
+        }
+    } catch(error) {
+        console.log(error);
+    }
+}
