@@ -167,6 +167,62 @@ const signup_get = (req, res) => {
 }
 
 
+// const signup_post = async (req, res) => {
+//     try {
+//         const password = req.body.password;
+//         const cpassword = req.body.cpassword;
+
+//         //validate password
+//         const validpassword = validatepassword(password);
+//         if (!validpassword) {
+//             res.render('signup', { err: "Password must be between 6 to 16 characters and must contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character" });
+//         }
+
+//         if (password === cpassword) {
+//             const user = new User({
+//                 fullname: req.body.fullname,
+//                 username: req.body.username,
+//                 email: req.body.email,
+//                 password: req.body.password,
+//                 phone: req.body.phone,
+//                 role: req.body.role,
+//                 gender: req.body.gender,
+//                 date: req.body.birthdate,
+//             });
+//             //verify username and email in the database if already exists
+
+//             const foundUser = await User.findOne({ username: user.username });
+//             console.log(foundUser);
+//             if (foundUser) {
+//                 // res.send("Username already exists");
+//                 res.render('signup', { err: "Username already exists" });
+//             }
+//             const foundEmail = await User.findOne({ email: user.email });
+//             console.log(foundEmail);
+
+//             if (foundEmail) {
+//                 // res.send("Email already exists");
+//                 res.render('signup', { err: "Email already exists" });
+//             }
+
+//             //if not exists then save the user in the database
+//             const registered = user.save().then((result) => {
+//                 // sendVerifyMail(req.body.fullname,req.body.email,result._id);
+//                 res.send(result);
+//             }).catch((err) => {
+//                 console.log(err);
+//             }
+//             );
+//             res.status(201).render('login');
+//         } else {
+//             res.send("Password are not matching");
+//         }
+
+//     } catch (error) {
+//         res.status(400);
+//         res.send(error);
+//     }
+// }
 const signup_post = async (req, res) => {
     try {
         const password = req.body.password;
@@ -194,26 +250,23 @@ const signup_post = async (req, res) => {
             const foundUser = await User.findOne({ username: user.username });
             console.log(foundUser);
             if (foundUser) {
-                // res.send("Username already exists");
                 res.render('signup', { err: "Username already exists" });
             }
             const foundEmail = await User.findOne({ email: user.email });
             console.log(foundEmail);
 
             if (foundEmail) {
-                // res.send("Email already exists");
                 res.render('signup', { err: "Email already exists" });
             }
 
             //if not exists then save the user in the database
-            const registered = user.save().then((result) => {
-                // sendVerifyMail(req.body.fullname,req.body.email,result._id);
-                res.send(result);
+            user.save().then((result) => {
+                // sendVerifyMail(req.body.fullname, req.body.email, result._id, req.body.role);
+                res.status(201).render('login');
             }).catch((err) => {
                 console.log(err);
             }
             );
-            res.status(201).render('login');
         } else {
             res.send("Password are not matching");
         }
@@ -358,7 +411,7 @@ const customer_edit_patch = async (req, res) => {
         // res.send(username);
 
         User.updateOne({ username: username },
-            { $set: {  fullname: req.body.fullname, date: req.body.date, email: req.body.email, phone: req.body.phone, gender: req.body.gender }, validate: true }).then((result) => {
+            { $set: { fullname: req.body.fullname, date: req.body.date, email: req.body.email, phone: req.body.phone, gender: req.body.gender }, validate: true }).then((result) => {
                 console.log(result);
                 res.render('customer/index', { customer: customer });
             }).catch((err) => {
@@ -443,7 +496,7 @@ const customer_paymenthistory_get = async (req, res) => {
         const customer = await User.findOne({ username: username, role: 'customer' });
         if (customer) {
             const found = await Paymenthistory.findMany({ username: username, role: 'customer' }).sort({ startdate: -1 });
-            res.render('customer/paymenthistory', { customer: customer  , found: found});
+            res.render('customer/paymenthistory', { customer: customer, found: found });
             // res.send(found);
         } else {
             res.send('No customer found.');
@@ -472,7 +525,7 @@ const manager_edit_get = async (req, res) => {
         const { username } = req.params;
         const manager = await User.findOne({ username: username, role: 'manager' });
         if (manager) {
-            res.render('manager/edit',{manager:manager});
+            res.render('manager/edit', { manager: manager });
             // res.send(manager);
         }
         else {
@@ -521,7 +574,7 @@ const manager_view_get = async (req, res) => {
         const { username } = req.params;
         const manager = await User.findOne({ username: username, role: 'manager' });
         if (manager) {
-            res.render('manager/view',{manager:manager});
+            res.render('manager/view', { manager: manager });
             // res.send(manager);
         }
         else {
@@ -677,8 +730,6 @@ const manager_inventorydegrade_patch = async (req, res) => {
     }
 }
 
-
-
 const add_user_get = (req, res) => {
     const user = new User({
         fullname: 'Gaurang',
@@ -706,7 +757,7 @@ const add_user_get = (req, res) => {
 
 const logout_get = (req, res) => {
     res.cookie('jwt', '', { maxAge: 1 });
-    res.redirect('/');
+    res.render('home');
 }
 module.exports = {
     login_get,
@@ -729,10 +780,10 @@ module.exports = {
     manager_view_get,
     manager_changepassword_get,
     manager_changepassword_patch,
-    logout_get,
     manager_inventoryupgrade_get,
     manager_inventoryupgrade_patch,
     manager_inventorydegrade_get,
     manager_inventorydegrade_patch,
-    verifyMail
+    verifyMail,
+    logout_get
 };
