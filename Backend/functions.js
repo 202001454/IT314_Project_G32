@@ -120,6 +120,127 @@ const manager_managercheck_get = async (req,res) => {
   </body> */}
 }
 
+
+const manager_managercheck_post = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username, role:'manager'});
+        if(manager)
+        {
+            const c_username = req.body.username;
+            const c_date = req.body.date;
+            const c_time = req.body.time.toLowerCase();
+
+            //finding the customer from payment database
+            const paymentofcustomer = await Payment.findone({username:c_username});
+            if(paymentofcustomer)
+            {
+                // const _date = new Date();
+                if(paymentofcustomer.enddate - c_date <0)
+                {
+                    Payment.deletaOne({username:c_username}).then((result) => {
+                        res.send("Payment expired");
+                    }).catch((err) => {
+                        console.log(err);
+                        res.send("Error occured");
+                    });
+                }
+                //payment is done!
+                else {
+                    const customer = await Managercheck.findOne({username:c_username,date:c_date});
+
+                    if(customer)
+                    {
+                        if(c_time == 'breakfast')
+                        {
+                            if(customer.breakfast == Boolean(false))
+                            {
+                                Managercheck.updateOne({username:c_username,date:c_date},{$set: {breakfast: Boolean(true)}}).then((result) => {
+                                res.render('manager/managercheck',{manager}); 
+                                }).catch((err) => {
+                                    console.log(err);
+                                    res.send('cannot update');
+                                });
+                            }
+                            else
+                            {
+                                res.send("Already checked for breakfast");
+                            }
+
+                        }
+                        else if(c_time == 'lunch')
+                        {
+                            if(customer.lunch == Boolean(false))
+                            {
+                                Managercheck.updateOne({username:c_username,date:c_date},{$set: {lunch : Boolean(true)}}).then((result) => {
+                                res.render('manager/managercheck',{manager}); 
+                                }).catch((err) => {
+                                    console.log(err);
+                                    res.send('cannot update');
+                                });
+                            }
+                            else
+                            {
+                                res.send("Already checked for lunch");
+                            }
+
+                        }
+                        else 
+                        {
+                            if(customer.dinner == Boolean(false))
+                            {
+                                Managercheck.updateOne({username:c_username,date:c_date},{$set: {dinner : Boolean(true)}}).then((result) => {
+                                res.render('manager/managercheck',{manager}); 
+                                }).catch((err) => {
+                                    console.log(err);
+                                    res.send('cannot update');
+                                });
+                            }
+                            else
+                            {
+                                res.send("Already checked for dinner");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //make new and save
+                        let newcustomer = new Managercheck({username:c_username,date:c_date,breakfast:Boolean(false),lunch:Boolean(false),dinner:Boolean(false)});
+
+                        if(c_time == 'breakfast')
+                        {
+                            newcustomer.breakfast = Boolean(true);
+                        }
+                        else if(c_time == 'lunch')
+                        {
+                            newcustomer.lunch = Boolean(true);
+                        }
+                        else
+                        {
+                            newcustomer.dinner = Boolean(true);
+                        }
+                        const register = await newcustomer.save();
+                        res.render('manager/managercheck',{manager});
+
+                    }
+                }
+            }
+            else
+            {
+                res.send("Payment not found");
+            }
+            
+        }
+        else {
+            res.status(404).send('Manager not found');
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error');
+    }
+}
+
+
 const manager_changepassword_get = async (req, res) => {
     try {
         const username = req.params.username; // use req.params.username to get the username
@@ -379,3 +500,24 @@ const signup_post = async (req, res) => {
 
 //--> Update the route as below
 router.get('/verify/:id', authController.verifyMail);
+
+//--------------------------------------------------------------
+const manager_viewinventory_get = async (req, res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username,role: 'manager'});
+
+        if(manager)
+        {
+            const inventory = await Inventory.find();
+            res.render('manager/viewinventory', { manager: manager, inventory: inventory });
+        }
+        else
+        {
+            res.send("Manager not found");
+        }
+    }
+    catch(error){
+        console.log(error);
+    }
+}
