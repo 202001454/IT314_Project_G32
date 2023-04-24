@@ -1,9 +1,9 @@
 
-<%- include('./partials/header') %>
+<%- include('../partials/header') %>
 
 
     <div id="wrapper">
-        <%- include('./partials/nav') %>
+        <%- include('../partials/nav') %>
 
 
         <div class="container">
@@ -15,8 +15,8 @@
                             <thead>
                                 <tr>
                                     <div class="profile my-4 table-striped-columns">
-                                        <div class="mb-3"><img src="./photos/person_logo.svg" alt="person" width="20%"></div>
-                                        <div class="fs-3">Person name</div>
+                                        <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
+                                        <div class="fs-3"><%= cadet.fullname%></div>
                                         <div class="fs-5">Cadet</div>
                                     </div>
                                 </tr>
@@ -24,22 +24,22 @@
                             <tbody>
                               
                               <tr>
-                                  <td><a href="./cadet/<%= cadet.username%>" class="list-group-item list-group-item-action">Home</a></td>
+                                  <td><a href="/cadet/<%= cadet.username%>" class="list-group-item list-group-item-action">Home</a></td>
                                 </tr>
                               <tr>
                                 <tr>
-                                    <td><a href="./cadet/<%= cadet.username%>/view" class="list-group-item list-group-item-action">View
+                                    <td><a href="/cadet/<%= cadet.username%>/view" class="list-group-item list-group-item-action">View
                                         profile</a></td>
                                 </tr>
                                 <tr class="table-active">
-                                  <td><a href="./cadet/<%= cadet.username%>/edit" class="list-group-item list-group-item-action">Edit
+                                  <td><a href="/cadet/<%= cadet.username%>/edit" class="list-group-item list-group-item-action">Edit
                                     Profile</a></td>
                                 </tr>
                                 <tr>
-                                  <td><a href="./cadet/<%= cadet.username%>/changepassword.ejs" class="list-group-item list-group-item-action">Change
+                                  <td><a href="/cadet/<%= cadet.username%>/changepassword.ejs" class="list-group-item list-group-item-action">Change
                                     password</a></td>
                                 </tr>
-                                    <td><a href="./cadet/<%= cadet.username%>/viewinventory" class="list-group-item list-group-item-action">View inventory</a></td>
+                                    <td><a href="/cadet/<%= cadet.username%>/viewinventory" class="list-group-item list-group-item-action">View inventory</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -56,18 +56,18 @@
                         <div class="text-center fs-2 mt-4 text-dark">Edit Your Profile</div>
                         <div class="text-center mb-5 text-dark">Fill the details mentioned.</div>
                   
-                        <form action="" method="post">
+                        <form action="/cadet/<%= cadet.username%>/edit?_method=patch" method="post">
                   
                           <div class="row">
                             <div class="col-12 col-sm-6">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="something" required>
+                                <input type="text" class="form-control" id="fullname" name="fullname" value="<%= cadet.fullname%>" placeholder="something" required>
                                 <label for="fullname">Full name</label>
                               </div>
                             </div>
                             <div class="col-12 col-sm-6">
                               <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="username" name="username" placeholder="something" disabled>
+                                <input type="text" class="form-control" id="username" name="username" value="<%= cadet.username%>" placeholder="something" disabled>
                                 <label for="username">User name</label>
                               </div>
                             </div>
@@ -76,13 +76,13 @@
                           <div class="row">
                             <div class="col-12 col-sm-6">
                               <div class="form-floating mb-3">
-                                <input type="tel" class="form-control" id="phone-number" name="phone" placeholder="012345678" pattern="[0-9]{10}" required>
+                                <input type="tel" class="form-control" id="phone-number" name="phone" value="<%= cadet.phone%>" placeholder="012345678" pattern="[0-9]{10}" required>
                                 <label for="phone-number">Phone number</label>
                               </div>
                             </div>
                             <div class="col-12 col-sm-6">
                               <div class="form-floating mb-3">
-                                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" disabled>
+                                <input type="email" class="form-control" id="email" name="email" value="<%= cadet.email%>" placeholder="name@example.com" disabled>
                                 <label for="email">Email</label>
                               </div>
                             </div>
@@ -92,7 +92,7 @@
                             <div class="col-12 col-sm-4">
                               <div class="form-floating mb-4">
                   
-                                <select id="role" class="form-select selectpicker" placeholder="Role" name="role" data-width="auto" disabled>
+                                <select id="role" class="form-select selectpicker" placeholder="Role" name="role" value="<%= cadet.role%>" data-width="auto" disabled>
                                   <option  value="customer"> customer </option>
                                   <option selected value="cadet"> cadet </option>
                                   <option value="admin"> Admin </option>
@@ -103,13 +103,13 @@
                   
                             <div class="col-12 col-sm-4">
                               <div class="form-floating mb-3">
-                                <select id="gender" class="form-select selectpicker" placeholder="Gender" name="gender" data-width="auto" required>
-                                  <% if(manager.gender==='male' )  {%>
+                                <select id="gender" class="form-select selectpicker" placeholder="Gender" name="gender" value="<%= cadet.gender%>" data-width="auto" required>
+                                  <% if(cadet.gender==='male' )  {%>
                                     <option selected value="male"> Male </option>
                                     <option value="female"> Female </option>
                                     <option value="other"> Other </option>
           
-                                    <%} else if (manager.gender=='female' ) {%>
+                                    <%} else if (cadet.gender=='female' ) {%>
                                       <option value="male"> Male </option>
                                       <option selected value="female"> Female </option>
                                       <option value="other"> Other </option>
@@ -125,7 +125,7 @@
                   
                             <div class="col-12 col-sm-4">
                               <div class="form-floating mb-3">
-                                <input type="date" class="form-control" id="birthdate" name="birthdate" placeholder="name@example.com" required>
+                                <input type="date" class="form-control" id="birthdate" name="date" value="<%= cadet.date.toISOString().slice(0 ,10)%>" placeholder="name@example.com" required>
                                 <label for="birthdate">birth date</label>
                               </div>
                             </div>
@@ -142,4 +142,4 @@
 
                     <div class="col-1 col-lg-0"></div>
                 </div>
-        <%- include('./partials/footer') %>
+        <%- include('../partials/footer') %>

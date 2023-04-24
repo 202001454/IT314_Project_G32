@@ -1,11 +1,11 @@
-<%- include('./partials/header') %>
+<%- include('../partials/header') %>
 
 
 
     <div id="wrapper">
 
 
-        <%- include('./partials/nav') %>
+        <%- include('../partials/nav') %>
 
 
 
@@ -18,37 +18,39 @@
                                 <thead>
                                     <tr>
                                         <div class="profile my-4 table-striped-columns">
-                                            <div class="mb-3"><img src="../photos/person_logo.svg" alt="person"
+                                            <div class="mb-3"><img src="/photos/person_logo.svg" alt="person"
                                                     width="20%"></div>
-                                            <div class="fs-3">Person name</div>
+                                            <div class="fs-3">
+                                                <%= cadet.fullname%>
+                                            </div>
                                             <div class="fs-5">Cadet</div>
                                         </div>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                    <tr class="table-active">
-                                        <td><a href="./cadet/<%= cadet.username%>"
+                                    <tr >
+                                        <td><a href="/cadet/<%= cadet.username%>"
                                                 class="list-group-item list-group-item-action">Home</a>
                                         </td>
                                     </tr>
                                     <tr>
-                                    <tr>
-                                        <td><a href="./cadet/<%= cadet.username%>/view"
+                                    <tr class="table-active">
+                                        <td><a href="/cadet/<%= cadet.username%>/view"
                                                 class="list-group-item list-group-item-action">View
                                                 profile</a></td>
                                     </tr>
                                     <tr>
-                                        <td><a href="./cadet/<%= cadet.username%>/edit"
+                                        <td><a href="/cadet/<%= cadet.username%>/edit"
                                                 class="list-group-item list-group-item-action">Edit
                                                 Profile</a></td>
                                     </tr>
                                     <tr>
-                                        <td><a href="./cadet/<%= cadet.username%>/changepassword"
+                                        <td><a href="/cadet/<%= cadet.username%>/changepassword"
                                                 class="list-group-item list-group-item-action">Change
                                                 password</a></td>
                                     </tr>
-                                    <td><a href="./cadet/<%= cadet.username%>/viewinventory"
+                                    <td><a href="/cadet/<%= cadet.username%>/viewinventory"
                                             class="list-group-item list-group-item-action">View inventory</a></td>
                                     </tr>
                                 </tbody>
@@ -63,7 +65,7 @@
                         <div class="container border rounded-5 text-center">
 
                             <div class="profile my-4 pt-5 ">
-                                <div class="mb-3"><img src="../photos/person_logo.svg" alt="person" width="15%""></div>
+                                <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="15%""></div>
                             <div class=" fs-3">My Profile</div>
                             </div>
                             <div class="row my-5">
@@ -76,7 +78,9 @@
                                                     <p class="mb-0">User Name</p>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">Johnatan Smith</p>
+                                                    <p class="text-muted mb-0">
+                                                        <%= cadet.username%>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -85,7 +89,9 @@
                                                     <p class="mb-0">Full Name</p>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">Johnatan Smith</p>
+                                                    <p class="text-muted mb-0">
+                                                        <%= cadet.fullname%>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -94,7 +100,9 @@
                                                     <p class="mb-0">Role</p>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">Customer</p>
+                                                    <p class="text-muted mb-0">
+                                                        <%= cadet.role%>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -103,7 +111,9 @@
                                                     <p class="mb-0">Email</p>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">example@example.com</p>
+                                                    <p class="text-muted mb-0">
+                                                        <%= cadet.email%>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -112,7 +122,9 @@
                                                     <p class="mb-0">Phone</p>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">(097) 234-5678</p>
+                                                    <p class="text-muted mb-0">
+                                                        <%= cadet.phone%>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -122,7 +134,9 @@
                                                     <p class="mb-0">Gender</p>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">Male</p>
+                                                    <p class="text-muted mb-0">
+                                                        <%= cadet.gender%>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -131,7 +145,9 @@
                                                     <p class="mb-0">Birthdate</p>
                                                 </div>
                                                 <div class="col-sm-8">
-                                                    <p class="text-muted mb-0">12/5/2023</p>
+                                                    <p class="text-muted mb-0">
+                                                        <%= cadet.date.toISOString().slice(0 ,10)%>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -146,4 +162,4 @@
 
 
 
-                    <%- include('./partials/footer') %>
+                    <%- include('../partials/footer') %>

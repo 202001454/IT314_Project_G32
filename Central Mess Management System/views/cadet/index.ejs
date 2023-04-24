@@ -1,10 +1,10 @@
-<%- include('./partials/header') %>
+<%- include('../partials/header') %>
 
 
 
   <div id="wrapper">
 
-    <%- include('./partials/nav_home') %>
+    <%- include('../partials/nav_home') %>
 
 
       <div class="container">
@@ -18,8 +18,8 @@
                 <thead>
                   <tr>
                     <div class="profile my-4 table-striped-columns">
-                      <div class="mb-3"><img src="../photos/person_logo.svg" alt="person" width="20%"></div>
-                      <div class="fs-3">Person name</div>
+                      <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
+                      <div class="fs-3"><%= cadet.fullname%></div>
                       <div class="fs-5">Cadet</div>
                     </div>
                   </tr>
@@ -27,24 +27,24 @@
                 <tbody>
 
                   <tr class="table-active">
-                    <td><a href="./cadet/<%= cadet.username%>" class="list-group-item list-group-item-action">Home</a>
+                    <td><a href="/cadet/<%= cadet.username%>" class="list-group-item list-group-item-action">Home</a>
                     </td>
                   </tr>
                   <tr>
                   <tr>
-                    <td><a href="./cadet/<%= cadet.username%>/view" class="list-group-item list-group-item-action">View
+                    <td><a href="/cadet/<%= cadet.username%>/view" class="list-group-item list-group-item-action">View
                         profile</a></td>
                   </tr>
                   <tr>
-                    <td><a href="./cadet/<%= cadet.username%>/edit" class="list-group-item list-group-item-action">Edit
+                    <td><a href="/cadet/<%= cadet.username%>/edit" class="list-group-item list-group-item-action">Edit
                         Profile</a></td>
                   </tr>
                   <tr>
-                    <td><a href="./cadet/<%= cadet.username%>/changepassword"
+                    <td><a href="/cadet/<%= cadet.username%>/changepassword"
                         class="list-group-item list-group-item-action">Change
                         password</a></td>
                   </tr>
-                  <td><a href="./cadet/<%= cadet.username%>/viewinventory"
+                  <td><a href="/cadet/<%= cadet.username%>/viewinventory"
                       class="list-group-item list-group-item-action">View inventory</a></td>
                   </tr>
                 </tbody>
@@ -56,7 +56,7 @@
           <div class="col-12 col-lg-9">
 
             <div class="container text-center fs-2 my-5">
-              Welcome <a href="./cadet/<%= cadet.username%>">
+              Welcome <a href="/cadet/<%= cadet.username%>">
                 <%= cadet.fullname%>
               </a>, </br> <span class="fs-3">Look what delicious items are waiting for
                 you.</span>
@@ -223,4 +223,4 @@
         </div>
       </div>
 
-      <%- include('./partials/footer') %>
+      <%- include('../partials/footer') %>
