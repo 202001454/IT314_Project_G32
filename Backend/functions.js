@@ -120,6 +120,86 @@ const manager_managercheck_get = async (req,res) => {
   </body> */}
 }
 
+
+const manager_managercheck_post = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username, role:'manager'});
+        if(manager)
+        {
+            const c_username = req.body.username;
+            const c_date = req.body.date;
+            const c_time = req.body.time.toLowerCase();
+            const customer = Managercheck.findOne({username:c_username,date:c_date});
+
+            if(customer)
+            {
+                if(c_time == 'breakfast')
+                {
+                    if(customer.breakfast == Boolean(false))
+                    {
+                        Managercheck.updateOne({username:c_username,date:c_date},{$set: {breakfast: Boolean(true)}}).then((result) => {
+                           res.render('manager/managercheck',{manager}); 
+                        }).catch((err) => {
+                            console.log(err);
+                            res.send('cannot update');
+                        });
+                    }
+                    else
+                    {
+                        res.send("Already checked for breakfast");
+                    }
+
+                }
+                else if(c_time == 'lunch')
+                {
+                    if(customer.lunch == Boolean(false))
+                    {
+                        Managercheck.updateOne({username:c_username,date:c_date},{$set: {lunch : Boolean(true)}}).then((result) => {
+                           res.render('manager/managercheck',{manager}); 
+                        }).catch((err) => {
+                            console.log(err);
+                            res.send('cannot update');
+                        });
+                    }
+                    else
+                    {
+                        res.send("Already checked for lunch");
+                    }
+
+                }
+                else 
+                {
+                    if(customer.dinner == Boolean(false))
+                    {
+                        Managercheck.updateOne({username:c_username,date:c_date},{$set: {dinner : Boolean(true)}}).then((result) => {
+                           res.render('manager/managercheck',{manager}); 
+                        }).catch((err) => {
+                            console.log(err);
+                            res.send('cannot update');
+                        });
+                    }
+                    else
+                    {
+                        res.send("Already checked for dinner");
+                    }
+                }
+            }
+            else
+            {
+                res.send("Customer not found");
+            }
+        }
+        else {
+            res.status(404).send('Manager not found');
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error');
+    }
+}
+
+
 const manager_changepassword_get = async (req, res) => {
     try {
         const username = req.params.username; // use req.params.username to get the username
@@ -379,3 +459,5 @@ const signup_post = async (req, res) => {
 
 //--> Update the route as below
 router.get('/verify/:id', authController.verifyMail);
+
+//--> 
