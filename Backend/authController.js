@@ -161,7 +161,7 @@ const customer_patch = async (req, res) => {
         customer.email = req.body.email;
         customer.phone = req.body.phone;
         customer.gender = req.body.gender;
-        // console.log(customer);
+        console.log(customer);
         // res.send(username);
 
         User.updateOne({ username: username },
