@@ -57,3 +57,8 @@ const manager_about_get = async (req, res) => {
         res.send('An error occurred while finding the manager.');
     }
 }
+
+const user_logout_get = (req, res) => {
+    res.cookie('jwt', '', { maxAge: 1 });
+    res.render('/home');
+}
