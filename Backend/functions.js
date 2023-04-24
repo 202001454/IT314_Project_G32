@@ -497,25 +497,6 @@ const signup_post = async (req, res) => {
 router.get('/verify/:id', authController.verifyMail);
 
 //--------------------------------------------------------------
-const manager_viewinventory_get = async (req, res) => {
-    try{
-        const username = req.params.username;
-        const manager = await User.findOne({username:username,role: 'manager'});
-
-        if(manager)
-        {
-            const inventory = await Inventory.find();
-            res.render('manager/viewinventory', { manager: manager, inventory: inventory });
-        }
-        else
-        {
-            res.send("Manager not found");
-        }
-    }
-    catch(error){
-        console.log(error);
-    }
-}
 
 //customer functionality for about and faq
 
@@ -750,6 +731,27 @@ const manager_viewfeedback_get = async (req,res) => {
             else
             {
                 res.send("No feedback found");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const manager_viewinventory_get = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = User.findOne({username:username,role: 'manager'});
+        if(manager)
+        {
+            const inventory = await Inventory.find();
+            if(inventory)
+            {
+                res.render('manager/viewinventory', { manager: manager, inventory: inventory });
+            }
+            else
+            {
+                res.send("No inventory found");
             }
         }
     } catch (error) {
