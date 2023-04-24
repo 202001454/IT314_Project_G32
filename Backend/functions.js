@@ -138,12 +138,7 @@ const manager_managercheck_post = async (req,res) => {
                 // const _date = new Date();
                 if(paymentofcustomer.enddate - c_date <0)
                 {
-                    Payment.deletaOne({username:c_username}).then((result) => {
-                        res.send("Payment expired");
-                    }).catch((err) => {
-                        console.log(err);
-                        res.send("Error occured");
-                    });
+                    res.send("payment is expired");
                 }
                 //payment is done!
                 else {
@@ -729,6 +724,10 @@ const manager_addpayment_post = async (req,res) => {
                         res.send("An error occurred while updating the payment details.");
                     }
                     
+                }
+                else
+                {
+                    res.send("customer not found");
                 }
             }
         }
