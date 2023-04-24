@@ -577,3 +577,4 @@ const cadet_faq_get = async (req, res) => {
 // ----------------------------------------------------
 // adding routes for customer, manager and cadet
 routers.get('/customer/:username/faq', authController.customer_faq_get);
+routers.get('/manager/:username/faq', authController.manager_faq_get);
