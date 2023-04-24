@@ -25,4 +25,6 @@ router.get('/cadet/:username/about', authController.cadet_about_get);
 
 router.get('/manager/:username/about', authController.manager_about_get);
 
+router.get('/logout', authController.logout_get);
+
 module.exports = router;
