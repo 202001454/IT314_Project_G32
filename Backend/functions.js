@@ -526,10 +526,27 @@ const manager_viewinventory_get = async (req, res) => {
 const customer_faq_get = async (req, res) => {
     try{
         const username = req.params.username;
-        const caustomer = await User.findOne({username:username,role: 'customer'});
-        if(caustomer)
+        const customer = await User.findOne({username:username,role: 'customer'});
+        if(customer)
         {
-            res.render('customer/faq', { customer: caustomer });
+            res.render('customer/faq', { customer: customer });
+        }
+        else
+        {
+            res.send("Customer not found");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const manager_faq_get = async (req, res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username,role: 'customer'});
+        if(manager)
+        {
+            res.render('manager/faq', { manager: manager });
         }
         else
         {
