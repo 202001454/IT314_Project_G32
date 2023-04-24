@@ -573,3 +573,7 @@ const cadet_faq_get = async (req, res) => {
         console.log(error);
     }
 }
+
+// ----------------------------------------------------
+// adding routes for
+routers.get('customer_faq_get', authController.customer_faq_get);
