@@ -130,7 +130,7 @@ const manager_managercheck_post = async (req,res) => {
             const c_username = req.body.username;
             const c_date = req.body.date;
             const c_time = req.body.time.toLowerCase();
-            const customer = Managercheck.findOne({username:c_username,date:c_date});
+            const customer = await Managercheck.findOne({username:c_username,date:c_date});
 
             if(customer)
             {
@@ -460,4 +460,23 @@ const signup_post = async (req, res) => {
 //--> Update the route as below
 router.get('/verify/:id', authController.verifyMail);
 
-//--> 
+//--------------------------------------------------------------
+const manager_viewinventory_get = async (req, res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username,role: 'manager'});
+
+        if(manager)
+        {
+            const inventory = await Inventory.find();
+            res.render('manager/viewinventory', { manager: manager, inventory: inventory });
+        }
+        else
+        {
+            res.send("Manager not found");
+        }
+    }
+    catch(error){
+        console.log(error);
+    }
+}
