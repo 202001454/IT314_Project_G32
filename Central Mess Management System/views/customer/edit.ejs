@@ -1,0 +1,153 @@
+<%- include('../partials/header') %>
+
+
+  <div id="wrapper">
+
+    <%- include('../partials/nav_home_customer') %>
+
+
+      <div class="container">
+
+
+        <div class="row mb-5">
+          <div class="col-12 col-lg-3">
+            <div class="list-group text-center make-sticky ">
+
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <div class="profile my-4 table-striped-columns">
+                      <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
+                      <div class="fs-3"><%=customer.fullname%></div>
+                      <div class="fs-5">Customer</div>
+                    </div>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>"
+                        class="list-group-item list-group-item-action">Home</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/view"
+                        class="list-group-item list-group-item-action">View
+                        profile</a></td>
+                  </tr>
+                  <tr class="table-active">
+                    <td><a href="/customer/<%= customer.username%>/edit"
+                        class="list-group-item list-group-item-action">Edit
+                        Profile</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/changepassword"
+                        class="list-group-item list-group-item-action">Change
+                        password</a></td>
+                  </tr>
+
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/paymenthistory" class="list-group-item list-group-item-action">Payment History</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/feedback" class="list-group-item list-group-item-action">Feedback</a></td>
+                  </tr>
+                </tbody>
+              </table>
+
+
+            </div>
+          </div>
+          <div class="col-1 col-lg-0"></div>
+
+
+          <div class="col-12 col-lg-7 my-5">
+            <div class="container border rounded-5 text-center">
+
+              <div class="text-center fs-2 mt-4 text-dark">Edit Your Profile</div>
+              <div class="text-center mb-5 text-dark">Fill the details mentioned.</div>
+
+              <form action="/customer/<%= customer.username%>/edit?_method=patch" method="post">
+
+                <div class="row">
+                  <div class="col-12 col-sm-6">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="fullname" name="fullname" value="<%= customer.fullname%>"
+                        required>
+                      <label for="fullname">Full name</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="username" name="username" value="<%= customer.username%>"
+                        disabled>
+                      <label for="username">Username</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 col-sm-6">
+                    <div class="form-floating mb-3">
+                      <input type="tel" class="form-control" id="phone-number" name="phone" value="<%= customer.phone%>"
+                        pattern="[0-9]{10}" required>
+                      <label for="phone-number">Phone number</label>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <div class="form-floating mb-3">
+                      <input type="email" class="form-control" id="email" name="email" value="<%= customer.email%>"
+                        disabled>
+                      <label for="email">Email</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 col-sm-4">
+                    <div class="form-floating mb-4">
+
+                      <select id="role" class="form-select selectpicker" value="<%= customer.role%>" name="role"
+                        data-width="auto" disabled>
+                        <option selected value="customer"> customer </option>
+                        <option value="cadet"> cadet </option>
+                        <option value="admin"> Admin </option>
+                      </select>
+                      <label for="role">Role</label>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-sm-4">
+                    <div class="form-floating mb-3">
+                      <select id="gender" class="form-select selectpicker" placeholder="Gender" name="gender"
+                        data-width="auto" required>
+                        <option selected value="male"> Male </option>
+                        <option value="female"> Female </option>
+                        <option value="other"> Other </option>
+                      </select>
+                      <label for="gender">Gender</label>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-sm-4">
+                    <div class="form-floating mb-3">
+                      <input type="date" class="form-control" id="birthdate" value="<%= customer.date.toISOString().slice(0 ,10)%>" name="birthdate" placeholder="somedate"
+                        required>
+                      <label for="birthdate">birth date</label>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="text-center mb-5">
+                  <button class="btn btn-primary mt-4 col-3" type="submit">Update</button>
+                </div>
+
+              </form>
+
+            </div>
+
+            <div class="col-1 col-lg-0"></div>
+          </div>
+
+
+          <%- include('../partials/footer') %>
