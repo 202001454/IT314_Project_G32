@@ -558,6 +558,23 @@ const customer_faq_get = async (req, res) => {
     }
 }
 
+const manager_about_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            res.render('manager/about', { manager: manager });
+        }
+        else {
+            res.send('An error occurred while finding the manager.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
+
 const manager_faq_get = async (req, res) => {
     try{
         const username = req.params.username;
