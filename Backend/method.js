@@ -34,11 +34,26 @@ const customer_about_get = async (req, res) => {
             res.render('customer/about', { customer: customer });
         }
         else {
-            res.send('An error occurred while finding the cadet.');
+            res.send('An error occurred while finding the customer.');
         }
     } catch (error) {
         console.log(error);
-        res.send('An error occurred while finding the cadet.');
+        res.send('An error occurred while finding the customer.');
     }
 }
 
+const manager_about_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            res.render('manager/about', { manager: manager });
+        }
+        else {
+            res.send('An error occurred while finding the manager.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
