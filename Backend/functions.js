@@ -631,3 +631,11 @@ const cadet_faq_get = async (req, res) => {
 routers.get('/customer/:username/faq', authController.customer_faq_get);
 routers.get('/manager/:username/faq', authController.manager_faq_get);
 router.get('/cadet/:username/faq', authController.cadet_faq_get);
+
+
+
+/*
+add payment
+view feedback
+view inventory
+*/
