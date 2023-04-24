@@ -521,3 +521,22 @@ const manager_viewinventory_get = async (req, res) => {
         console.log(error);
     }
 }
+
+//customer functionality for about and faq
+const customer_faq_get = async (req, res) => {
+    try{
+        const username = req.params.username;
+        const caustomer = await User.findOne({username:username,role: 'customer'});
+        if(caustomer)
+        {
+            res.render('customer/faq', { customer: caustomer });
+        }
+        else
+        {
+            res.send("Customer not found");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
