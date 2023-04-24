@@ -735,3 +735,24 @@ const manager_addpayment_post = async (req,res) => {
         console.log(error);
     }
 }
+
+const manager_viewfeedback_get = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = User.findOne({username:username,role: 'manager'});
+        if(manager)
+        {
+            const feedback = await Feedback.find();
+            if(feedback)
+            {
+                res.render('manager/viewfeedback', { manager: manager, feedback: feedback });
+            }
+            else
+            {
+                res.send("No feedback found");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
