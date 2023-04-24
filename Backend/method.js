@@ -26,3 +26,19 @@ const cadet_about_get = async (req, res) => {
     }
 }
 
+const customer_about_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const customer = await User.findOne({ username: username, role: 'customer' });
+        if (customer) {
+            res.render('customer/about', { customer: customer });
+        }
+        else {
+            res.send('An error occurred while finding the cadet.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
