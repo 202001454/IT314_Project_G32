@@ -521,3 +521,61 @@ const manager_viewinventory_get = async (req, res) => {
         console.log(error);
     }
 }
+
+//customer functionality for about and faq
+const customer_faq_get = async (req, res) => {
+    try{
+        const username = req.params.username;
+        const customer = await User.findOne({username:username,role: 'customer'});
+        if(customer)
+        {
+            res.render('customer/faq', { customer: customer });
+        }
+        else
+        {
+            res.send("Customer not found");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const manager_faq_get = async (req, res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username,role: 'manager'});
+        if(manager)
+        {
+            res.render('manager/faq', { manager: manager });
+        }
+        else
+        {
+            res.send("Manager not found");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const cadet_faq_get = async (req, res) => {
+    try{
+        const username = req.params.username;
+        const cadet = await User.findOne({username:username,role: 'cadet'});
+        if(cadet)
+        {
+            res.render('cadet/faq', { cadet: cadet });
+        }
+        else
+        {
+            res.send("Cadet not found");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// ----------------------------------------------------
+// adding routes for customer, manager and cadet
+routers.get('/customer/:username/faq', authController.customer_faq_get);
+routers.get('/manager/:username/faq', authController.manager_faq_get);
+router.get('/cadet/:username/faq', authController.cadet_faq_get);
