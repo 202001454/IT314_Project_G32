@@ -635,7 +635,23 @@ router.get('/cadet/:username/faq', authController.cadet_faq_get);
 
 
 /*
-add payment
-view feedback
-view inventory
+add payment --> get --> post
+view feedback --> get
+view inventory --> get
 */
+
+const manager_addpayment_get = async (req,res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            res.render('manager/addpayment', { manager: manager });
+        }
+        else {
+            res.send('An error occurred while finding the manager.');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+}
