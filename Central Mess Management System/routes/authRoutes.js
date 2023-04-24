@@ -6,6 +6,9 @@ const { requireAuth, checkUser } = require('../middleware/authMiddleware');
 router.use(methodoverride('_method'));
 
 router.get('*', checkUser);
+router.patch('*', checkUser);
+router.post('*', checkUser);
+
 
 
 router.get('/login', authController.login_get);
@@ -53,6 +56,8 @@ router.patch('/manager/:username/inventoryupgrade', authController.manager_inven
 
 router.get('/manager/:username/inventorydegrade', authController.manager_inventorydegrade_get);
 router.patch('/manager/:username/inventorydegrade', authController.manager_inventorydegrade_patch);
+
+router.get('/verify/:id', authController.verifyMail);
 
 router.get('/add-user', requireAuth, authController.add_user_get);
 router.get('/logout', authController.logout_get);
