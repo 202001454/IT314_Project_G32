@@ -523,6 +523,24 @@ const manager_viewinventory_get = async (req, res) => {
 }
 
 //customer functionality for about and faq
+
+const customer_about_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const customer = await User.findOne({ username: username, role: 'customer' });
+        if (customer) {
+            res.render('customer/about', { customer: customer });
+        }
+        else {
+            res.send('An error occurred while finding the customer.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the customer.');
+    }
+}
+
+
 const customer_faq_get = async (req, res) => {
     try{
         const username = req.params.username;
@@ -572,6 +590,7 @@ const cadet_about_get = async (req, res) => {
         res.send('An error occurred while finding the cadet.');
     }
 }
+
 
 const cadet_faq_get = async (req, res) => {
     try{
