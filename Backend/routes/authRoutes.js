@@ -19,4 +19,6 @@ router.get('/secret', requireAuth, authController.secret_get);
 
 router.get('/logout', authController.logout_get);
 
+router.get('/customer/:username/about', authController.customer_about_get);
+
 module.exports = router;
