@@ -2,9 +2,10 @@ const { Router } = require('express');
 const router = Router();
 const authController = require('../controllers/authController');
 const methodoverride = require('method-override');
-
+const { requireAuth, checkUser } = require('../middleware/authMiddleware');
 router.use(methodoverride('_method'));
 
+router.get('*', checkUser);
 
 
 router.get('/login', authController.login_get);
@@ -21,34 +22,40 @@ router.post('/login', authController.login_post);
 router.get('/signup', authController.signup_get);
 router.post('/signup', authController.signup_post);
 
-router.get('/customer/:username', authController.customer_get);
+router.get('/customer/:username', requireAuth, authController.customer_get);
 
-router.get('/customer/:username/edit', authController.customer_edit_get);
-router.patch('/customer/:username/edit', authController.customer_edit_patch);
+router.get('/customer/:username/edit', requireAuth, authController.customer_edit_get);
+router.patch('/customer/:username/edit', requireAuth, authController.customer_edit_patch);
 
-router.get('/customer/:username/view', authController.customer_view_get);
+router.get('/customer/:username/view', requireAuth, authController.customer_view_get);
 
-router.get('/customer/:username/changepassword', authController.customer_changepassword_get);
-router.patch('/customer/:username/changepassword', authController.customer_changepassword_patch);
+router.get('/customer/:username/changepassword', requireAuth, authController.customer_changepassword_get);
+router.patch('/customer/:username/changepassword', requireAuth, authController.customer_changepassword_patch);
 
 // router.patch('/customer/:username', authController.customer_patch);
-router.get('/customer/:username/feedback', authController.customer_feedback_get);
-router.post('/customer/:username/feedback', authController.customer_feedback_post);
+router.get('/customer/:username/feedback', requireAuth, authController.customer_feedback_get);
+router.post('/customer/:username/feedback', requireAuth, authController.customer_feedback_post);
 
-router.get('/customer/:username/paymenthistory', authController.customer_paymenthistory_get);
+router.get('/customer/:username/paymenthistory', requireAuth, authController.customer_paymenthistory_get);
 
-router.get('/manager/:username', authController.manager_get);
+router.get('/manager/:username', requireAuth, authController.manager_get);
 
-router.get('/manager/:username/edit', authController.manager_edit_get);
-router.patch('/manager/:username/edit', authController.manager_edit_patch);
+router.get('/manager/:username/edit', requireAuth, authController.manager_edit_get);
+router.patch('/manager/:username/edit', requireAuth, authController.manager_edit_patch);
 
-router.get('/manager/:username/view', authController.manager_view_get);
+router.get('/manager/:username/view', requireAuth, authController.manager_view_get);
 
-router.get('/manager/:username/changepassword', authController.manager_changepassword_get);
-router.patch('/manager/:username/changepassword', authController.manager_changepassword_patch);
+router.get('/manager/:username/changepassword', requireAuth, authController.manager_changepassword_get);
+router.patch('/manager/:username/changepassword', requireAuth, authController.manager_changepassword_patch);
 
+router.get('/manager/:username/inventoryupgrade', authController.manager_inventoryupgrade_get);
+router.patch('/manager/:username/inventoryupgrade', authController.manager_inventoryupgrade_patch);
 
-router.get('/add-user', authController.add_user_get);
+router.get('/manager/:username/inventorydegrade', authController.manager_inventorydegrade_get);
+router.patch('/manager/:username/inventorydegrade', authController.manager_inventorydegrade_patch);
+
+router.get('/add-user', requireAuth, authController.add_user_get);
+router.get('/logout', authController.logout_get);
 router.get('/', (req, res) => {
     res.render('home', { title: 'Home' });
 }
