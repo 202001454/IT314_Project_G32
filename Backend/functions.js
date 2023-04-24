@@ -557,6 +557,22 @@ const manager_faq_get = async (req, res) => {
     }
 }
 
+const cadet_about_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        if (cadet) {
+            res.render('cadet/about', { cadet: cadet });
+        }
+        else {
+            res.send('An error occurred while finding the cadet.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
 const cadet_faq_get = async (req, res) => {
     try{
         const username = req.params.username;
