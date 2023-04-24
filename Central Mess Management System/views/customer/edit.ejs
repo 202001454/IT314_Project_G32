@@ -18,7 +18,9 @@
                   <tr>
                     <div class="profile my-4 table-striped-columns">
                       <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
-                      <div class="fs-3"><%=customer.fullname%></div>
+                      <div class="fs-3">
+                        <%=customer.fullname%>
+                      </div>
                       <div class="fs-5">Customer</div>
                     </div>
                   </tr>
@@ -34,7 +36,7 @@
                         class="list-group-item list-group-item-action">View
                         profile</a></td>
                   </tr>
-                  <tr class="table-active">
+                  <tr class="table-active" >
                     <td><a href="/customer/<%= customer.username%>/edit"
                         class="list-group-item list-group-item-action">Edit
                         Profile</a></td>
@@ -46,10 +48,12 @@
                   </tr>
 
                   <tr>
-                    <td><a href="/customer/<%= customer.username%>/paymenthistory" class="list-group-item list-group-item-action">Payment History</a></td>
+                    <td><a href="/customer/<%= customer.username%>/paymenthistory"
+                        class="list-group-item list-group-item-action">Payment History</a></td>
                   </tr>
                   <tr>
-                    <td><a href="/customer/<%= customer.username%>/feedback" class="list-group-item list-group-item-action">Feedback</a></td>
+                    <td><a href="/customer/<%= customer.username%>/feedback"
+                        class="list-group-item list-group-item-action">Feedback</a></td>
                   </tr>
                 </tbody>
               </table>
@@ -71,15 +75,15 @@
                 <div class="row">
                   <div class="col-12 col-sm-6">
                     <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="fullname" name="fullname" value="<%= customer.fullname%>"
-                        required>
+                      <input type="text" class="form-control" id="fullname" name="fullname"
+                        value="<%= customer.fullname%>" required>
                       <label for="fullname">Full name</label>
                     </div>
                   </div>
                   <div class="col-12 col-sm-6">
                     <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="username" name="username" value="<%= customer.username%>"
-                        disabled>
+                      <input type="text" class="form-control" id="username" name="username"
+                        value="<%= customer.username%>" disabled>
                       <label for="username">Username</label>
                     </div>
                   </div>
@@ -120,9 +124,22 @@
                     <div class="form-floating mb-3">
                       <select id="gender" class="form-select selectpicker" placeholder="Gender" name="gender"
                         data-width="auto" required>
-                        <option selected value="male"> Male </option>
-                        <option value="female"> Female </option>
-                        <option value="other"> Other </option>
+
+                       
+                        <% if(customer.gender==='male' )  {%>
+                          <option selected value="male"> Male </option>
+                          <option value="female"> Female </option>
+                          <option value="other"> Other </option>
+
+                          <%} else if (customer.gender=='female' ) {%>
+                            <option value="male"> Male </option>
+                            <option selected value="female"> Female </option>
+                            <option value="other"> Other </option>
+                            <% } else {%>
+                              <option value="male"> Male </option>
+                              <option value="female"> Female </option>
+                              <option selected value="other"> Other </option>
+                              <% }%>
                       </select>
                       <label for="gender">Gender</label>
                     </div>
@@ -130,7 +147,8 @@
 
                   <div class="col-12 col-sm-4">
                     <div class="form-floating mb-3">
-                      <input type="date" class="form-control" id="birthdate" value="<%= customer.date.toISOString().slice(0 ,10)%>" name="birthdate" placeholder="somedate"
+                      <input type="date" class="form-control" id="birthdate"
+                        value="<%= customer.date.toISOString().slice(0 ,10)%>" name="date" placeholder="somedate"
                         required>
                       <label for="birthdate">birth date</label>
                     </div>
