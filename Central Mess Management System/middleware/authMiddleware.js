@@ -12,17 +12,19 @@ const requireAuth = (req, res, next) => {
                 res.render('login');
             } else {
                 // console.log("Vrund");
-                // console.log(res.locals.user);
                 // console.log("Vrund");
                 // console.log(decodedToken);
                 const username = req.params.username;
-                const fraud = await User.findOne({username:username});
-                if(fraud && fraud.username == res.locals.user.username)
-                {
+                console.log("deep");
+                console.log(res.locals.user);
+                console.log(username);
+                console.log("deep");
+
+                const fraud = await User.findOne({ username: username });
+                if (fraud && fraud.username == res.locals.user.username) {
                     next();
                 }
-                else
-                {
+                else {
                     console.log("Bhai Bhai");
                     res.render('login');
                 }
