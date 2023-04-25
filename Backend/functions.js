@@ -480,13 +480,14 @@ const sendVerifyMail = async (name, email, user_id, userrole, req) => {
 };
 
 
-  const verifyMail = async (req, res) => {
+const verifyMail = async (req, res) => {
     try {
         const updateInfo = await User.updateOne({ _id: req.params.id }, { $set: { isVarified: Boolean(true) } });
         console.log(updateInfo);
-        res.render('home');
+        res.render('login');
     } catch (error) {
         console.log(error.message);
+        res.send('Inside catch block of verifyMail');
     }
 }
 
