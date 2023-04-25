@@ -920,3 +920,65 @@ const manager_paymenthistorygraph_get = async (req,res) => {
     }
     // 
 }
+
+
+const manager_paymenthistorygraph_post = async (req, res) => {
+    try{
+
+        const username = req.params.username;
+        const manager = User.findOne({username:username, role:'manager'});
+        if(manager)
+        {
+            const monthsAgo = new Date();
+            const month = Number(req.body.month);
+            monthsAgo.setMonth(sixMonthsAgo.getMonth() - month);
+            const username = req.params.username;
+            const manager = await User.findOne({username:username, role:'manager'});
+            const payments = await Paymenthistory.aggregate([
+            {
+                $match: {
+                enddate: {
+                    $gte: monthsAgo
+                }
+                }
+            },
+            {
+                $group: {
+                _id: {
+                    $dateToString: {
+                    format: "%Y-%m",
+                    date: "$startdate"
+                    }
+                },
+                totalAmount: {
+                    $sum: "$amount"
+                }
+                }
+            },
+            {
+                $project: {
+                month: "$_id",
+                totalAmount: "$totalAmount",
+                _id: 0
+                }
+            },
+            {
+                $sort: {
+                    month: 1
+                }
+            }
+            ]);
+        
+            console.log(payments);
+            res.render('manager/viewpaymenthistorygraph', {manager, payments });
+        }
+        else
+        {
+            res.send("No manager found");
+        }
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+  }
