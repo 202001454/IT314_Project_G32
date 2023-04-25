@@ -92,7 +92,7 @@
                                     Check Customer List
                                 </div>
                             </div>
-                            <form action="manager/<%=manager.username%>/managercheck?_method=patch" method="post" class="mt-4">
+                            <form action="/manager/<%=manager.username%>/managercheck" method="post" class="mt-4">
 
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="username" name="username" placeholder="something"
@@ -102,7 +102,7 @@
 
                                 <div class="form-floating mb-3">
                                     <input type="date" class="form-control" id="date" name="date" placeholder="something"
-                                        value="<%= manager.currentDate.toISOString().slice(0,10) %>" required>
+                                        value="<%= manager.date.toISOString().slice(0,10) %>" required>
                                     <label for="date">Date</label>
                                 </div>
 
@@ -115,11 +115,11 @@
                                   <label for="foodtime">FoodTime</label>
                                 </div> -->
 
-                                <% var hour=manager.currentDate.getHours(); %>
+                                <% var hour=manager.date.getHours(); %>
                                     <% if (hour>= 6 && hour < 10) { %>
                                             <div class="form-floating mb-3">
                                                 <select id="foodtime" class="form-select selectpicker"
-                                                    placeholder="foodtime" data-width="auto" required>
+                                                name ="time"   placeholder="foodtime" data-width="auto" required>
                                                     <option selected value="breakfast"> Breakfast </option>
                                                     <option value="lunch"> Lunch </option>
                                                     <option value="dinner"> Dinner </option>
@@ -128,7 +128,7 @@
                                             </div>
                                             <% } else if (hour>= 10 && hour < 16) { %>
                                                     <div class="form-floating mb-3">
-                                                        <select id="foodtime" class="form-select selectpicker"
+                                                        <select id="foodtime" class="form-select selectpicker"  name ="time"                                                         
                                                             placeholder="foodtime" data-width="auto" required>
                                                             <option value="breakfast"> Breakfast </option>
                                                             <option selected value="lunch"> Lunch </option>
@@ -138,7 +138,7 @@
                                                     </div>
                                                     <% } else { %>
                                                         <div class="form-floating mb-3">
-                                                            <select id="foodtime" class="form-select selectpicker"
+                                                            <select id="foodtime" class="form-select selectpicker"  name ="time" 
                                                                 placeholder="foodtime" data-width="auto" required>
                                                                 <option value="breakfast"> Breakfast </option>
                                                                 <option value="lunch"> Lunch </option>

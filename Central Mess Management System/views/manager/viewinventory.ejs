@@ -100,22 +100,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <% for (const i of inventory ) {%>
                                     <tr>
-                                        <td scope="col" class="col-7">Item1</td>
-                                        <td scope="col">amount1</td>
+                                        <td scope="col" class="col-7"><%=i.item%></td>
+                                        <td scope="col"><%=i.quantity%></td>
                                     </tr>
-                                    <tr>
-                                        <td scope="col" class="col-7">Item1</td>
-                                        <td scope="col">amount1</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="col" class="col-7">Item1</td>
-                                        <td scope="col">amount1</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="col" class="col-7">Item1</td>
-                                        <td scope="col">amount1</td>
-                                    </tr>
+                                    <%}%>
+                                   
                                 </tbody>
                             </table>
 

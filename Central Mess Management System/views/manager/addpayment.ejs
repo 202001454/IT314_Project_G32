@@ -18,7 +18,9 @@
                                         <div class="profile my-4 table-striped-columns">
                                             <div class="mb-3"><img src="/photos/person_logo.svg" alt="person"
                                                     width="20%"></div>
-                                            <div class="fs-3"><%= manager.fullname%></div>
+                                            <div class="fs-3">
+                                                <%= manager.fullname%>
+                                            </div>
                                             <div class="fs-5">Manager</div>
                                         </div>
                                     </tr>`
@@ -83,7 +85,9 @@
 
 
                     <div class="col-12 col-md-8 col-lg-5 mt-5 py-5">
-                        <div class="text-center fs-2 mb-5">Welcome <a href="/manager/<%= manager.username%>"> <%= manager.fullname%></a></div>
+                        <div class="text-center fs-2 mb-5">Welcome <a href="/manager/<%= manager.username%>">
+                                <%= manager.fullname%>
+                            </a></div>
 
                         <div class="container border rounded-5 p-5">
                             <div class="row mb-5">
@@ -91,7 +95,8 @@
                                     Add Payment.
                                 </div>
                             </div>
-                            <form action="manager/<%=manager.username%>/changepassword?_method=patch" method="post" class="mt-4">
+                            <form action="/manager/<%=manager.username%>/addpayment" method="post"
+                                class="mt-4">
 
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="username" name="username"
@@ -105,9 +110,17 @@
                                 </div>
 
                                 <div class="form-floating mb-3">
-                                    <input type="date" class="form-control" id="date" name="date"
-                                        placeholder="something" required>
-                                    <label for="date">Date</label>
+                                    <input type="date" class="form-control" id="date" name="startdate"
+                                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something"
+                                        required>
+                                    <label for="date">Start Date</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" id="date" name="enddate"
+                                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something"
+                                        required>
+                                    <label for="date">End Date</label>
                                 </div>
 
                                 <div class="text-center mt-5">

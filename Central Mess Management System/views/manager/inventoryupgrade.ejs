@@ -91,7 +91,7 @@
                                     Add / Update your Inventory.
                                 </div>
                             </div>
-                            <form action="manager/<%=manager.username%>/inventoryupgrade?_method=patch" method="post" class="mt-4">
+                            <form action="/manager/<%=manager.username%>/inventoryupgrade?_method=patch" method="post" class="mt-4">
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="item-name" name="item" placeholder="something"
                                         required>
@@ -100,7 +100,7 @@
 
                                 <div class="form-floating mb-3">
                                     <input type="number" class="form-control" id="quantity" name="quantity" placeholder="something"
-                                        min="0" max="100" required>
+                                        min="0"  required>
                                     <label for="quantity">Quantity</label>
                                 </div>
 
