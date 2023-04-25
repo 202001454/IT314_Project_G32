@@ -38,6 +38,37 @@ router.post('/customer/:username/feedback', requireAuth, authController.customer
 
 router.get('/customer/:username/paymenthistory', requireAuth, authController.customer_paymenthistory_get);
 
+
+router.get('/manager/:username', requireAuth, authController.manager_get);
+
+router.get('/manager/:username/edit', requireAuth, authController.manager_edit_get);
+router.patch('/manager/:username/edit', requireAuth, authController.manager_edit_patch);
+
+router.get('/manager/:username/view', requireAuth, authController.manager_view_get);
+
+router.get('/manager/:username/changepassword', requireAuth, authController.manager_changepassword_get);
+router.patch('/manager/:username/changepassword', requireAuth, authController.manager_changepassword_patch);
+
+router.get('/manager/:username/about', authController.manager_about_get);
+
+router.get('/manager/:username/managercheck', authController.manager_managercheck_get);
+router.post('/manager/:username/managercheck', authController.manager_managercheck_post);
+
+router.get('/manager/:username/inventoryupgrade', authController.manager_inventoryupgrade_get);
+router.patch('/manager/:username/inventoryupgrade', authController.manager_inventoryupgrade_patch);
+
+router.get('/manager/:username/inventorydegrade', authController.manager_inventorydegrade_get);
+router.patch('/manager/:username/inventorydegrade', authController.manager_inventorydegrade_patch);
+
+router.get('/manager/:username/viewfeedback', requireAuth, authController.manager_viewfeedback_get);
+
+router.get('/manager/:username/viewinventory', requireAuth, authController.manager_viewinventory_get);
+router.get('/manager/:username/addpayment', requireAuth, authController.manager_addpayment_get);
+router.post('/manager/:username/addpayment', requireAuth, authController.manager_addpayment_post);
+
+router.get('/manager/:username/managercheck', requireAuth, authController.manager_managercheck_get);
+router.post('/manager/:username/managercheck', requireAuth, authController.manager_managercheck_post);
+
 router.get('/logout', authController.logout_get);
 
 router.use((req, res) => {
