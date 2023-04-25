@@ -23,6 +23,21 @@ router.post('/login', authController.login_post);
 router.get('/signup', authController.signup_get);
 router.post('/signup', authController.signup_post);
 
+router.get('/customer/:username', requireAuth, authController.customer_get);
+
+router.get('/customer/:username/edit', requireAuth, authController.customer_edit_get);
+router.patch('/customer/:username/edit', requireAuth, authController.customer_edit_patch);
+
+router.get('/customer/:username/view', requireAuth, authController.customer_view_get);
+
+router.get('/customer/:username/changepassword', requireAuth, authController.customer_changepassword_get);
+router.patch('/customer/:username/changepassword', requireAuth, authController.customer_changepassword_patch);
+
+router.get('/customer/:username/feedback', requireAuth, authController.customer_feedback_get);
+router.post('/customer/:username/feedback', requireAuth, authController.customer_feedback_post);
+
+router.get('/customer/:username/paymenthistory', requireAuth, authController.customer_paymenthistory_get);
+
 router.get('/logout', authController.logout_get);
 
 router.use((req, res) => {
