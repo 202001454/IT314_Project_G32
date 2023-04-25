@@ -3,10 +3,11 @@ const Inventory = require('../models/inventory');
 const Feedback = require('../models/feedback');
 const Payment = require('../models/payment');
 const Paymenthistory = require('../models/paymenthistory');
+const Managercheck = require('../models/managercheck');
+
 const nodedmailer = require("nodemailer");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
 
 const validatepassword = (password) => {
     let errors = [];
@@ -495,8 +496,9 @@ const customer_paymenthistory_get = async (req, res) => {
         const username = req.params.username; // use req.params.username to get the username
         const customer = await User.findOne({ username: username, role: 'customer' });
         if (customer) {
-            const found = await Paymenthistory.findMany({ username: username, role: 'customer' }).sort({ startdate: -1 });
-            res.render('customer/paymenthistory', { customer: customer, found: found });
+            const found = await Paymenthistory.find({username: customer.username }).sort({_id:-1});
+            console.log(found );
+            res.render('customer/paymenthistory', { customer: customer, paymenthistory: found });
             // res.send(found);
         } else {
             res.send('No customer found.');
@@ -636,11 +638,142 @@ const manager_changepassword_patch = async (req, res) => {
     }
 }
 
+const manager_managercheck_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            const today = new Date();
+            manager.date = today;
+            res.render('manager/managercheck', { manager });
+        }
+        else {
+            res.status(404).send('Manager not found');
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error');
+    }
+
+}
+
+const manager_managercheck_post = async (req, res) => {
+    try {
+        const username = req.params.username;
+        let manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            const c_username = req.body.username;
+            const c_date = req.body.date;
+            const c_time = req.body.time.toLowerCase();
+
+            //finding the customer from payment database
+            const paymentofcustomer = await Payment.findOne({ username: c_username });
+            if (paymentofcustomer) {
+                // const _date = new Date();
+                if (paymentofcustomer.enddate - c_date < 0) {
+                    res.send("payment is expired");
+                }
+                //payment is done!
+                else {
+                    const customer = await Managercheck.findOne({ username: c_username, date: c_date });
+
+                    if (customer) {
+                        if (c_time == 'breakfast') {
+                            if (customer.breakfast == Boolean(false)) {
+                                Managercheck.updateOne({ username: c_username, date: c_date }, { $set: { breakfast: Boolean(true) } }).then((result) => {
+                                    manager.date = new Date();
+                                    res.render('manager/managercheck', { manager });
+                                }).catch((err) => {
+                                    console.log(err);
+                                    res.send('cannot update');
+                                });
+                            }
+                            else {
+                                res.send("Already checked for breakfast");
+                            }
+
+                        }
+                        else if (c_time == 'lunch') {
+                            if (customer.lunch == Boolean(false)) {
+                                Managercheck.updateOne({ username: c_username, date: c_date }, { $set: { lunch: Boolean(true) } }).then((result) => {
+                                    manager.date = new Date();
+
+                                    res.render('manager/managercheck', { manager });
+                                }).catch((err) => {
+                                    console.log(err);
+                                    res.send('cannot update');
+                                });
+                            }
+                            else {
+                                res.send("Already checked for lunch");
+                            }
+
+                        }
+                        else {
+                            if (customer.dinner == Boolean(false)) {
+                                Managercheck.updateOne({ username: c_username, date: c_date }, { $set: { dinner: Boolean(true) } }).then((result) => {
+                                    manager.date = new Date();
+
+                                    res.render('manager/managercheck', { manager });
+                                }).catch((err) => {
+                                    console.log(err);
+                                    res.send('cannot update');
+                                });
+                            }
+                            else {
+                                res.send("Already checked for dinner");
+                            }
+                        }
+                    }
+                    else {
+                        //make new and save
+                        const _customer = await User.findOne({ username: c_username, role: 'customer' });
+                        if (_customer) {
+
+                            let newcustomer = new Managercheck({ username: c_username, date: c_date, breakfast: Boolean(false), lunch: Boolean(false), dinner: Boolean(false) });
+
+                            if (c_time == 'breakfast') {
+                                newcustomer.breakfast = Boolean(true);
+                            }
+                            else if (c_time == 'lunch') {
+                                newcustomer.lunch = Boolean(true);
+                            }
+                            else {
+                                newcustomer.dinner = Boolean(true);
+                            }
+                            const register = await newcustomer.save();
+                            manager.date = new Date();
+
+                            res.render('manager/managercheck', { manager });
+
+                        }
+                        else
+                            res.send("Customer not found");
+
+
+                    }
+                }
+            }
+            else {
+                res.send("Payment not found");
+            }
+
+        }
+        else {
+            res.status(404).send('Manager not found');
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error');
+    }
+}
+
+
 const manager_inventoryupgrade_get = async (req, res) => {
     try {
         const username = req.params.username;
         const manager = await User.findOne({ username: username, role: 'manager' });
-        res.render('/manager/inventoryupgrade', { manager });
+        res.render('manager/inventoryupgrade', { manager });
 
     } catch (error) {
         console.log(error);
@@ -652,7 +785,7 @@ const manager_inventorydegrade_get = async (req, res) => {
     try {
         const username = req.params.username;
         const manager = await User.findOne({ username: username, role: 'manager' });
-        res.render('/manager/inventorydegrade', { manager });
+        res.render('manager/inventorydegrade', { manager });
 
     } catch (error) {
         console.log(error);
@@ -669,11 +802,11 @@ const manager_inventoryupgrade_patch = async (req, res) => {
         const manager = await User.findOne({ username: username, role: 'manager' });
         if (inventory && manager) {
             //if both found
-            Inventory.updateOne({ item: item }, { $set: { quantity: inventory.quantity + quantity } })
+            Inventory.updateOne({ item: item }, { $set: { quantity: Number(inventory.quantity) + Number(quantity) } })
                 .then((result) => {
                     console.log(result);
-                    // res.render('manager/inventoryupgrade', { manager: manager });
-                    res.send("Updated successfully");
+                    res.render('manager/inventoryupgrade', { manager: manager });
+                    // res.send("Updated successfully");
                 })
                 .catch((error) => {
                     console.log(error);
@@ -686,8 +819,8 @@ const manager_inventoryupgrade_patch = async (req, res) => {
                 quantity: quantity
             });
             const response = await _inventory.save();
-            // res.render('manager/inventoryupgrade', { manager: manager });
-            res.send("New added");
+            res.render('manager/inventoryupgrade', { manager: manager });
+            // res.send("New added");
         }
         else {
             console.log("Error");
@@ -709,13 +842,13 @@ const manager_inventorydegrade_patch = async (req, res) => {
         const manager = await User.findOne({ username: username, role: 'manager' });
         if (inventory && manager) {
             //if both found
-            let qty = (inventory.quantity - quantity >= 0) ? inventory.quantity - quantity : 0;
+            let qty = (inventory.quantity - Number(quantity) >= 0) ? inventory.quantity - Number(quantity) : 0;
 
             Inventory.updateOne({ item: item }, { $set: { quantity: qty } })
                 .then((result) => {
                     console.log(result);
-                    // res.render('manager/inventorydegrade', { manager: manager });
-                    res.send("Updated successfully");
+                    res.render('manager/inventorydegrade', { manager: manager });
+                    // res.send("Updated successfully");
                 })
                 .catch((error) => {
                     console.log(error);
@@ -724,6 +857,248 @@ const manager_inventorydegrade_patch = async (req, res) => {
         }
         else {
             console.log("Error");
+            res.render('404');
+
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+const manager_addpayment_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        let manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+
+            manager.date = new Date();
+            res.render('manager/addpayment', { manager: manager });
+        }
+        else {
+            res.send('An error occurred while finding the manager.');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+
+const manager_addpayment_post = async (req, res) => {
+    try {
+        const {username} = req.params;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        const user =await User.findOne({username:req.body.username, role:'customer'});
+        if (manager && user) {
+            const customerusername = req.body.username;
+            console.log("Hiya");
+            console.log(customerusername);
+            console.log("Hiya");
+            const oldPayment = await Payment.findOne({ username: customerusername });
+            if (oldPayment) {
+                oldPayment.startdate = req.body.startdate;
+                oldPayment.enddate = req.body.enddate;
+                oldPayment.amount = req.body.amount;
+
+                const updated = await Payment.updateOne({ username: customerusername }, { $set: { startdate: oldPayment.startdate, enddate: oldPayment.enddate, amount: oldPayment.amount }, validate: true });
+                if (updated) {
+                    const updateHistory = new Paymenthistory({
+                        username: customerusername,
+                        startdate: oldPayment.startdate,
+                        enddate: oldPayment.enddate,
+                        amount: oldPayment.amount
+                    });
+                    const historysave = await updateHistory.save();
+                    if (historysave) {
+                        manager.date = new Date();
+                        res.status(201).render('manager/addpayment', { manager: manager });
+                    }
+                    else {
+                        res.send("An error occurred while updating the payment history.");
+                    }
+                }
+                else {
+                    res.send("An error occurred while updating the payment details.");
+                }
+            }
+            else {
+                const customer =await  User.findOne({ username: customerusername, role: 'customer' });
+                console.log('customer', customer);
+                if (customer) {
+                    const payment = new Payment({
+                        username: req.body.username,
+                        startdate: req.body.startdate,
+                        enddate: req.body.enddate,
+                        amount: req.body.amount
+                    });
+                    const customerpaymentadded = await payment.save();
+                    if (customerpaymentadded) {
+                        const paymenthistory = new Paymenthistory({
+                            username: customerusername,
+                            startdate: req.body.startdate,
+                            enddate: req.body.enddate,
+                            amount: req.body.amount
+                        });
+                        const historysave = await paymenthistory.save();
+                        if (historysave) {
+                        manager.date = new Date();
+
+                            res.status(201).render('manager/addpayment', { manager: manager });
+                        }
+                        else {
+                            res.send("An error occurred while updating the payment history.");
+                        }
+                    }
+                    else {
+                        res.send("An error occurred while updating the payment details.");
+                    }
+
+                }
+                else {
+                    res.send("customer not found");
+                }
+            }
+        }
+        else
+            res.send("aap payment nahi kar sakte");
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const manager_viewfeedback_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            const feedback = await Feedback.find().sort({ _id: -1 }).limit(10);
+            if (feedback) {
+                console.log(manager.username);
+                console.log("ok");
+                res.render('manager/viewfeedback', { manager: manager, feedback: feedback });
+            }
+            else {
+                res.send("No feedback found");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const manager_viewinventory_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            const inventory = await Inventory.find();
+            if (inventory) {
+                console.log(inventory);
+                res.render('manager/viewinventory', { manager: manager, inventory: inventory });
+            }
+            else {
+                res.send("No inventory found");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// about and faq
+
+const customer_about_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const customer = await User.findOne({ username: username, role: 'customer' });
+        if (customer) {
+            res.render('customer/about', { customer: customer });
+        }
+        else {
+            res.send('An error occurred while finding the customer.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the customer.');
+    }
+}
+
+
+const customer_faq_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const customer = await User.findOne({ username: username, role: 'customer' });
+        if (customer) {
+            res.render('customer/faq', { customer: customer });
+        }
+        else {
+            res.send("Customer not found");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const manager_about_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            res.render('manager/about', { manager: manager });
+        }
+        else {
+            res.send('An error occurred while finding the manager.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
+
+const manager_faq_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            res.render('manager/faq', { manager: manager });
+        }
+        else {
+            res.send("Manager not found");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const cadet_about_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        if (cadet) {
+            res.render('cadet/about', { cadet: cadet });
+        }
+        else {
+            res.send('An error occurred while finding the cadet.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
+
+const cadet_faq_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        if (cadet) {
+            res.render('cadet/faq', { cadet: cadet });
+        }
+        else {
+            res.send("Cadet not found");
         }
     } catch (error) {
         console.log(error);
@@ -780,10 +1155,24 @@ module.exports = {
     manager_view_get,
     manager_changepassword_get,
     manager_changepassword_patch,
+    manager_managercheck_get,
+    manager_managercheck_post, // POST
+
     manager_inventoryupgrade_get,
     manager_inventoryupgrade_patch,
     manager_inventorydegrade_get,
     manager_inventorydegrade_patch,
+    manager_viewfeedback_get,
+    manager_viewinventory_get,
+    manager_addpayment_get,
+    manager_addpayment_post, // POST
+
     verifyMail,
-    logout_get
+    logout_get,
+    customer_about_get,
+    customer_faq_get,
+    manager_about_get,
+    manager_faq_get,
+    cadet_about_get,
+    cadet_faq_get
 };
