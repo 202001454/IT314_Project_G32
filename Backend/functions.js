@@ -1003,3 +1003,55 @@ const cadet_viewprofile_get = async (req,res) => {
     }
 }
 
+const cadet_changepassword_get = async (req, res) => {
+    try {
+        const username = req.params.username; // use req.params.username to get the username
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+
+        if (cadet) {
+
+            res.render('cadet/changepassword', { cadet: cadet });
+            // res.send(cadet);
+        } else {
+            res.send('No cadet found.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
+const cadet_changepassword_patch = async (req, res) => {
+    try {
+        const { username } = req.params; // use req.params.username to get the username
+        let cadet = await User.findOne({ username: username, role: 'cadet' });
+        // cadet.password = req.body.password;
+        // const cpassword = req.body.cpassword;
+        if(cadet)
+        {
+            if (req.body.password === req.body.cpassword && req.body.cpassword) {
+            
+            
+            cadet.password = await bcrypt.hash(req.body.password, 12);
+            User.updateOne({ username: username },
+            { $set: { password: cadet.password }, validate: true }).then((result) => {
+                console.log(result);
+                res.render('cadet/index', { cadet: cadet });
+            }).catch((err) => {
+                console.log(err);
+                res.send(err);
+            });
+            }
+            else {
+                res.send("Password are not matching");
+            }
+        }
+        else {
+            res.send('No cadet found.');
+        }
+        
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
