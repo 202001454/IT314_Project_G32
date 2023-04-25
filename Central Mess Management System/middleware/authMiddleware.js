@@ -20,13 +20,11 @@ const requireAuth = (req, res, next) => {
                 console.log(username);
                 console.log("deep");
 
-                const fraud = await User.findOne({username:username});
-                if(fraud && fraud.username == res.locals.user.username)
-                {
+                const fraud = await User.findOne({ username: username });
+                if (fraud && fraud.username == res.locals.user.username) {
                     next();
                 }
-                else
-                {
+                else {
                     console.log("Bhai Bhai");
                     res.render('login');
                 }
