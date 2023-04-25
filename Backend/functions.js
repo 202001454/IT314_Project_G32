@@ -813,7 +813,7 @@ const manager_viewinventory_get = async (req,res) => {
     }
 }
 
-// ----------------cadet functionalities---------------- //
+// ----------------manager deletion functionalities---------------- //
 const manager_deleteuser_get = async (req,res) => {
     const username = req.params.username;
     const manager = await User.findOne({username:username,role: 'manager'});
