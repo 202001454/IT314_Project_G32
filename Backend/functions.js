@@ -859,3 +859,64 @@ const manager_deleteuser_delete = async (req,res) => {
     }
 }
 
+//----------------------------------------------
+const manager_paymenthistorygraph_get = async (req,res) => {
+    try{
+
+        const username = req.params.username;
+        const manager = User.findOne({username:username, role:'manager'});
+        if(manager)
+        {
+            const sixMonthsAgo = new Date();
+            sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+            const username = req.params.username;
+            const manager = await User.findOne({username:username, role:'manager'});
+            const payments = await Paymenthistory.aggregate([
+            {
+                $match: {
+                enddate: {
+                    $gte: sixMonthsAgo
+                }
+                }
+            },
+            {
+                $group: {
+                _id: {
+                    $dateToString: {
+                    format: "%Y-%m",
+                    date: "$startdate"
+                    }
+                },
+                totalAmount: {
+                    $sum: "$amount"
+                }
+                }
+            },
+            {
+                $project: {
+                month: "$_id",
+                totalAmount: "$totalAmount",
+                _id: 0
+                }
+            },
+            {
+                $sort: {
+                    month: 1
+                }
+            }
+            ]);
+        
+            console.log(payments);
+            res.render('manager/viewpaymenthistorygraph', {manager, payments });
+        }
+        else
+        {
+            res.send("No manager found");
+        }
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+    // 
+}
