@@ -79,26 +79,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                  <%for (const i of paymenthistory){%>
                                     <tr>
-                                        <td scope="col">1200</td>
-                                        <td scope="col">24-02-2023 </td>
-                                        <td scope="col">end-date</td>
+                                        <td scope="col"><%=i.amount%></td>
+                                        <td scope="col"><%=i.startdate.toISOString().slice(0,10)%></td>
+                                        <td scope="col"><%=i.enddate.toISOString().slice(0,10)%></td>
                                     </tr>
-                                    <tr>
-                                        <td scope="col">1200</td>
-                                        <td scope="col">24-02-2023 </td>
-                                        <td scope="col">end-date</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="col">1200</td>
-                                        <td scope="col">24-02-2023 </td>
-                                        <td scope="col">end-date</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="col">1200</td>
-                                        <td scope="col">24-02-2023 </td>
-                                        <td scope="col">end-date</td>
-                                    </tr>
+                                    <%}%>
+                                    
                                 </tbody>
                             </table>
 
@@ -115,4 +103,4 @@
     </div>
 
 
-    <%- include('./partials/footer') %>
+    <%- include('../partials/footer') %>
