@@ -812,3 +812,17 @@ const manager_viewinventory_get = async (req,res) => {
         console.log(error);
     }
 }
+
+// ----------------cadet functionalities---------------- //
+const manager_deletecustomer_get = async (req,res) => {
+    const username = req.params.username;
+    const manager = await User.findOne({username:username,role: 'manager'});
+    if(manager)
+    {
+        res.render('manager/deletecustomer', { manager: manager });
+    }
+    else
+    {
+        res.send("Manager not found");
+    }
+}
