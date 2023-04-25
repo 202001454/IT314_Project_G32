@@ -257,32 +257,7 @@ const manager_changepassword_get = async (req, res) => {
     }
 }
 
-const manager_changepassword_patch = async (req, res) => {
-    try {
-        const { username } = req.params; // use req.params.username to get the username
-        const manager = await User.findOne({ username: username, role: 'manager' });
-        manager.password = req.body.password;
-        const cpassword = req.body.cpassword;
-
-        if (manager.password === cpassword && cpassword) {
-            User.updateOne({ username: username },
-                { $set: { password: req.body.password }, validate: true }).then((result) => {
-                    console.log(result);
-                    res.render('manager/index', { manager: manager });
-                }).catch((err) => {
-                    console.log(err);
-                    res.send(err);
-                }
-                );
-        }
-        else {
-            res.send("Password are not matching");
-        }
-    } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the manager.');
-    }
-}
+// /
 
 const manager_inventoryupgrade_get = async (req,res) => {
     try{
@@ -1053,5 +1028,37 @@ const cadet_changepassword_patch = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.send('An error occurred while finding the cadet.');
+    }
+}
+
+const manager_changepassword_patch = async (req, res) => {
+    try {
+        const { username } = req.params; // use req.params.username to get the username
+        let manager = await User.findOne({ username: username, role: 'manager' });
+        // manager.password = req.body.password;
+        // const cpassword = req.body.cpassword;
+        if(manager)
+        {
+            if (req.body.password === req.body.cpassword && req.body.cpassword) {
+                manager.password = await bcrypt.hash(req.body.password, 12);
+                User.updateOne({ username: username },
+                { $set: { password: manager.password }, validate: true }).then((result) => {
+                    console.log(result);
+                    res.render('manager/index', { manager: manager });
+                }).catch((err) => {
+                    console.log(err);
+                    res.send(err);
+                });
+            }
+            else {
+                res.send("Password are not matching");
+            }
+        }
+        else {
+            res.send('No manager found.');
+        }  
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
     }
 }
