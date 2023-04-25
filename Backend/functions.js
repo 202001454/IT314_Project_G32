@@ -982,3 +982,24 @@ const manager_paymenthistorygraph_post = async (req, res) => {
         console.log(error);
     }
   }
+
+
+  //cadet functionalities
+
+const cadet_viewprofile_get = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const cadet = await User.findOne({username:username,role: 'cadet'});
+        if(cadet)
+        {
+            res.render('cadet/viewprofile', { cadet: cadet });
+        }
+        else
+        {
+            res.send("Cadet not found");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
