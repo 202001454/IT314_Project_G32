@@ -826,3 +826,35 @@ const manager_deletecustomer_get = async (req,res) => {
         res.send("Manager not found");
     }
 }
+
+const manager_deletecustomer_post = async (req,res) => {
+    const username = req.params.username;
+    const manager = await User.findOne({username:username,role: 'manager'});
+    
+    if(manager)
+    {
+        const managerPass = req.body.password;
+        const auth = await bcrypt.compare(managerPass, manager.password);
+        if(auth)
+        {
+            const customerusername = req.body.username;
+            const _delete = await User.deleteOne({username:customerusername,role:'customer'});
+            if(_delete)
+            {
+                res.status(201).render('manager/deletecustomer', { manager: manager });
+            }
+            else
+            {
+                res.send("An error occurred while deleting the customer.");
+            }
+        }
+        else
+        {
+            res.send("{Password not matched for manager");
+        }
+    }
+    else
+    {
+        res.send("Manager not found");
+    }
+}
