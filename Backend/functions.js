@@ -138,12 +138,7 @@ const manager_managercheck_post = async (req,res) => {
                 // const _date = new Date();
                 if(paymentofcustomer.enddate - c_date <0)
                 {
-                    Payment.deletaOne({username:c_username}).then((result) => {
-                        res.send("Payment expired");
-                    }).catch((err) => {
-                        console.log(err);
-                        res.send("Error occured");
-                    });
+                    res.send("payment is expired");
                 }
                 //payment is done!
                 else {
@@ -502,27 +497,26 @@ const signup_post = async (req, res) => {
 router.get('/verify/:id', authController.verifyMail);
 
 //--------------------------------------------------------------
-const manager_viewinventory_get = async (req, res) => {
-    try{
-        const username = req.params.username;
-        const manager = await User.findOne({username:username,role: 'manager'});
 
-        if(manager)
-        {
-            const inventory = await Inventory.find();
-            res.render('manager/viewinventory', { manager: manager, inventory: inventory });
+//customer functionality for about and faq
+
+const customer_about_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const customer = await User.findOne({ username: username, role: 'customer' });
+        if (customer) {
+            res.render('customer/about', { customer: customer });
         }
-        else
-        {
-            res.send("Manager not found");
+        else {
+            res.send('An error occurred while finding the customer.');
         }
-    }
-    catch(error){
+    } catch (error) {
         console.log(error);
+        res.send('An error occurred while finding the customer.');
     }
 }
 
-//customer functionality for about and faq
+
 const customer_faq_get = async (req, res) => {
     try{
         const username = req.params.username;
@@ -540,6 +534,23 @@ const customer_faq_get = async (req, res) => {
     }
 }
 
+const manager_about_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            res.render('manager/about', { manager: manager });
+        }
+        else {
+            res.send('An error occurred while finding the manager.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
+
 const manager_faq_get = async (req, res) => {
     try{
         const username = req.params.username;
@@ -556,6 +567,23 @@ const manager_faq_get = async (req, res) => {
         console.log(error);
     }
 }
+
+const cadet_about_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        if (cadet) {
+            res.render('cadet/about', { cadet: cadet });
+        }
+        else {
+            res.send('An error occurred while finding the cadet.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
 
 const cadet_faq_get = async (req, res) => {
     try{
@@ -579,3 +607,154 @@ const cadet_faq_get = async (req, res) => {
 routers.get('/customer/:username/faq', authController.customer_faq_get);
 routers.get('/manager/:username/faq', authController.manager_faq_get);
 router.get('/cadet/:username/faq', authController.cadet_faq_get);
+
+
+
+/*
+add payment --> get --> post
+view feedback --> get
+view inventory --> get
+*/
+
+const manager_addpayment_get = async (req,res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            res.render('manager/addpayment', { manager: manager });
+        }
+        else {
+            res.send('An error occurred while finding the manager.');
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+const manager_addpayment_post = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username,role: 'manager'});
+        if(manager)
+        {
+            const customerusername = req.body.username;
+            const oldPayment = await Payment.findOne({username:customerusername});
+            if(oldPayment)
+            {
+                oldPayment.startdate = req.body.startdate;
+                oldPayment.enddate = req.body.enddate;
+                oldPayment.amount = req.body.amount;
+
+                const updated = await Payment.updateOne({username:customerusername},{$set : {startdate:oldPayment.startdate,enddate:oldPayment.enddate,amount:oldPayment.amount}, validate: true});
+                if(updated)
+                {
+                    const updateHistory = new Paymenthistory({
+                        username: customerusername,
+                        startdate: oldPayment.startdate,
+                        enddate: oldPayment.enddate,
+                        amount: oldPayment.amount
+                    });
+                    const historysave = await updateHistory.save();
+                    if(historysave)
+                    {
+                        res.status(201).render('manager/addpayment', { manager: manager });
+                    }
+                    else
+                    {
+                        res.send("An error occurred while updating the payment history.");
+                    }
+                }
+                else
+                {
+                    res.send("An error occurred while updating the payment details.");
+                }
+            }
+            else
+            {
+                const customer = User.findone({username:customerusername,role:'customer'});
+                if(customer)
+                {
+                    const payment = new Payment({
+                        username: req.body.username,
+                        startdate: req.body.startdate,
+                        enddate: req.body.enddate,
+                        amount: req.body.amount
+                    });
+                    const customerpaymentadded = await payment.save();
+                    if(customerpaymentadded)
+                    {
+                        const paymenthistory = new Paymenthistory({
+                            username: customerusername,
+                            startdate: req.body.startdate,
+                            enddate: req.body.enddate,
+                            amount: req.body.amount
+                        });
+                        const historysave = await paymenthistory.save();
+                        if(historysave)
+                        {
+                            res.status(201).render('manager/addpayment', { manager: manager });
+                        }
+                        else
+                        {
+                            res.send("An error occurred while updating the payment history.");
+                        }
+                    }
+                    else
+                    {
+                        res.send("An error occurred while updating the payment details.");
+                    }
+                    
+                }
+                else
+                {
+                    res.send("customer not found");
+                }
+            }
+        }
+    } catch(error) {
+        console.log(error);
+    }
+}
+
+const manager_viewfeedback_get = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = User.findOne({username:username,role: 'manager'});
+        if(manager)
+        {
+            const feedback = await Feedback.find();
+            if(feedback)
+            {
+                res.render('manager/viewfeedback', { manager: manager, feedback: feedback });
+            }
+            else
+            {
+                res.send("No feedback found");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const manager_viewinventory_get = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = User.findOne({username:username,role: 'manager'});
+        if(manager)
+        {
+            const inventory = await Inventory.find();
+            if(inventory)
+            {
+                res.render('manager/viewinventory', { manager: manager, inventory: inventory });
+            }
+            else
+            {
+                res.send("No inventory found");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}

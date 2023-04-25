@@ -1,0 +1,106 @@
+<%- include('../partials/header') %>
+
+
+  <div id="wrapper">
+
+    <%- include('../partials/nav_home_customer') %>
+
+
+      <div class="container">
+
+
+        <div class="row mb-5">
+          <div class="col-12 col-lg-3">
+            <div class="list-group text-center make-sticky ">
+
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <div class="profile my-4 table-striped-columns">
+                      <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
+                      <div class="fs-3"><%=customer.fullname%></div>
+                      <div class="fs-5">Customer</div>
+                    </div>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>"
+                        class="list-group-item list-group-item-action">Home</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/view"
+                        class="list-group-item list-group-item-action">View
+                        profile</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/edit"
+                        class="list-group-item list-group-item-action">Edit
+                        Profile</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/changepassword"
+                        class="list-group-item list-group-item-action">Change
+                        password</a></td>
+                  </tr>
+
+                  <tr class="table-active">
+                    <td><a href="/customer/<%= customer.username%>/paymenthistory" class="list-group-item list-group-item-action">Payment History</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/feedback" class="list-group-item list-group-item-action">Feedback</a></td>
+                  </tr>
+                </tbody>
+              </table>
+
+
+            </div>
+                    </div>
+                    <div class="col-12 col-lg-9">
+
+                        <div class="container text-center fs-2 my-5">
+                            Welcome <a href="./customer/<%= customer.username%>"> <%= customer.fullname%></a>, </br> <span class="fs-3"></span>
+                        </div>
+
+                        <div class="container border rounded-5 p-5">
+                            <div class="row mb-5">
+                                <div class="col text-center fs-3">
+                                    Here are your payments.
+                                </div>
+                            </div>
+
+                            <table class="table text-center table-hover border">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">start date</th>
+                                        <th scope="col">end date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <%for (const i of paymenthistory){%>
+                                    <tr>
+                                        <td scope="col"><%=i.amount%></td>
+                                        <td scope="col"><%=i.startdate.toISOString().slice(0,10)%></td>
+                                        <td scope="col"><%=i.enddate.toISOString().slice(0,10)%></td>
+                                    </tr>
+                                    <%}%>
+                                    
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-1 col-lg-0"></div>
+                </div>
+
+            </div>
+    </div>
+    </div>
+
+
+    <%- include('../partials/footer') %>

@@ -1,0 +1,150 @@
+
+<%- include('../partials/header') %>
+
+
+  <div id="wrapper">
+
+    <%- include('../partials/nav_home_customer') %>
+
+
+      <div class="container">
+
+
+        <div class="row mb-5">
+          <div class="col-12 col-lg-3">
+            <div class="list-group text-center make-sticky ">
+
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <div class="profile my-4 table-striped-columns">
+                      <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
+                      <div class="fs-3"><%=customer.fullname%></div>
+                      <div class="fs-5">Customer</div>
+                    </div>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr >
+                    <td><a href="/customer/<%= customer.username%>"
+                        class="list-group-item list-group-item-action">Home</a></td>
+                  </tr>
+                  <tr  class="table-active">
+                    <td><a href="/customer/<%= customer.username%>/view"
+                        class="list-group-item list-group-item-action">View
+                        profile</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/edit"
+                        class="list-group-item list-group-item-action">Edit
+                        Profile</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/changepassword"
+                        class="list-group-item list-group-item-action">Change
+                        password</a></td>
+                  </tr>
+
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/paymenthistory" class="list-group-item list-group-item-action">Payment History</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/customer/<%= customer.username%>/feedback" class="list-group-item list-group-item-action">Feedback</a></td>
+                  </tr>
+                </tbody>
+              </table>
+
+
+            </div>
+                </div>
+                <div class="col-1 col-lg-0"></div>
+
+
+                <div class="col-12 col-lg-7 my-5">
+                    <div class="container border rounded-5 text-center">
+
+                        <div class="profile my-4 pt-5 ">
+                            <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="15%"></div>
+                            <div class=" fs-3">My Profile</div>
+                        </div>
+                        <div class="row my-5">
+                            <div class="col-2"></div>
+                            <div class="col-lg-8">
+                                <div class="mb-4">
+                                    <div class="nothing">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <p class="mb-0">User Name</p>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <p class="text-muted mb-0"><%= customer.username%></p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <p class="mb-0">Full Name</p>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <p class="text-muted mb-0"><%= customer.fullname%></p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <p class="mb-0">Role</p>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <p class="text-muted mb-0"><%= customer.role%></p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <p class="mb-0">Email</p>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <p class="text-muted mb-0"><%= customer.email%></p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <p class="mb-0">Phone</p>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <p class="text-muted mb-0"><%= customer.phone%></p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <p class="mb-0">Gender</p>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <p class="text-muted mb-0"><%= customer.gender%></p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <p class="mb-0">Birthdate</p>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <p class="text-muted mb-0"><%= customer.date.toISOString().slice(0 ,10)%></p>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-1 col-lg-0"></div>
+                </div>
+
+    
+<%- include('../partials/footer') %>

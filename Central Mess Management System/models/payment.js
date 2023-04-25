@@ -24,7 +24,7 @@ const paymentSchema = new Schema({
     },
     role: {
         type: String,
-        required: true,
+        default: 'customer',
         enum: ['customer']
     }
 });
