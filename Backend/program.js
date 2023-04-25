@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const Payment = require('../models/payment');
 
 const login_get = (req, res) => {
 
@@ -129,9 +130,140 @@ const signup_post = async (req, res) => {
     }
 }
 
+
+const manager_managercheck_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            const today = new Date();
+            manager.date = today;
+            res.render('manager/managercheck', { manager });
+        }
+        else {
+            res.status(404).send('Manager not found');
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error');
+    }
+
+}
+
+const manager_managercheck_post = async (req, res) => {
+    try {
+        const username = req.params.username;
+        let manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            const c_username = req.body.username;
+            const c_date = req.body.date;
+            const c_time = req.body.time.toLowerCase();
+
+            //finding the customer from payment database
+            const paymentofcustomer = await Payment.findOne({ username: c_username });
+            if (paymentofcustomer) {
+                // const _date = new Date();
+                if (paymentofcustomer.enddate - c_date < 0) {
+                    res.send("payment is expired");
+                }
+                //payment is done!
+                else {
+                    const customer = await Managercheck.findOne({ username: c_username, date: c_date });
+
+                    if (customer) {
+                        if (c_time == 'breakfast') {
+                            if (customer.breakfast == Boolean(false)) {
+                                Managercheck.updateOne({ username: c_username, date: c_date }, { $set: { breakfast: Boolean(true) } }).then((result) => {
+                                    manager.date = new Date();
+                                    res.render('manager/managercheck', { manager });
+                                }).catch((err) => {
+                                    console.log(err);
+                                    res.send('cannot update');
+                                });
+                            }
+                            else {
+                                res.send("Already checked for breakfast");
+                            }
+
+                        }
+                        else if (c_time == 'lunch') {
+                            if (customer.lunch == Boolean(false)) {
+                                Managercheck.updateOne({ username: c_username, date: c_date }, { $set: { lunch: Boolean(true) } }).then((result) => {
+                                    manager.date = new Date();
+
+                                    res.render('manager/managercheck', { manager });
+                                }).catch((err) => {
+                                    console.log(err);
+                                    res.send('cannot update');
+                                });
+                            }
+                            else {
+                                res.send("Already checked for lunch");
+                            }
+
+                        }
+                        else {
+                            if (customer.dinner == Boolean(false)) {
+                                Managercheck.updateOne({ username: c_username, date: c_date }, { $set: { dinner: Boolean(true) } }).then((result) => {
+                                    manager.date = new Date();
+
+                                    res.render('manager/managercheck', { manager });
+                                }).catch((err) => {
+                                    console.log(err);
+                                    res.send('cannot update');
+                                });
+                            }
+                            else {
+                                res.send("Already checked for dinner");
+                            }
+                        }
+                    }
+                    else {
+                        //make new and save
+                        const _customer = await User.findOne({ username: c_username, role: 'customer' });
+                        if (_customer) {
+
+                            let newcustomer = new Managercheck({ username: c_username, date: c_date, breakfast: Boolean(false), lunch: Boolean(false), dinner: Boolean(false) });
+
+                            if (c_time == 'breakfast') {
+                                newcustomer.breakfast = Boolean(true);
+                            }
+                            else if (c_time == 'lunch') {
+                                newcustomer.lunch = Boolean(true);
+                            }
+                            else {
+                                newcustomer.dinner = Boolean(true);
+                            }
+                            const register = await newcustomer.save();
+                            manager.date = new Date();
+
+                            res.render('manager/managercheck', { manager });
+
+                        }
+                        else
+                            res.send("Customer not found");
+                    }
+                }
+            }
+            else {
+                res.send("Payment not found");
+            }
+        }
+        else {
+            res.status(404).send('Manager not found');
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error');
+    }
+}
+
+
 module.exports = {
     login_get,
     login_post,
     signup_get,
-    signup_post
+    signup_post,
+    manager_managercheck_get,
+    manager_managercheck_post
 };
