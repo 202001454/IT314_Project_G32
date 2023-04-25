@@ -1157,3 +1157,22 @@ const cadet_edit_patch = async (req, res) => {
         res.send('An error occurred while finding the cadet.');
     }
 }
+
+const cadet_viewinventory_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        if (cadet) {
+            const inventory = await Inventory.find();
+            if (inventory) {
+                console.log(inventory);
+                res.render('cadet/viewinventory', { cadet: cadet, inventory: inventory });
+            }
+            else {
+                res.send("No inventory found");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
