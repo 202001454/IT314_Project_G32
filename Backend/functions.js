@@ -257,32 +257,32 @@ const manager_changepassword_get = async (req, res) => {
     }
 }
 
-const manager_changepassword_patch = async (req, res) => {
-    try {
-        const { username } = req.params; // use req.params.username to get the username
-        const manager = await User.findOne({ username: username, role: 'manager' });
-        manager.password = req.body.password;
-        const cpassword = req.body.cpassword;
+// const manager_changepassword_patch = async (req, res) => {
+//     try {
+//         const { username } = req.params; // use req.params.username to get the username
+//         const manager = await User.findOne({ username: username, role: 'manager' });
+//         manager.password = req.body.password;
+//         const cpassword = req.body.cpassword;
 
-        if (manager.password === cpassword && cpassword) {
-            User.updateOne({ username: username },
-                { $set: { password: req.body.password }, validate: true }).then((result) => {
-                    console.log(result);
-                    res.render('manager/index', { manager: manager });
-                }).catch((err) => {
-                    console.log(err);
-                    res.send(err);
-                }
-                );
-        }
-        else {
-            res.send("Password are not matching");
-        }
-    } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the manager.');
-    }
-}
+//         if (manager.password === cpassword && cpassword) {
+//             User.updateOne({ username: username },
+//                 { $set: { password: req.body.password }, validate: true }).then((result) => {
+//                     console.log(result);
+//                     res.render('manager/index', { manager: manager });
+//                 }).catch((err) => {
+//                     console.log(err);
+//                     res.send(err);
+//                 }
+//                 );
+//         }
+//         else {
+//             res.send("Password are not matching");
+//         }
+//     } catch (error) {
+//         console.log(error);
+//         res.send('An error occurred while finding the manager.');
+//     }
+// }
 
 const manager_inventoryupgrade_get = async (req,res) => {
     try{
@@ -982,3 +982,197 @@ const manager_paymenthistorygraph_post = async (req, res) => {
         console.log(error);
     }
   }
+
+
+  //cadet functionalities
+
+const cadet_viewprofile_get = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const cadet = await User.findOne({username:username,role: 'cadet'});
+        if(cadet)
+        {
+            res.render('cadet/viewprofile', { cadet: cadet });
+        }
+        else
+        {
+            res.send("Cadet not found");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const cadet_changepassword_get = async (req, res) => {
+    try {
+        const username = req.params.username; // use req.params.username to get the username
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+
+        if (cadet) {
+
+            res.render('cadet/changepassword', { cadet: cadet });
+            // res.send(cadet);
+        } else {
+            res.send('No cadet found.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
+const cadet_changepassword_patch = async (req, res) => {
+    try {
+        const { username } = req.params; // use req.params.username to get the username
+        let cadet = await User.findOne({ username: username, role: 'cadet' });
+        // cadet.password = req.body.password;
+        // const cpassword = req.body.cpassword;
+        if(cadet)
+        {
+            if (req.body.password === req.body.cpassword && req.body.cpassword) {
+            
+            
+            cadet.password = await bcrypt.hash(req.body.password, 12);
+            User.updateOne({ username: username },
+            { $set: { password: cadet.password }, validate: true }).then((result) => {
+                console.log(result);
+                res.render('cadet/index', { cadet: cadet });
+            }).catch((err) => {
+                console.log(err);
+                res.send(err);
+            });
+            }
+            else {
+                res.send("Password are not matching");
+            }
+        }
+        else {
+            res.send('No cadet found.');
+        }
+        
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
+const manager_changepassword_patch = async (req, res) => {
+    try {
+        const { username } = req.params; // use req.params.username to get the username
+        let manager = await User.findOne({ username: username, role: 'manager' });
+        // manager.password = req.body.password;
+        // const cpassword = req.body.cpassword;
+        if(manager)
+        {
+            if (req.body.password === req.body.cpassword && req.body.cpassword) {
+                manager.password = await bcrypt.hash(req.body.password, 12);
+                User.updateOne({ username: username },
+                { $set: { password: manager.password }, validate: true }).then((result) => {
+                    console.log(result);
+                    res.render('manager/index', { manager: manager });
+                }).catch((err) => {
+                    console.log(err);
+                    res.send(err);
+                });
+            }
+            else {
+                res.send("Password are not matching");
+            }
+        }
+        else {
+            res.send('No manager found.');
+        }  
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
+const cadet_get = async (req, res) => {
+    try {
+        const username = req.params.username; // use req.params.username to get the username
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        // console.log(cadet);
+        if(cadet){
+
+            res.render('cadet/index', { cadet: cadet });
+        }
+        else{
+            res.send("No cadet found");
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
+const cadet_edit_get = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        if (cadet) {
+            res.render('cadet/edit', { cadet: cadet });
+            // res.send(cadet);
+        }
+        else {
+            res.send("Error occured!");
+        }
+    } catch (error) {
+        res.send("Unable to find cadet");
+    }
+}
+
+const cadet_edit_patch = async (req, res) => {
+    try {
+        const { username } = req.params; // use req.params.username to get the username
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+
+        if(cadet){
+            // cadet.password = req.body.password;
+            cadet.fullname = req.body.fullname;
+            cadet.date = req.body.date;
+            cadet.email = req.body.email;
+            cadet.phone = req.body.phone;
+            cadet.gender = req.body.gender;
+            User.updateOne({ username: username, role: 'cadet' },
+            { $set: { fullname: req.body.fullname, date: req.body.date, email: req.body.email, phone: req.body.phone, gender: req.body.gender }, validate: true })
+            .then((result) => {
+                console.log(result);
+                res.render('cadet/index', { cadet: cadet });
+            })
+            .catch((err) => {
+                console.log(err);
+                res.send('cannot update');
+            }
+            );
+        }
+        else
+        {
+            res.send("No cadet found");
+        }
+        
+
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
+const cadet_viewinventory_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        if (cadet) {
+            const inventory = await Inventory.find();
+            if (inventory) {
+                console.log(inventory);
+                res.render('cadet/viewinventory', { cadet: cadet, inventory: inventory });
+            }
+            else {
+                res.send("No inventory found");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
