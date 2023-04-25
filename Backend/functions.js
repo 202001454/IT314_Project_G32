@@ -814,12 +814,12 @@ const manager_viewinventory_get = async (req,res) => {
 }
 
 // ----------------cadet functionalities---------------- //
-const manager_deletecustomer_get = async (req,res) => {
+const manager_deleteuser_get = async (req,res) => {
     const username = req.params.username;
     const manager = await User.findOne({username:username,role: 'manager'});
     if(manager)
     {
-        res.render('manager/deletecustomer', { manager: manager });
+        res.render('manager/deleteuser', { manager: manager });
     }
     else
     {
@@ -827,21 +827,20 @@ const manager_deletecustomer_get = async (req,res) => {
     }
 }
 
-const manager_deletecustomer_post = async (req,res) => {
+const manager_deleteuser_delete = async (req,res) => {
     const username = req.params.username;
     const manager = await User.findOne({username:username,role: 'manager'});
-    
     if(manager)
     {
         const managerPass = req.body.password;
         const auth = await bcrypt.compare(managerPass, manager.password);
         if(auth)
         {
-            const customerusername = req.body.username;
-            const _delete = await User.deleteOne({username:customerusername,role:'customer'});
+            const userusername = req.body.username;
+            const _delete = await User.deleteOne({username:userusername,role:req.body.role});
             if(_delete)
             {
-                res.status(201).render('manager/deletecustomer', { manager: manager });
+                res.status(201).render('manager/deleteuser', { manager: manager });
             }
             else
             {
@@ -850,7 +849,8 @@ const manager_deletecustomer_post = async (req,res) => {
         }
         else
         {
-            res.send("{Password not matched for manager");
+            res.send("Password not matched for manager");
+
         }
     }
     else
@@ -858,3 +858,4 @@ const manager_deletecustomer_post = async (req,res) => {
         res.send("Manager not found");
     }
 }
+
