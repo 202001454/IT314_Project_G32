@@ -48,6 +48,7 @@ app.get('/add-user', (req, res) => {
         );
 
 });
+// app.get('/add-user', (req, res) => {
 
 
 app.get('/', (req, res) => {
