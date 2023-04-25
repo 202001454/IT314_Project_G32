@@ -69,6 +69,18 @@ router.post('/manager/:username/addpayment', requireAuth, authController.manager
 router.get('/manager/:username/managercheck', requireAuth, authController.manager_managercheck_get);
 router.post('/manager/:username/managercheck', requireAuth, authController.manager_managercheck_post);
 
+
+router.get('/customer/:username/faq', authController.customer_faq_get);
+router.get('/manager/:username/faq', authController.manager_faq_get);
+router.get('/cadet/:username/faq', authController.cadet_faq_get);
+router.get('/customer/:username/about', authController.customer_about_get);
+router.get('/manager/:username/about', authController.manager_about_get);
+router.get('/cadet/:username/about', authController.cadet_about_get);
+
+router.get('/verify/:id', authController.verifyMail);
+
+router.get('/add-user', requireAuth, authController.add_user_get);
+
 router.get('/logout', authController.logout_get);
 
 router.use((req, res) => {
