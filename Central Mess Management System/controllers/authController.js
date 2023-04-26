@@ -1005,6 +1005,114 @@ const manager_deleteuser_delete = async (req, res) => {
     }
 }
 
+const manager_paymenthistorygraph_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            const durationInMonths = 6;
+            const endDate = new Date();
+            const startDate = new Date(endDate.getFullYear() - Math.floor(durationInMonths / 12), endDate.getMonth() - (durationInMonths % 12), 1);
+            const payments = await Paymenthistory.aggregate([
+                {
+                    $match: {
+                        startdate: { $gte: startDate },
+                        // enddate: { $lte: endDate }
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            $dateToString: {
+                                format: '%Y-%m',
+                                date: '$startdate'
+                            }
+                        },
+                        totalAmount: {
+                            $sum: '$amount'
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        month: '$_id',
+                        totalAmount: '$totalAmount',
+                        _id: 0
+                    }
+                },
+                {
+                    $sort: {
+                        month: 1
+                    }
+                }
+            ]);
+            console.log(payments);
+            res.render('manager/viewpaymenthistorygraph', { manager, payments });
+        } else {
+            // res.send('No manager found');
+            res.status(404).render('404', { err: 'No manager found' });
+        }
+    } catch (error) {
+        // console.log(error);
+        res.status(404).render('404', { err: 'manager_paymenthistorygraph_get error' });
+
+    }
+};
+
+
+const manager_paymenthistorygraph_post = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            const durationInMonths = Number(req.body.month);
+            const endDate = new Date();
+            const startDate = new Date(endDate.getFullYear() - Math.floor(durationInMonths / 12), endDate.getMonth() - (durationInMonths % 12), 1);
+            const payments = await Paymenthistory.aggregate([
+                {
+                    $match: {
+                        startdate: { $gte: startDate },
+                        //   enddate: { $lte: endDate }
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            $dateToString: {
+                                format: '%Y-%m',
+                                date: '$startdate'
+                            }
+                        },
+                        totalAmount: {
+                            $sum: '$amount'
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        month: '$_id',
+                        totalAmount: '$totalAmount',
+                        _id: 0
+                    }
+                },
+                {
+                    $sort: {
+                        month: 1
+                    }
+                }
+            ]);
+            console.log(payments);
+            res.render('manager/viewpaymenthistorygraph', { manager, payments });
+        } else {
+            // res.send('No manager found');
+            res.status(404).render('404', { err: 'No manager found' });
+        }
+    } catch (error) {
+        // console.log(error);
+        res.status(404).render('404', { err: 'manager_paymenthistorygraph_post error' });
+    }
+};
+
 
 // about and faq
 
