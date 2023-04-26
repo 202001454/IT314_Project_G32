@@ -8,10 +8,11 @@ const Paymenthistory = require('../models/paymenthistory');
 const Managercheck = require('../models/managercheck');
 
 
+
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.SECRET;
-
 
 const validatepassword = (password) => {
     let errors = [];
@@ -39,10 +40,11 @@ const validatepassword = (password) => {
 
 const maxAge = 50 * 24 * 60 * 60;
 const createToken = (id) => {
-    return jwt.sign({ id }, 'deep gaurang vrund', {
+    return jwt.sign({ id }, SECRET, {
         expiresIn: maxAge
     });
 }
+
 
 const sendVerifyMail = async (name, email, user_id, userrole, req) => {
     try {
@@ -90,6 +92,7 @@ const sendVerifyMail = async (name, email, user_id, userrole, req) => {
     }
 };
 
+
 const verifyMail = async (req, res) => {
     try {
         const updateInfo = await User.updateOne({ _id: req.params.id }, { $set: { isVerified: Boolean(true) } });
@@ -105,8 +108,8 @@ const verifyMail = async (req, res) => {
 
 
 const login_get = (req, res) => {
-
-    res.render('login', { title: 'Login' });
+    const err = undefined;
+    res.render('login', { title: 'Login', err });
 }
 const login_post = async (req, res) => {
     try {
@@ -114,62 +117,76 @@ const login_post = async (req, res) => {
         const username = req.body.username;
         const password = req.body.password;
         const role = req.body.role;
-        console.log("Parth");
-        console.log(role);
 
-        if (role === 'customer') {
-            // console.log(req.body);
-            const customer = await User.findOne({ username, role });
-            const auth = await bcrypt.compare(password, customer.password);
-            // const isMatch = await bcrypt.compare(password, user.password);
-            if (customer && auth && customer.role === role) {
 
-                // req.session.user_id = user._id;
-                // const user = await User.login(username, password, role);
-                res.cookie('jwt', '', { maxAge: 1 });
-                const token = createToken(customer._id);
-                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-                res.status(201).render(`${role}/index`, { customer });
-            } else {
-                res.status(500).send('Invalid Login Details');
+        const customer = await User.findOne({ username, role });
+
+
+        if (customer) {
+            if (customer.isVerified === false) {
+                const err = 'Please verify your mail to login';
+                res.status(500).render('login', { err });
+            }
+            if (role === 'customer') {
+                // console.log(req.body);
+                const customer = await User.findOne({ username, role });
+                const auth = await bcrypt.compare(password, customer.password);
+                // const isMatch = await bcrypt.compare(password, user.password);
+                if (customer && auth && customer.role === role) {
+
+                    // req.session.user_id = user._id;
+                    // const user = await User.login(username, password, role);
+                    res.cookie('jwt', '', { maxAge: 1 });
+                    const token = createToken(customer._id);
+                    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+                    res.status(201).render(`${role}/index`, { customer });
+                } else {
+                    const err = 'Invalid Login Details';
+                    res.status(500).render('login', { err });
+                }
+            }
+            else if (role === 'manager') {
+                const manager = await User.findOne({ username: username, role: role });
+                const auth = await bcrypt.compare(password, manager.password);
+                // console.log(manager)
+                if (manager && auth && manager.role === role) {
+                    // const user = await User.login(username, password, role);
+                    res.cookie('jwt', '', { maxAge: 1 });
+                    const token = createToken(manager._id);
+                    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+                    res.status(201).render(`${role}/index`, { manager });
+                }
+                else {
+                    const err = 'Invalid Login Details';
+                    res.status(500).render('login', { err });
+                };
+
+            }
+            else if (role === 'cadet') {
+                const cadet = await User.findOne({ username, role });
+                const auth = await bcrypt.compare(password, cadet.password);
+
+                if (cadet && auth && cadet.role === req.body.role) {
+                    const user = await User.login(username, password, role);
+                    const token = createToken(user._id);
+                    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+                    res.status(201).render(`${role}/index`, { cadet });
+                }
+                else {
+                    const err = 'Invalid Login Details';
+                    res.status(500).render('login', { err });
+                }
+
             }
         }
-        else if (role === 'manager') {
-            const manager = await User.findOne({ username: username, role: role });
-            const auth = await bcrypt.compare(password, manager.password);
-            // console.log(manager)
-            if (manager && auth && manager.role === role) {
-                // const user = await User.login(username, password, role);
-                res.cookie('jwt', '', { maxAge: 1 });
-                const token = createToken(manager._id);
-                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-                res.status(201).render(`${role}/index`, { manager });
-            }
-            else {
-                console.log(username);
-                res.status(400).send('Invalid manager');
-            };
-
-        }
-        else if (role === 'cadet') {
-            const cadet = await User.findOne({ username, role });
-            const auth = await bcrypt.compare(password, cadet.password);
-
-            if (cadet && auth && cadet.role === req.body.role) {
-                const user = await User.login(username, password, role);
-                const token = createToken(user._id);
-                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-                res.status(201).render(`${role}/index`, { cadet });
-            }
-            else {
-                res.status(300).send('Invalid Login Details');
-            }
-
+        else {
+            const err = 'Invalid Login Details';
+            res.status(500).render('login', { err });
         }
     } catch (error) {
-        console.log(req.body);
-
-        res.status(200).send('Invalid Login Details');
+        const err = `User Doesn't Exist`;
+        console.log("LODU");
+        res.status(404).render('404', { err });
     }
 };
 // app.post('/login', async (req, res) => {
@@ -183,66 +200,11 @@ const login_post = async (req, res) => {
 
 const signup_get = (req, res) => {
     const err = undefined;
-    res.render('Signup', { err });
+    res.render('signup', { err });
 }
 
 
-// const signup_post = async (req, res) => {
-//     try {
-//         const password = req.body.password;
-//         const cpassword = req.body.cpassword;
 
-//         //validate password
-//         const validpassword = validatepassword(password);
-//         if (!validpassword) {
-//             res.render('signup', { err: "Password must be between 6 to 16 characters and must contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character" });
-//         }
-
-//         if (password === cpassword) {
-//             const user = new User({
-//                 fullname: req.body.fullname,
-//                 username: req.body.username,
-//                 email: req.body.email,
-//                 password: req.body.password,
-//                 phone: req.body.phone,
-//                 role: req.body.role,
-//                 gender: req.body.gender,
-//                 date: req.body.birthdate,
-//             });
-//             //verify username and email in the database if already exists
-
-//             const foundUser = await User.findOne({ username: user.username });
-//             console.log(foundUser);
-//             if (foundUser) {
-//                 // res.send("Username already exists");
-//                 res.render('signup', { err: "Username already exists" });
-//             }
-//             const foundEmail = await User.findOne({ email: user.email });
-//             console.log(foundEmail);
-
-//             if (foundEmail) {
-//                 // res.send("Email already exists");
-//                 res.render('signup', { err: "Email already exists" });
-//             }
-
-//             //if not exists then save the user in the database
-//             const registered = user.save().then((result) => {
-//                 // sendVerifyMail(req.body.fullname,req.body.email,result._id);
-//                 res.send(result);
-//             }).catch((err) => {
-//                 console.log(err);
-//             }
-//             );
-//             res.status(201).render('login');
-//         } else {
-//             res.send("Password are not matching");
-//         }
-
-//     } catch (error) {
-//         res.status(400);
-//         res.send(error);
-//     }
-// }
 const signup_post = async (req, res) => {
     try {
         const password = req.body.password;
@@ -270,30 +232,31 @@ const signup_post = async (req, res) => {
             const foundUser = await User.findOne({ username: user.username });
             console.log(foundUser);
             if (foundUser) {
-                res.render('signup', { err: "Username already exists" });
+                const err = 'Username already exists';
+                res.status(500).render('signup', { err });
             }
             const foundEmail = await User.findOne({ email: user.email });
             console.log(foundEmail);
 
             if (foundEmail) {
-                res.render('signup', { err: "Email already exists" });
+                res.status(500).render('signup', { err: "Email already exists" });
             }
 
             //if not exists then save the user in the database
-            user.save().then((result) => {
+            user.save().then(async (result) => {
                 // sendVerifyMail(req.body.fullname, req.body.email, result._id, req.body.role);
-                res.status(201).render('login');
+                const sendMail = await sendVerifyMail(req.body.fullname, req.body.email, result._id, req.body.role, req);
+                res.render('login', { err: undefined });
             }).catch((err) => {
                 console.log(err);
             }
             );
         } else {
-            res.send("Password are not matching");
+            res.status(500).render('signup', { err: "Password are not matching" });
         }
 
     } catch (error) {
-        res.status(400);
-        res.send(error);
+        res.status(404).render('404', { err: "Signup_post error" });
     }
 }
 
@@ -301,18 +264,11 @@ const customer_get = async (req, res) => {
     try {
         const username = req.params.username; // use req.params.username to get the username
         const customer = await User.findOne({ username: username });
-        console.log(customer);
-        // if(res.locals.user.username === username)
-        // {
-        res.render('customer/index', { customer: customer });
-        // }
-        // else
-        // {
-        //     res.render('login');
-        // }
+        // console.log(customer);
+        res.render('customer/index', { customer: customer, err: undefined });
     } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the customer.');
+        // console.log(error);
+        res.status(404).render('404', { err: 'Customer_get error' });
     }
 }
 
@@ -325,13 +281,14 @@ const customer_view_get = async (req, res) => {
             res.render('customer/view', { customer: customer });
             // res.send(customer);
         } else {
-            res.send('No customer found.');
+            res.status(500).render('signup', { err: `customer doesn't exist` });
         }
 
 
     } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the customer.');
+        res.status(404).render('404', { err: `customer_view get error` });
+        // console.log(error);
+        // res.send('An error occurred while finding the customer.');
     }
 }
 
@@ -341,19 +298,16 @@ const customer_changepassword_get = async (req, res) => {
         const username = req.params.username; // use req.params.username to get the username
         const customer = await User.findOne({ username: username, role: 'customer' });
 
-
         if (customer) {
-
-
-
-            res.render('customer/changepassword', { customer: customer });
-            // res.send(customer);
+            res.render('customer/changepassword', { customer: customer, err: undefined });
         } else {
-            res.send('No customer found.');
+            res.status(500).render('signup', { err: `customer doesn't exist` });
+            // res.send('No customer found.');
         }
     } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the customer.');
+        res.status(404).render('404', { err: `customer_changepassword_get error` });
+        // console.log(error);
+        // res.send('An error occurred while finding the customer.');
     }
 }
 
@@ -369,30 +323,32 @@ const customer_changepassword_patch = async (req, res) => {
         if (req.body.password === req.body.cpassword && req.body.cpassword) {
             const validpassword = validatepassword(req.body.password);
             if (!validpassword) {
-                res.render('signup', { err: "Password must be between 6 to 16 characters and must contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character" });
+                res.render('customer/changepassword', { customer: customer, err: "Password must be between 6 to 16 characters and must contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character" });
             }
             const bcryptPass = await bcrypt.hash(req.body.password, 12);
 
             User.updateOne({ username: username },
                 { $set: { password: bcryptPass }, validate: true }).then((result) => {
-                    console.log("Gaurang");
+                    // console.log("Gaurang");
                     customer.password = bcryptPass;
                     res.render('customer/index', { customer: customer });
                 }).catch((err) => {
-                    console.log("Gaurang");
-
-                    console.log(err);
-                    res.send(err);
+                    // console.log("Gaurang");
+                    // console.log(err);
+                    // res.send(err);
+                    res.status(404).render('404', { err: "change password error" });
                 }
                 );
         }
         else {
-            res.send("Password are not matching");
+            res.status(500).render('customer/changepassword', { customer: customer, err: "Password are not matching" });
+            // res.send("Password are not matching");
         }
 
     } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the customer.');
+        // console.log(error);
+        // res.send('An error occurred while finding the customer.');
+        res.status(404).render('404', { err: `customer_changepassword_patch error` });
     }
 }
 
@@ -402,17 +358,16 @@ const customer_edit_get = async (req, res) => {
         const customer = await User.findOne({ username: username, role: 'customer' });
         if (customer) {
 
-            res.render('customer/edit', { customer: customer });
+            res.render('customer/edit', { customer: customer, err: undefined });
             // res.send(customer);
         } else {
-            res.send('No customer found.');
+            res.status(500).render('signup', { err: `customer doesn't exist` });
         }
 
     } catch (error) {
-
-
-        console.log(error);
-        res.send('An error occurred while finding the customer.');
+        res.status(404).render('signup', { err: `customer doesn't exist` });
+        // console.log(error);
+        // res.send('An error occurred while finding the customer.');
     }
 }
 
@@ -435,8 +390,9 @@ const customer_edit_patch = async (req, res) => {
                 console.log(result);
                 res.render('customer/index', { customer: customer });
             }).catch((err) => {
-                console.log(err);
-                res.send(err);
+                // console.log(err);
+                // res.send(err);
+                res.status(404).render('404', { err: "customer update error" });
             }
             );
 
@@ -451,8 +407,9 @@ const customer_edit_patch = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the customer.');
+        res.status(404).render('404', { err: `customer_edit_patch error` });
+        // console.log(error);
+        // res.send('An error occurred while finding the customer.');
     }
 };
 
@@ -465,19 +422,20 @@ const customer_feedback_get = async (req, res) => {
             res.render('customer/feedback', { customer: customer });
             // res.send(customer);
         } else {
-            res.send('No customer found.');
+            // res.send('No customer found.');
+            res.status(500).render('signup', { err: `customer doesn't exist` });
         }
 
     } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the customer.');
+        res.status(404).render('404', { err: `customer_feedback_get error` });
+        // console.log(error);
+        // res.send('An error occurred while finding the customer.');
     }
 }
 
-
+// error handling baki ****************************************************
 const customer_feedback_post = async (req, res) => {
     try {
-
 
         const { username } = req.params; // use req.params.username to get the username
         const customer = await User.findOne({ username: username, role: 'customer' });
@@ -490,22 +448,17 @@ const customer_feedback_post = async (req, res) => {
             food: req.body.food,
             comment: req.body.comment,
             username: username,
+            date: new Date(date.getTime() + (330 * 60 * 1000))
 
-            //date baki
-
-            date: new Date()
 
         });
         const fb = await feedback.save();
         res.render('customer/index', { customer: customer });
-        // }
-        // else {
-        //     res.send('No customer found.');
-        // }
 
     } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the customer.');
+        // console.log(error);
+        // res.send('An error occurred while finding the customer.');
+        res.status(404).render('404', { err: `customer_feedback_post error` });
     }
 }
 
@@ -515,29 +468,19 @@ const customer_paymenthistory_get = async (req, res) => {
         const username = req.params.username; // use req.params.username to get the username
         const customer = await User.findOne({ username: username, role: 'customer' });
         if (customer) {
-            const found = await Paymenthistory.find({username: customer.username }).sort({_id:-1});
-            console.log(found );
+            const found = await Paymenthistory.find({ username: customer.username }).sort({ _id: -1 });
+            console.log(found);
             res.render('customer/paymenthistory', { customer: customer, paymenthistory: found });
             // res.send(found);
         } else {
-            res.send('No customer found.');
+            // res.send('No customer found.');
+            res.render('signup', { err: `customer doesn't exist` });
         }
 
     } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the customer.');
-    }
-}
-
-const manager_get = async (req, res) => {
-    try {
-        const username = req.params.username; // use req.params.username to get the username
-        const manager = await User.findOne({ username: username, role: 'manager' });
-        // console.log(manager);
-        res.render('manager/index', { manager: manager });
-    } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the manager.');
+        res.status(404).render('404', { err: `customer_paymenthistory_get error` });
+        // console.log(error);
+        // res.send('An error occurred while finding the customer.');
     }
 }
 
