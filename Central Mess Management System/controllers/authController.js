@@ -969,6 +969,43 @@ const manager_viewinventory_get = async (req, res) => {
     }
 }
 
+const manager_deleteuser_get = async (req, res) => {
+    const username = req.params.username;
+    const manager = await User.findOne({ username: username, role: 'manager' });
+
+    res.render('manager/deleteuser', { manager: manager, err: undefined });
+
+}
+
+const manager_deleteuser_delete = async (req, res) => {
+    const username = req.params.username;
+    const manager = await User.findOne({ username: username, role: 'manager' });
+    if (manager) {
+        const managerPass = req.body.password;
+        const auth = await bcrypt.compare(managerPass, manager.password);
+        if (auth) {
+            const userusername = req.body.username;
+            const _delete = await User.deleteOne({ username: userusername, role: req.body.role });
+            if (_delete) {
+                res.render('manager/deleteuser', { manager: manager, err: undefined });
+            }
+            else {
+                // res.send("An error occurred while deleting the customer.");
+                res.status(500).render('manager/deleteuser', { manager: manager, err: `An error occurred while deleting the customer.` });
+            }
+        }
+        else {
+            // res.send("Password not matched for manager");
+            res.status(500).render('manager/deleteuser', { manager: manager, err: `Incorrect password` });
+
+        }
+    }
+    else {
+        res.send("Manager not found");
+    }
+}
+
+
 // about and faq
 
 const customer_about_get = async (req, res) => {
