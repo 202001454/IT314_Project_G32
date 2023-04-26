@@ -1674,6 +1674,13 @@ const logout_get = (req, res) => {
 module.exports = {
     login_get,
     login_post,
+
+    resetpassword_get,
+    resetpassword_patch,
+
+    forgotpassword_get,
+    forgotpassword_post,
+
     signup_get,
     signup_post,
     customer_get,
