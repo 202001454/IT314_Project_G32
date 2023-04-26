@@ -257,32 +257,32 @@ const manager_changepassword_get = async (req, res) => {
     }
 }
 
-const manager_changepassword_patch = async (req, res) => {
-    try {
-        const { username } = req.params; // use req.params.username to get the username
-        const manager = await User.findOne({ username: username, role: 'manager' });
-        manager.password = req.body.password;
-        const cpassword = req.body.cpassword;
+// const manager_changepassword_patch = async (req, res) => {
+//     try {
+//         const { username } = req.params; // use req.params.username to get the username
+//         const manager = await User.findOne({ username: username, role: 'manager' });
+//         manager.password = req.body.password;
+//         const cpassword = req.body.cpassword;
 
-        if (manager.password === cpassword && cpassword) {
-            User.updateOne({ username: username },
-                { $set: { password: req.body.password }, validate: true }).then((result) => {
-                    console.log(result);
-                    res.render('manager/index', { manager: manager });
-                }).catch((err) => {
-                    console.log(err);
-                    res.send(err);
-                }
-                );
-        }
-        else {
-            res.send("Password are not matching");
-        }
-    } catch (error) {
-        console.log(error);
-        res.send('An error occurred while finding the manager.');
-    }
-}
+//         if (manager.password === cpassword && cpassword) {
+//             User.updateOne({ username: username },
+//                 { $set: { password: req.body.password }, validate: true }).then((result) => {
+//                     console.log(result);
+//                     res.render('manager/index', { manager: manager });
+//                 }).catch((err) => {
+//                     console.log(err);
+//                     res.send(err);
+//                 }
+//                 );
+//         }
+//         else {
+//             res.send("Password are not matching");
+//         }
+//     } catch (error) {
+//         console.log(error);
+//         res.send('An error occurred while finding the manager.');
+//     }
+// }
 
 const manager_inventoryupgrade_get = async (req,res) => {
     try{
@@ -384,56 +384,110 @@ const manager_inventorydegrade_patch = async (req,res) => {
 
 
 //--> start from here
-const nodemailer = require("nodemailer");
-const sendVerifyMail = async (name, email, user_id, userrole) => {
-    try {
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        requireTLS: true,
-        auth: {
-          user: process.env.MAIL,
-          pass: process.env.PASS,
-        },
-      });
-  
-      let mailOptions = {
-        from: process.env.MAIL,
-        to: email,
-        subject: '',
-        html: '',
-      };
-  
-      if (userrole === 'customer') {
-        mailOptions.subject = 'For verification mail';
-        mailOptions.html = `<p>Hii '${name}', please click <a href="http://localhost:3000/verify/${user_id}">here</a> to verify your mail</p>`;
-      } else if (userrole === 'manager') {
-        mailOptions.to = process.env.MANAGER_MAIL;
-        mailOptions.subject = `For verification mail for manager named ${name}`;
-        mailOptions.html = `<p>Dear Manager, ${name} wants to be a manager, please click <a href="http://localhost:3000/verify/${user_id}">here</a> to verify their mail</p>`;
-      } else if (userrole === 'cadet') {
-        mailOptions.to = process.env.MANAGER_MAIL;
-        mailOptions.subject = `For verification mail for cadet named ${name}`;
-        mailOptions.html = `<p>Dear Manager, ${name} wants to be a cadet, please click <a href="http://localhost:3000/verify/${user_id}">here</a> to verify their mail</p>`;
-      } else {
-        throw new Error(`Invalid user role: ${userrole}`);
-      }
-  
-      const info = await transporter.sendMail(mailOptions);
-      console.log(`Email has been sent to ${email}: ${info.messageId}`);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+// const nodemailer = require("nodemailer");
 
-  const verifyMail = async (req, res) => {
+// const sendVerifyMail = async (name, email, user_id, userrole) => {
+//     try {
+//       const transporter = nodemailer.createTransport({
+//         host: 'smtp.gmail.com',
+//         port: 587,
+//         secure: false,
+//         requireTLS: true,
+//         auth: {
+//           user: process.env.MAIL,
+//           pass: process.env.PASS,
+//         },
+//       });
+  
+//       let mailOptions = {
+//         from: process.env.MAIL,
+//         to: email,
+//         subject: '',
+//         html: '',
+//       };
+//       const remaining = `/verify/${user_id}`; 
+//       const protocol = req.protocol;
+//       const hostname = req.headers.host;
+//       const url_ = protocol + '://' + hostname + remaining;
+//       if (userrole === 'customer') {
+//         mailOptions.subject = 'For verification mail';
+//         mailOptions.html = `<p>Hii '${name}', please click <a href="${url_}">here</a> to verify your mail</p>`;
+//       } else if (userrole === 'manager') {
+//         mailOptions.to = process.env.MANAGER_MAIL;
+//         mailOptions.subject = `For verification mail for manager named ${name}`;
+//         mailOptions.html = `<p>Dear Manager, ${name} wants to be a manager, please click <a href="${url_}">here</a> to verify their mail</p>`;
+//       } else if (userrole === 'cadet') {
+//         mailOptions.to = process.env.MANAGER_MAIL;
+//         mailOptions.subject = `For verification mail for cadet named ${name}`;
+//         mailOptions.html = `<p>Dear Manager, ${name} wants to be a cadet, please click <a href="${url_}">here</a> to verify their mail</p>`;
+//       } else {
+//         throw new Error(`Invalid user role: ${userrole}`);
+//       }
+  
+//       const info = await transporter.sendMail(mailOptions);
+//       console.log(`Email has been sent to ${email}: ${info.messageId}`);
+//     } catch (error) {
+//       console.error(error.message);
+//     }
+//   };
+
+const nodemailer = require("nodemailer");
+
+const sendVerifyMail = async (name, email, user_id, userrole, req) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: process.env.MAIL,
+        pass: process.env.PASS,
+      },
+    });
+
+    let mailOptions = {
+      from: process.env.MAIL,
+      to: email,
+      subject: '',
+      html: '',
+    };
+    const remaining = `/verify/${user_id}`; 
+    const protocol = req.protocol || 'http';
+    const hostname = req.headers.host || 'localhost:3000';
+    const url_ = protocol + '://' + hostname + remaining;
+    if (userrole === 'customer') {
+      mailOptions.subject = 'For verification mail';
+      mailOptions.html = `<p>Hii '${name}', please click <a href="${url_}">here</a> to verify your mail</p>`;
+    } else if (userrole === 'manager') {
+      mailOptions.to = process.env.MANAGER_MAIL;
+      mailOptions.subject = `For verification mail for manager named ${name}`;
+      mailOptions.html = `<p>Dear Manager, ${name} wants to be a manager, please click <a href="${url_}">here</a> to verify their mail</p>`;
+    } else if (userrole === 'cadet') {
+      mailOptions.to = process.env.MANAGER_MAIL;
+      mailOptions.subject = `For verification mail for cadet named ${name}`;
+      mailOptions.html = `<p>Dear Manager, ${name} wants to be a cadet, please click <a href="${url_}">here</a> to verify their mail</p>`;
+    } else {
+      throw new Error(`Invalid user role: ${userrole}`);
+    }
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`Email has been sent to ${email}: ${info.messageId}`);
+  } catch (error) {
+    console.error(error.message);
+    throw error;
+  }
+};
+
+
+const verifyMail = async (req, res) => {
     try {
         const updateInfo = await User.updateOne({ _id: req.params.id }, { $set: { isVarified: Boolean(true) } });
         console.log(updateInfo);
-        res.render('home');
+        res.render('login');
     } catch (error) {
         console.log(error.message);
+        res.send('Inside catch block of verifyMail');
     }
 }
 
@@ -475,8 +529,8 @@ const signup_post = async (req, res) => {
             }
 
             //if not exists then save the user in the database
-            user.save().then((result) => {
-                sendVerifyMail(req.body.fullname,req.body.email,result._id,req.body.role);
+            user.save().then(async (result) => {
+                const sendMail = await sendVerifyMail(req.body.fullname,req.body.email,result._id,req.body.role,req);
                 res.status(201).render('login');
             }).catch((err) => {
                 console.log(err);
@@ -751,6 +805,370 @@ const manager_viewinventory_get = async (req,res) => {
             }
             else
             {
+                res.send("No inventory found");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// ----------------manager deletion functionalities---------------- //
+const manager_deleteuser_get = async (req,res) => {
+    const username = req.params.username;
+    const manager = await User.findOne({username:username,role: 'manager'});
+    if(manager)
+    {
+        res.render('manager/deleteuser', { manager: manager });
+    }
+    else
+    {
+        res.send("Manager not found");
+    }
+}
+
+const manager_deleteuser_delete = async (req,res) => {
+    const username = req.params.username;
+    const manager = await User.findOne({username:username,role: 'manager'});
+    if(manager)
+    {
+        const managerPass = req.body.password;
+        const auth = await bcrypt.compare(managerPass, manager.password);
+        if(auth)
+        {
+            const userusername = req.body.username;
+            const _delete = await User.deleteOne({username:userusername,role:req.body.role});
+            if(_delete)
+            {
+                res.status(201).render('manager/deleteuser', { manager: manager });
+            }
+            else
+            {
+                res.send("An error occurred while deleting the customer.");
+            }
+        }
+        else
+        {
+            res.send("Password not matched for manager");
+
+        }
+    }
+    else
+    {
+        res.send("Manager not found");
+    }
+}
+
+//----------------------------------------------
+const manager_paymenthistorygraph_get = async (req,res) => {
+    try{
+
+        const username = req.params.username;
+        const manager = User.findOne({username:username, role:'manager'});
+        if(manager)
+        {
+            const sixMonthsAgo = new Date();
+            sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+            const username = req.params.username;
+            const manager = await User.findOne({username:username, role:'manager'});
+            const payments = await Paymenthistory.aggregate([
+            {
+                $match: {
+                enddate: {
+                    $gte: sixMonthsAgo
+                }
+                }
+            },
+            {
+                $group: {
+                _id: {
+                    $dateToString: {
+                    format: "%Y-%m",
+                    date: "$startdate"
+                    }
+                },
+                totalAmount: {
+                    $sum: "$amount"
+                }
+                }
+            },
+            {
+                $project: {
+                month: "$_id",
+                totalAmount: "$totalAmount",
+                _id: 0
+                }
+            },
+            {
+                $sort: {
+                    month: 1
+                }
+            }
+            ]);
+        
+            console.log(payments);
+            res.render('manager/viewpaymenthistorygraph', {manager, payments });
+        }
+        else
+        {
+            res.send("No manager found");
+        }
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+    // 
+}
+
+
+const manager_paymenthistorygraph_post = async (req, res) => {
+    try{
+
+        const username = req.params.username;
+        const manager = User.findOne({username:username, role:'manager'});
+        if(manager)
+        {
+            const monthsAgo = new Date();
+            const month = Number(req.body.month);
+            monthsAgo.setMonth(sixMonthsAgo.getMonth() - month);
+            const username = req.params.username;
+            const manager = await User.findOne({username:username, role:'manager'});
+            const payments = await Paymenthistory.aggregate([
+            {
+                $match: {
+                enddate: {
+                    $gte: monthsAgo
+                }
+                }
+            },
+            {
+                $group: {
+                _id: {
+                    $dateToString: {
+                    format: "%Y-%m",
+                    date: "$startdate"
+                    }
+                },
+                totalAmount: {
+                    $sum: "$amount"
+                }
+                }
+            },
+            {
+                $project: {
+                month: "$_id",
+                totalAmount: "$totalAmount",
+                _id: 0
+                }
+            },
+            {
+                $sort: {
+                    month: 1
+                }
+            }
+            ]);
+        
+            console.log(payments);
+            res.render('manager/viewpaymenthistorygraph', {manager, payments });
+        }
+        else
+        {
+            res.send("No manager found");
+        }
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+  }
+
+
+  //cadet functionalities
+
+const cadet_viewprofile_get = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const cadet = await User.findOne({username:username,role: 'cadet'});
+        if(cadet)
+        {
+            res.render('cadet/viewprofile', { cadet: cadet });
+        }
+        else
+        {
+            res.send("Cadet not found");
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const cadet_changepassword_get = async (req, res) => {
+    try {
+        const username = req.params.username; // use req.params.username to get the username
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+
+        if (cadet) {
+
+            res.render('cadet/changepassword', { cadet: cadet });
+            // res.send(cadet);
+        } else {
+            res.send('No cadet found.');
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
+const cadet_changepassword_patch = async (req, res) => {
+    try {
+        const { username } = req.params; // use req.params.username to get the username
+        let cadet = await User.findOne({ username: username, role: 'cadet' });
+        // cadet.password = req.body.password;
+        // const cpassword = req.body.cpassword;
+        if(cadet)
+        {
+            if (req.body.password === req.body.cpassword && req.body.cpassword) {
+            
+            
+            cadet.password = await bcrypt.hash(req.body.password, 12);
+            User.updateOne({ username: username },
+            { $set: { password: cadet.password }, validate: true }).then((result) => {
+                console.log(result);
+                res.render('cadet/index', { cadet: cadet });
+            }).catch((err) => {
+                console.log(err);
+                res.send(err);
+            });
+            }
+            else {
+                res.send("Password are not matching");
+            }
+        }
+        else {
+            res.send('No cadet found.');
+        }
+        
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
+const manager_changepassword_patch = async (req, res) => {
+    try {
+        const { username } = req.params; // use req.params.username to get the username
+        let manager = await User.findOne({ username: username, role: 'manager' });
+        // manager.password = req.body.password;
+        // const cpassword = req.body.cpassword;
+        if(manager)
+        {
+            if (req.body.password === req.body.cpassword && req.body.cpassword) {
+                manager.password = await bcrypt.hash(req.body.password, 12);
+                User.updateOne({ username: username },
+                { $set: { password: manager.password }, validate: true }).then((result) => {
+                    console.log(result);
+                    res.render('manager/index', { manager: manager });
+                }).catch((err) => {
+                    console.log(err);
+                    res.send(err);
+                });
+            }
+            else {
+                res.send("Password are not matching");
+            }
+        }
+        else {
+            res.send('No manager found.');
+        }  
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the manager.');
+    }
+}
+
+const cadet_get = async (req, res) => {
+    try {
+        const username = req.params.username; // use req.params.username to get the username
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        // console.log(cadet);
+        if(cadet){
+
+            res.render('cadet/index', { cadet: cadet });
+        }
+        else{
+            res.send("No cadet found");
+        }
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
+const cadet_edit_get = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        if (cadet) {
+            res.render('cadet/edit', { cadet: cadet });
+            // res.send(cadet);
+        }
+        else {
+            res.send("Error occured!");
+        }
+    } catch (error) {
+        res.send("Unable to find cadet");
+    }
+}
+
+const cadet_edit_patch = async (req, res) => {
+    try {
+        const { username } = req.params; // use req.params.username to get the username
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+
+        if(cadet){
+            // cadet.password = req.body.password;
+            cadet.fullname = req.body.fullname;
+            cadet.date = req.body.date;
+            cadet.email = req.body.email;
+            cadet.phone = req.body.phone;
+            cadet.gender = req.body.gender;
+            User.updateOne({ username: username, role: 'cadet' },
+            { $set: { fullname: req.body.fullname, date: req.body.date, email: req.body.email, phone: req.body.phone, gender: req.body.gender }, validate: true })
+            .then((result) => {
+                console.log(result);
+                res.render('cadet/index', { cadet: cadet });
+            })
+            .catch((err) => {
+                console.log(err);
+                res.send('cannot update');
+            }
+            );
+        }
+        else
+        {
+            res.send("No cadet found");
+        }
+        
+
+    } catch (error) {
+        console.log(error);
+        res.send('An error occurred while finding the cadet.');
+    }
+}
+
+const cadet_viewinventory_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        if (cadet) {
+            const inventory = await Inventory.find();
+            if (inventory) {
+                console.log(inventory);
+                res.render('cadet/viewinventory', { cadet: cadet, inventory: inventory });
+            }
+            else {
                 res.send("No inventory found");
             }
         }
