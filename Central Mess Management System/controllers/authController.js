@@ -1,3 +1,5 @@
+require('dotenv').config();
+const nodemailer = require('nodemailer');
 const User = require('../models/user');
 const Inventory = require('../models/inventory');
 const Feedback = require('../models/feedback');
@@ -5,9 +7,11 @@ const Payment = require('../models/payment');
 const Paymenthistory = require('../models/paymenthistory');
 const Managercheck = require('../models/managercheck');
 
-const nodedmailer = require("nodemailer");
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const SECRET = process.env.SECRET;
+
 
 const validatepassword = (password) => {
     let errors = [];
@@ -40,49 +44,64 @@ const createToken = (id) => {
     });
 }
 
-
-const sendVerifyMail = async (name, email, user_id) => {
+const sendVerifyMail = async (name, email, user_id, userrole, req) => {
     try {
-
-        const transporter = nodedmailer.createTransport({
+        const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 587,
             secure: false,
             requireTLS: true,
             auth: {
-                user: 'centralmess777@gmail.com',
-                pass: 'ymnrfortalkgakyi'
-            }
+                user: process.env.MAIL,
+                pass: process.env.PASS,
+            },
         });
-        const mailOption = {
-            from: 'centralmess777@gmail.com',
+
+        let mailOptions = {
+            from: process.env.MAIL,
             to: email,
-            subject: 'For verification mail',
-            html: '<p>Hii ' + name + ', please click here to <a href = "localhost:3000/verify?id=' + user_id + '"> Verify </a> your mail</p>'
+            subject: '',
+            html: '',
+        };
+        const remaining = `/verify/${user_id}`;
+        const protocol = req.protocol || 'http';
+        const hostname = req.headers.host || 'localhost:3000';
+        const url_ = protocol + '://' + hostname + remaining;
+        if (userrole === 'customer') {
+            mailOptions.subject = 'For verification mail';
+            mailOptions.html = `<p>Hii '${name}', please click <a href="${url_}">here</a> to verify your mail</p>`;
+        } else if (userrole === 'manager') {
+            mailOptions.to = process.env.MANAGER_MAIL;
+            mailOptions.subject = `For verification mail for manager named ${name}`;
+            mailOptions.html = `<p>Dear Manager, ${name} wants to be a manager, please click <a href="${url_}">here</a> to verify their mail</p>`;
+        } else if (userrole === 'cadet') {
+            mailOptions.to = process.env.MANAGER_MAIL;
+            mailOptions.subject = `For verification mail for cadet named ${name}`;
+            mailOptions.html = `<p>Dear Manager, ${name} wants to be a cadet, please click <a href="${url_}">here</a> to verify their mail</p>`;
+        } else {
+            throw new Error(`Invalid user role: ${userrole}`);
         }
-        transporter.sendMail(mailOption, function (error, info) {
-            if (error) {
-                console.log(error);
-            }
-            else {
-                console.log("Email has been sent" + info);
-            }
-        })
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`Email has been sent to ${email}: ${info.messageId}`);
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
+        throw error;
     }
-}
+};
 
 const verifyMail = async (req, res) => {
     try {
-        const updateInfo = await User.updateOne({ _id: req.params.id }, { $set: { isVarified: Boolean(true) } });
+        const updateInfo = await User.updateOne({ _id: req.params.id }, { $set: { isVerified: Boolean(true) } });
+        const customer = await User.findOne({ _id: req.params.id });
+        console.log(customer);
         console.log(updateInfo);
-        res.render('home');
+        res.render('login', { err: undefined });
     } catch (error) {
         console.log(error.message);
+        res.log('Inside catch block of verifyMail');
     }
 }
-
 
 
 const login_get = (req, res) => {
@@ -1135,6 +1154,8 @@ const logout_get = (req, res) => {
     res.render('home');
 }
 module.exports = {
+
+    
     login_get,
     login_post,
     signup_get,
@@ -1168,6 +1189,7 @@ module.exports = {
     manager_addpayment_post, // POST
 
     verifyMail,
+    sendVerifyMail,
     logout_get,
     customer_about_get,
     customer_faq_get,
