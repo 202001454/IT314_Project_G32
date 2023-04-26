@@ -1113,7 +1113,22 @@ const manager_paymenthistorygraph_post = async (req, res) => {
     }
 };
 
-
+const cadet_viewprofile_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        if (cadet) {
+            res.render('cadet/view', { cadet: cadet });
+        }
+        else {
+            // res.send("Cadet not found");
+            res.status(404).render('404', { err: 'Cadet not found' });
+        }
+    } catch (error) {
+        // console.log(error);
+        res.status(404).render('404', { err: 'cadet_viewprofile_get error' });
+    }
+}
 // about and faq
 
 const customer_about_get = async (req, res) => {
