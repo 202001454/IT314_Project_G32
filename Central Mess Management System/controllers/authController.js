@@ -260,6 +260,117 @@ const signup_post = async (req, res) => {
     }
 }
 
+//----------------------Functions for forget password-----------------------------
+
+const sendForgotPasswordMail = async (name, email, user_id, req) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: process.env.MAIL,
+                pass: process.env.PASS,
+            },
+        });
+
+        const remaining = `/resetpassword/${user_id}`;
+        const protocol = req.protocol || 'http';
+        const hostname = req.headers.host || 'localhost:3000';
+        const url_ = protocol + '://' + hostname + remaining;
+
+        let mailOptions = {
+            from: process.env.MAIL,
+            to: email,
+            subject: 'Password reset for central mess portal',
+            html: `<p>Hii '${name}', please click <a href="${url_}">here</a> to reset your password.</p>`
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`Email has been sent to ${email}: ${info.messageId}`);
+    } catch (error) {
+        // console.error(error.message);
+        // throw error;
+        res.status(404).render('404', { err: 'sendForgotPasswordMail error' });
+    }
+};
+
+const forgotpassword_get = async (req, res) => {
+    try {
+        res.render('forgotpassword', { err: undefined });
+    }
+    catch (error) {
+        // console.log(error);
+        res.status(404).render('404', { err: 'forgotpassword_get error' });
+    }
+}
+
+const forgotpassword_post = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const user = await User.findOne({ email: email });
+        if (user) {
+            const mailSend = await sendForgotPasswordMail(user.fullname, email, user._id, req);
+            // res.render('cadet/edit', { cadet: cadet });
+            // res.send(cadet);
+            res.render('login', { err: 'Please check your email to reset password.' });
+        }
+        else {
+            res.status(500).render('forgotpassword', { err: 'Email not found' });
+        }
+    } catch (error) {
+        // res.send("Unable to find cadet");
+        res.status(400).render('404', { err: 'forgotpassword_post error' });
+    }
+}
+
+const resetpassword_get = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await User.findOne({ _id: id });
+        if (user) {
+            res.render('resetpassword', {user: user , err: undefined });
+        }
+        else {
+            res.status(404).render('404', { err: 'User not found' });
+        }
+    } catch (error) {
+        // console.log(error);
+        res.status(404).render('404', { err: 'resetpassword_get error' });
+    }
+}
+
+const resetpassword_patch = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await User.findOne({ _id: id });
+        if (user) {
+            const password = req.body.password;
+            const cpassword = req.body.cpassword;
+            if (password === cpassword) {
+                const hashedPassword = await bcrypt.hash(password, 12);
+                User.updateOne({ _id: id }, { $set: { password: hashedPassword }, validate: true })
+                    .then((result) => {
+                        console.log(result);
+                        res.render('login', { err: undefined });
+                    })
+                    .catch((err) => {
+                        res.status(404).render('404', { err: 'cannot perform updation error' });
+                    });
+            }
+            else {
+                res.status(500).render('resetpassword', { user: user , err: 'Password does not match' });
+            }
+        }
+        else {
+            res.status(500).render('login', { err: 'User not found' });
+        }
+    } catch (error) {
+        res.status(404).render('404', { err: 'resetpassword_patch error' });
+    }
+}
+
 const customer_get = async (req, res) => {
     try {
         const username = req.params.username; // use req.params.username to get the username
@@ -1563,6 +1674,13 @@ const logout_get = (req, res) => {
 module.exports = {
     login_get,
     login_post,
+
+    resetpassword_get,
+    resetpassword_patch,
+
+    forgotpassword_get,
+    forgotpassword_post,
+
     signup_get,
     signup_post,
     customer_get,

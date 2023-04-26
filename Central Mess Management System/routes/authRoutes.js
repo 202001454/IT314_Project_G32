@@ -13,6 +13,12 @@ router.delete('*', checkUser);
 
 router.get('/login', authController.login_get);
 router.post('/login', authController.login_post);
+
+router.get('/forgotpassword', authController.forgotpassword_get);
+router.post('/forgotpassword', authController.forgotpassword_post);
+
+router.get('/resetpassword/:id', authController.resetpassword_get);
+router.patch('/resetpassword/:id', authController.resetpassword_patch);
 // router.post('/login', async (req, res) => {
 //     const { username, password, role } = req.body;
 //     res.send({ username, password, role });
