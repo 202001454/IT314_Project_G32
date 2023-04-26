@@ -14,9 +14,7 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/manager/<%=manager.username%>">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/manager/<%=manager.username%>">Menu</a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link" href="/manager/<%=manager.username%>/about">About</a>
                     </li>
@@ -26,7 +24,9 @@
                 </ul>
 
                 <div class="nav-link me-2 my-2">
-                    <a href="/logout" class="btn btn-primary"> Logout </a>
+                    <form action = "/home" method="post">
+                        <button class="btn btn-primary" type="submit">Logout</button>                        
+                    </form>
                 </div>
             </div>
         </div>
