@@ -1,4 +1,4 @@
-<%- include('../partials/header_manager') %>
+<%- include('../partials/header') %>
 
 
     <div id="wrapper">
@@ -18,9 +18,7 @@
                                         <div class="profile my-4 table-striped-columns">
                                             <div class="mb-3"><img src="/photos/person_logo.svg" alt="person"
                                                     width="20%"></div>
-                                            <div class="fs-3">
-                                                <%= manager.fullname%>
-                                            </div>
+                                            <div class="fs-3"><%= manager.fullname%></div>
                                             <div class="fs-5">Manager</div>
                                         </div>
                                     </tr>
@@ -78,15 +76,14 @@
                                     </tr>
                                     <tr class="table-active">
                                         <td><a href="/manager/<%= manager.username%>/viewpaymenthistorygraph"
-                                                class="list-group-item list-group-item-action">View Payment
-                                                Statistics</a>
+                                            class="list-group-item list-group-item-action">View Payment Statistics</a>
                                         </td>
-                                    </tr>
-                                    <tr>
+                                      </tr>
+                                      <tr>
                                         <td><a href="/manager/<%= manager.username%>/deleteuser"
-                                                class="list-group-item list-group-item-action">Remove Customer/cadet</a>
+                                            class="list-group-item list-group-item-action">Remove Customer/cadet</a>
                                         </td>
-                                    </tr>
+                                      </tr>
                                 </tbody>
                             </table>
 
@@ -98,8 +95,7 @@
                     <div class="col-12 col-lg-7 mt-5 py-5">
 
 
-                        <form action="/manager/<%=manager.username%>/viewpaymenthistorygraph" method="post"
-                            class="mb-5">
+                        <form action="/manager/<%= manager.username%>/viewpaymenthistorygraph" method="post">
                             <div class="row">
                                 <div class="col-12  col-sm-7">
                                     <h1>Payment History Graph</h1>
@@ -117,10 +113,10 @@
                                         </select>
                                         <label for="month">Duration</label>
                                     </div> -->
-                                    <div class="form-floating mb-3">
-                                        <input type="number" class="form-control" id="duration" name="month"
-                                            placeholder="something" min="1" max="60" required>
-                                        <label for="duraion">Duration (months)</label>
+                                    <div class="form-floating mb-5">
+                                        <input type="number" class="form-control" id="duration" name="month" placeholder="something"
+                                            min="1" max="60"  required>
+                                        <label for="duraion">duration (months)</label>
                                     </div>
                                 </div>
                                 <div class="col-1">
@@ -131,14 +127,14 @@
                             </div>
                         </form>
                         <canvas id="payment-chart"></canvas>
-
-
+        
+                    
                         <!-- Load Chart.js and script for rendering chart -->
                         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
                         <script>
                             // Get payment data passed from server-side
-                            const paymentData = <% - JSON.stringify(payments) %>;
-
+                            const paymentData = <%- JSON.stringify(payments) %>;
+                    
                             // Extract labels and amounts from payment data
                             const labels = paymentData.map(payment => getMonthName(payment.month));
                             const amounts = paymentData.map(payment => payment.totalAmount);
@@ -147,35 +143,35 @@
 
                             // Function to get month and year name from number (e.g. "Jan 2023")
                             function getMonthName(monthYearString) {
-                                const [year, month] = monthYearString.split('-');
-                                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                                return `${monthNames[Number(month) - 1]} ${year}`;
+                            const [year, month] = monthYearString.split('-');
+                            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                            return `${monthNames[Number(month)-1]} ${year}`;
                             }
 
                             // Create chart using Chart.js library
                             const ctx = document.getElementById('payment-chart').getContext('2d');
                             const paymentChart = new Chart(ctx, {
-                                type: 'bar',
-                                data: {
-                                    labels: labels,
-                                    datasets: [{
-                                        label: 'Total Payment Amount',
-                                        data: amounts,
-                                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                        borderColor: 'rgba(54, 162, 235, 1)',
-                                        borderWidth: 1
-                                    }]
-                                },
-                                options: {
-                                    scales: {
-                                        yAxes: [{
-                                            ticks: {
-                                                beginAtZero: true
-                                            }
-                                        }]
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                label: 'Total Payment Amount',
+                                data: amounts,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                yAxes: [{
+                                    ticks: {
+                                    beginAtZero: true
                                     }
+                                }]
                                 }
+                            }
                             });
                         </script>
                     </div>
