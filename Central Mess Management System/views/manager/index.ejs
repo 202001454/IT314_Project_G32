@@ -1,4 +1,4 @@
-<%- include('../partials/header') %>
+<%- include('../partials/header_manager') %>
 
 
   <div id="wrapper">
@@ -13,7 +13,7 @@
         <div class="row mb-5">
           <div class="col-12 col-lg-3">
             <div class="list-group text-center make-sticky ">
-
+        
               <table class="table table-hover">
                 <thead>
                   <tr>
@@ -25,12 +25,12 @@
                   </tr>
                 </thead>
                 <tbody>
-
+        
                   <tr class="table-active">
                     <td><a href="/manager/<%= manager.username%>"
                         class="list-group-item list-group-item-action">Home</a></td>
                   </tr>
-
+        
                   <tr>
                     <td><a href="/manager/<%= manager.username%>/view"
                         class="list-group-item list-group-item-action">View
@@ -75,9 +75,19 @@
                         class="list-group-item list-group-item-action">Customer checklist</a>
                     </td>
                   </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/viewpaymenthistorygraph"
+                        class="list-group-item list-group-item-action">View Payment Statistics</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/deleteuser"
+                        class="list-group-item list-group-item-action">Remove Customer/cadet</a>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
-
+        
             </div>
           </div>
           <div class="col-12 col-lg-9">
@@ -94,8 +104,8 @@
                 <div class="accordion" id="accordionExample">
                   <div class="accordion-item">
                     <h2 class="accordion-header">
-                      <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne">
                         Breakfast
                       </button>
                     </h2>
@@ -104,40 +114,50 @@
                         <div class="row row-cols-1 row-cols-md-3 g-4">
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/breakfast/tea.webp" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">Tea</h5>
+                                <p class="card-text">A warm and comforting beverage to start your day.</p>
                               </div>
                             </div>
                           </div>
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/breakfast/coffee.jpg" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">Coffee</h5>
+                                <p class="card-text">The perfect pick-me-up with a rich and bold flavor</p>
                               </div>
                             </div>
                           </div>
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/breakfast/paratha.jpg" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">Paratha</h5>
+                                <p class="card-text">Flaky, buttery, and delicious Indian flatbread.</p>
                               </div>
                             </div>
                           </div>
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/breakfast/idli-sambhar.jpg" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">idliSambar</h5>
+                                <p class="card-text">A comforting South Indian staple with fluffy idlis</p>
                               </div>
                             </div>
                           </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/breakfast/upma.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Upma</h5>
+                                <p class="card-text">A savory and satisfying Indian breakfast dish</p>
+                              </div>
+                            </div>
+                          </div>
+                          
                         </div>
                       </div>
                     </div>
@@ -154,37 +174,64 @@
                         <div class="row row-cols-1 row-cols-md-3 g-4">
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/lunch/chhole-bhature.jpg" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">Chole bhature</h5>
+                                <p class="card-text">A classic North Indian dish with fluffy bhature and spicy chole</p>
                               </div>
                             </div>
                           </div>
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/lunch/gulab-jamun.jpg" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">Gulab jamun</h5>
+                                <p class="card-text">Fried dough balls soaked in sweet syrup.</p>
                               </div>
                             </div>
                           </div>
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/lunch/panner.jpg" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">Paneer tikka masala</h5>
+                                <p class="card-text">a popular Indian vegetarian dish with grilled paneer cheese in a creamy spiced tomato sauce.</p>
                               </div>
                             </div>
                           </div>
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/lunch/roti.jpg" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">Buteer Roti</h5>
+                                <p class="card-text">A simple and delicious Indian flatbread with buttery goodness</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/rice.jfif" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">jeera rice</h5>
+                                <p class="card-text">Basmati rice cooked with cumin seeds for a flavorful twist</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/dal.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Dal tadka</h5>
+                                <p class="card-text">A comforting and nutritious lentil-based dish.</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/chhas.jpeg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Chhas</h5>
+                                <p class="card-text">A refreshing and healthy yogurt-based drink</p>
                               </div>
                             </div>
                           </div>
@@ -204,37 +251,46 @@
                         <div class="row row-cols-1 row-cols-md-3 g-4">
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/dinner/papad.jpg" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">Masala papad</h5>
+                                <p class="card-text">A crispy and crunchy Indian appetizer</p>
                               </div>
                             </div>
                           </div>
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/dinner/bhaji.jpg" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">Bhaji-Paw</h5>
+                                <p class="card-text">A popular Indian street food with spicy vegetable bhaji and soft buttered pav</p>
                               </div>
                             </div>
                           </div>
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/dinner/pulav.jpg" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">Pulav</h5>
+                                <p class="card-text">A fragrant and flavorful rice dish with vegetables and spices.</p>
                               </div>
                             </div>
                           </div>
                           <div class="col">
                             <div class="card h-100">
-                              <img src="https://picsum.photos/200/100" class="card-img-top" alt="food image">
+                              <img src="/photos/dinner/kadhi.webp" class="card-img-top" alt="Food Photo" >
                               <div class="card-body">
-                                <h5 class="card-title">FOOD_NAME</h5>
-                                <p class="card-text">extra information about that food</p>
+                                <h5 class="card-title">Kadhi</h5>
+                                <p class="card-text">A tangy and creamy yogurt-based curry with pakoras</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/chhas.jpeg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Chhas</h5>
+                                <p class="card-text">A refreshing and healthy yogurt-based drink</p>
                               </div>
                             </div>
                           </div>

@@ -1,4 +1,4 @@
-<%- include('../partials/header') %>
+<%- include('../partials/header_manager') %>
 
 
 
@@ -10,75 +10,83 @@
                 <div class="row mb-5">
                     <div class="col-12 col-lg-3">
                         <div class="list-group text-center make-sticky ">
-
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <div class="profile my-4 table-striped-columns">
-                                            <div class="mb-3"><img src="/photos/person_logo.svg" alt="person"
-                                                    width="20%"></div>
-                                            <div class="fs-3"><%= manager.fullname%></div>
-                                            <div class="fs-5">Manager</div>
-                                        </div>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    <tr>
-                                        <td><a href="/manager/<%= manager.username%>"
-                                                class="list-group-item list-group-item-action">Home</a></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td><a href="/manager/<%= manager.username%>/view"
-                                                class="list-group-item list-group-item-action">View
-                                                profile</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="/manager/<%= manager.username%>/edit"
-                                                class="list-group-item list-group-item-action">Edit
-                                                Profile</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="/manager/<%= manager.username%>/changepassword"
-                                                class="list-group-item list-group-item-action">Change
-                                                password</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="/manager/<%= manager.username%>/addpayment"
-                                                class="list-group-item list-group-item-action">Add Payment</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="/manager/<%= manager.username%>/viewfeedback"
-                                                class="list-group-item list-group-item-action">View Feedback</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="/manager/<%= manager.username%>/viewinventory"
-                                                class="list-group-item list-group-item-action">View inventory</a>
-                                        </td>
-                                    </tr>
-                                    <tr  class="table-active">
-                                        <td><a href="/manager/<%= manager.username%>/inventoryupgrade"
-                                                class="list-group-item list-group-item-action">Edit inventory</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="/manager/<%= manager.username%>/inventorydegrade"
-                                                class="list-group-item list-group-item-action">Remove inventory</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="/manager/<%= manager.username%>/managercheck"
-                                                class="list-group-item list-group-item-action">Customer checklist</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-
+                    
+                          <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <div class="profile my-4 table-striped-columns">
+                                  <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
+                                  <div class="fs-3"><%= manager.fullname%></div>
+                                  <div class="fs-5">Manager</div>
+                                </div>
+                              </tr>
+                            </thead>
+                            <tbody>
+                    
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>"
+                                    class="list-group-item list-group-item-action">Home</a></td>
+                              </tr>
+                    
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/view"
+                                    class="list-group-item list-group-item-action">View
+                                    profile</a></td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/edit"
+                                    class="list-group-item list-group-item-action">Edit
+                                    Profile</a></td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/changepassword"
+                                    class="list-group-item list-group-item-action">Change
+                                    password</a></td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/addpayment"
+                                    class="list-group-item list-group-item-action">Add Payment</a></td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/viewfeedback"
+                                    class="list-group-item list-group-item-action">View Feedback</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/viewinventory"
+                                    class="list-group-item list-group-item-action">View inventory</a>
+                                </td>
+                              </tr>
+                              <tr class="table-active">
+                                <td><a href="/manager/<%= manager.username%>/inventoryupgrade"
+                                    class="list-group-item list-group-item-action">Edit inventory</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/inventorydegrade"
+                                    class="list-group-item list-group-item-action">Remove inventory</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/managercheck"
+                                    class="list-group-item list-group-item-action">Customer checklist</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/viewpaymenthistorygraph"
+                                    class="list-group-item list-group-item-action">View Payment Statistics</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/deleteuser"
+                                    class="list-group-item list-group-item-action">Remove Customer/cadet</a>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    
                         </div>
-                    </div>
+                      </div>
                     <div class="col-1 col-md-2"></div>
 
 
@@ -91,6 +99,15 @@
                                     Add / Update your Inventory.
                                 </div>
                             </div>
+
+                            <% if(err)  {%>
+                              <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                      <%=err %>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                  </div>
+                                </div>
+                                <% } %>
                             <form action="/manager/<%=manager.username%>/inventoryupgrade?_method=patch" method="post" class="mt-4">
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="item-name" name="item" placeholder="something"
@@ -104,10 +121,8 @@
                                     <label for="quantity">Quantity</label>
                                 </div>
 
-                                <div class="text-center mt-5">
-                                    <button class="btn btn-primary col-4 col-sm-3 me-5" type="submit">Submit</button>
-                                    <button class="btn btn-primary col-4 col-sm-3 " type="cancel"
-                                        onclick="javascript:window.location='manager_page.html';">Cancel</button>
+                                <div class="text-center mt-5 text-center">
+                                    <button class="btn btn-primary px-3" type="submit">Submit</button>
                                 </div>
 
                             </form>
