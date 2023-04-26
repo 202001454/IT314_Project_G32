@@ -1250,6 +1250,22 @@ const cadet_edit_patch = async (req, res) => {
         res.status(404).render('404', { err: 'cadet_edit_patch error' });
     }
 }
+
+const cadet_viewinventory_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const cadet = await User.findOne({ username: username, role: 'cadet' });
+        const inventory = await Inventory.find();
+
+        res.render('cadet/viewinventory', { cadet: cadet, inventory: inventory });
+
+    } catch (error) {
+        // console.log(error);
+        // res.send('An error occurred while finding the cadet.');
+        res.status(404).render('404', { err: 'cadet_viewinventory_get error' });
+    }
+}
+
 // about and faq
 
 const customer_about_get = async (req, res) => {
