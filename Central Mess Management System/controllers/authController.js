@@ -260,6 +260,43 @@ const signup_post = async (req, res) => {
     }
 }
 
+//----------------------Functions for forget password-----------------------------
+
+const sendForgotPasswordMail = async (name, email, user_id, req) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: process.env.MAIL,
+                pass: process.env.PASS,
+            },
+        });
+
+        const remaining = `/resetpassword/${user_id}`;
+        const protocol = req.protocol || 'http';
+        const hostname = req.headers.host || 'localhost:3000';
+        const url_ = protocol + '://' + hostname + remaining;
+
+        let mailOptions = {
+            from: process.env.MAIL,
+            to: email,
+            subject: 'Password reset for central mess portal',
+            html: `<p>Hii '${name}', please click <a href="${url_}">here</a> to reset your password.</p>`
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`Email has been sent to ${email}: ${info.messageId}`);
+    } catch (error) {
+        // console.error(error.message);
+        // throw error;
+        res.status(404).render('404', { err: 'sendForgotPasswordMail error' });
+    }
+};
+
+
 const customer_get = async (req, res) => {
     try {
         const username = req.params.username; // use req.params.username to get the username
