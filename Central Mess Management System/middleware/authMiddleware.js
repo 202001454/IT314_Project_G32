@@ -9,7 +9,7 @@ const requireAuth = (req, res, next) => {
         jwt.verify(token, varifying_token, async (err, decodedToken) => {
             if (err) {
                 console.log(err.message);
-                res.render('login');
+                res.render('login' , {err: undefined});
             } else {
                 // console.log("Vrund");
                 // console.log("Vrund");
@@ -26,14 +26,15 @@ const requireAuth = (req, res, next) => {
                 }
                 else {
                     console.log("Bhai Bhai");
-                    res.render('login');
+                    res.render('login' , {err: undefined});
+
                 }
                 // next();
             }
         });
     } else {
         console.log("User not logged in");
-        res.redirect('/login');
+        res.render('login' , {err: undefined});
     }
 }
 
@@ -57,5 +58,4 @@ const checkUser = (req, res, next) => {
         next();
     }
 }
-
 module.exports = { requireAuth, checkUser };
