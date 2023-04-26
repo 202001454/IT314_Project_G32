@@ -1,4 +1,4 @@
-<%- include('../partials/header') %>
+<%- include('../partials/header_cadet') %>
 
 
 
@@ -13,49 +13,42 @@
                 <div class="row mb-5">
                     <div class="col-12 col-lg-3">
                         <div class="list-group text-center make-sticky ">
-
+                    
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
                                         <div class="profile my-4 table-striped-columns">
-                                            <div class="mb-3"><img src="/photos/person_logo.svg" alt="person"
-                                                    width="20%"></div>
-                                            <div class="fs-3">
-                                                <%= cadet.fullname%>
-                                            </div>
+                                            <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
+                                            <div class="fs-3"><%= cadet.fullname%></div>
                                             <div class="fs-5">Cadet</div>
                                         </div>
                                     </tr>
                                 </thead>
                                 <tbody>
-
-                                    <tr >
-                                        <td><a href="/cadet/<%= cadet.username%>"
-                                                class="list-group-item list-group-item-action">Home</a>
-                                        </td>
+                                  
+                                  <tr>
+                                      <td><a href="/cadet/<%= cadet.username%>" class="list-group-item list-group-item-action">Home</a></td>
                                     </tr>
-                                    <tr>
+                                  <tr>
                                     <tr class="table-active">
-                                        <td><a href="/cadet/<%= cadet.username%>/view"
-                                                class="list-group-item list-group-item-action">View
-                                                profile</a></td>
+                                        <td><a href="/cadet/<%= cadet.username%>/view" class="list-group-item list-group-item-action">View
+                                            profile</a></td>
+                                    </tr>
+                                    <tr >
+                                      <td><a href="/cadet/<%= cadet.username%>/edit" class="list-group-item list-group-item-action">Edit
+                                        Profile</a></td>
+                                    </tr>
+                                    <tr >
+                                      <td><a href="/cadet/<%= cadet.username%>/changepassword" class="list-group-item list-group-item-action">Change
+                                        password</a></td>
                                     </tr>
                                     <tr>
-                                        <td><a href="/cadet/<%= cadet.username%>/edit"
-                                                class="list-group-item list-group-item-action">Edit
-                                                Profile</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="/cadet/<%= cadet.username%>/changepassword"
-                                                class="list-group-item list-group-item-action">Change
-                                                password</a></td>
-                                    </tr>
-                                    <td><a href="/cadet/<%= cadet.username%>/viewinventory"
-                                            class="list-group-item list-group-item-action">View inventory</a></td>
+                                        <td><a href="/cadet/<%= cadet.username%>/viewinventory" class="list-group-item list-group-item-action">View inventory</a></td>
                                     </tr>
                                 </tbody>
                             </table>
-
+                    
+                    
                         </div>
                     </div>
                     <div class="col-1 col-lg-0"></div>

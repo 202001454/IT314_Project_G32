@@ -8,7 +8,7 @@ router.use(methodoverride('_method'));
 router.get('*', checkUser);
 router.patch('*', checkUser);
 router.post('*', checkUser);
-
+router.delete('*', checkUser);
 
 
 router.get('/login', authController.login_get);
@@ -73,6 +73,24 @@ router.get('/manager/:username/managercheck', requireAuth, authController.manage
 router.post('/manager/:username/managercheck', requireAuth, authController.manager_managercheck_post);
 
 
+router.get('/manager/:username/deleteuser', requireAuth, authController.manager_deleteuser_get);
+router.delete('/manager/:username/deleteuser', requireAuth, authController.manager_deleteuser_delete);
+
+router.get('/manager/:username/viewpaymenthistorygraph', requireAuth, authController.manager_paymenthistorygraph_get);
+router.post('/manager/:username/viewpaymenthistorygraph', requireAuth, authController.manager_paymenthistorygraph_post);
+
+router.get('/cadet/:username/view' , requireAuth, authController.cadet_viewprofile_get);
+router.get('/cadet/:username/changepassword', requireAuth, authController.cadet_changepassword_get);
+router.patch('/cadet/:username/changepassword', requireAuth, authController.cadet_changepassword_patch);
+
+router.get('/cadet/:username', requireAuth, authController.cadet_get);
+router.get('/cadet/:username/edit', requireAuth, authController.cadet_edit_get);
+router.patch('/cadet/:username/edit', requireAuth, authController.cadet_edit_patch);
+
+router.get('/cadet/:username/viewinventory', requireAuth, authController.cadet_viewinventory_get);
+
+
+
 router.get('/customer/:username/faq', authController.customer_faq_get);
 router.get('/manager/:username/faq', authController.manager_faq_get);
 router.get('/cadet/:username/faq', authController.cadet_faq_get);
@@ -83,7 +101,7 @@ router.get('/cadet/:username/about', authController.cadet_about_get);
 router.get('/verify/:id', authController.verifyMail);
 
 router.get('/add-user', requireAuth, authController.add_user_get);
-router.get('/logout', authController.logout_get);
+router.post('/home', authController.logout_get);
 router.get('/', (req, res) => {
     res.render('home', { title: 'Home' });
 }
