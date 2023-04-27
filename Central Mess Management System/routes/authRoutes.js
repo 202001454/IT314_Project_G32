@@ -29,6 +29,11 @@ router.patch('/resetpassword/:id', authController.resetpassword_patch);
 // });
 
 router.get('/signup', authController.signup_get);
+router.get('/about', authController.about_get);
+router.get('/faq', authController.faq_get);
+
+
+
 router.post('/signup', authController.signup_post);
 
 router.get('/customer/:username', requireAuth, authController.customer_get);
@@ -57,17 +62,17 @@ router.get('/manager/:username/view', requireAuth, authController.manager_view_g
 router.get('/manager/:username/changepassword', requireAuth, authController.manager_changepassword_get);
 router.patch('/manager/:username/changepassword', requireAuth, authController.manager_changepassword_patch);
 
-router.get('/manager/:username/about', authController.manager_about_get);
+// router.get('/manager/:username/about', authController.manager_about_get);
 
-router.get('/manager/:username/managercheck', authController.manager_managercheck_get);
-router.post('/manager/:username/managercheck', authController.manager_managercheck_post);
+router.get('/manager/:username/managercheck',requireAuth, authController.manager_managercheck_get);
+router.post('/manager/:username/managercheck',requireAuth, authController.manager_managercheck_post);
 
 
-router.get('/manager/:username/inventoryupgrade', authController.manager_inventoryupgrade_get);
-router.patch('/manager/:username/inventoryupgrade', authController.manager_inventoryupgrade_patch);
+router.get('/manager/:username/inventoryupgrade',requireAuth, authController.manager_inventoryupgrade_get);
+router.patch('/manager/:username/inventoryupgrade',requireAuth, authController.manager_inventoryupgrade_patch);
 
-router.get('/manager/:username/inventorydegrade', authController.manager_inventorydegrade_get);
-router.patch('/manager/:username/inventorydegrade', authController.manager_inventorydegrade_patch);
+router.get('/manager/:username/inventorydegrade',requireAuth, authController.manager_inventorydegrade_get);
+router.patch('/manager/:username/inventorydegrade',requireAuth, authController.manager_inventorydegrade_patch);
 
 router.get('/manager/:username/viewfeedback', requireAuth, authController.manager_viewfeedback_get);
 
@@ -97,16 +102,17 @@ router.get('/cadet/:username/viewinventory', requireAuth, authController.cadet_v
 
 
 
-router.get('/customer/:username/faq', authController.customer_faq_get);
-router.get('/manager/:username/faq', authController.manager_faq_get);
-router.get('/cadet/:username/faq', authController.cadet_faq_get);
-router.get('/customer/:username/about', authController.customer_about_get);
-router.get('/manager/:username/about', authController.manager_about_get);
-router.get('/cadet/:username/about', authController.cadet_about_get);
+
+router.get('/customer/:username/faq', requireAuth,authController.customer_faq_get);
+router.get('/manager/:username/faq', requireAuth,authController.manager_faq_get);
+router.get('/cadet/:username/faq', requireAuth,authController.cadet_faq_get);
+router.get('/customer/:username/about',requireAuth, authController.customer_about_get);
+router.get('/manager/:username/about', requireAuth ,authController.manager_about_get);
+router.get('/cadet/:username/about', requireAuth ,authController.cadet_about_get);
 
 router.get('/verify/:id', authController.verifyMail);
 
-router.get('/add-user', requireAuth, authController.add_user_get);
+router.get('/add-user', authController.add_user_get);
 router.post('/home', authController.logout_get);
 router.get('/', (req, res) => {
     res.render('home', { title: 'Home' });
