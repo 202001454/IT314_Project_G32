@@ -11,83 +11,87 @@
                 <div class="row mb-5">
                     <div class="col-12 col-lg-3">
                         <div class="list-group text-center make-sticky ">
-                    
-                          <table class="table table-hover">
-                            <thead>
-                              <tr>
-                                <div class="profile my-4 table-striped-columns">
-                                  <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
-                                  <div class="fs-3"><%= manager.fullname%></div>
-                                  <div class="fs-5">Manager</div>
-                                </div>
-                              </tr>
-                            </thead>
-                            <tbody>
-                    
-                              <tr>
-                                <td><a href="/manager/<%= manager.username%>"
-                                    class="list-group-item list-group-item-action">Home</a></td>
-                              </tr>
-                    
-                              <tr>
-                                <td><a href="/manager/<%= manager.username%>/view"
-                                    class="list-group-item list-group-item-action">View
-                                    profile</a></td>
-                              </tr>
-                              <tr>
-                                <td><a href="/manager/<%= manager.username%>/edit"
-                                    class="list-group-item list-group-item-action">Edit
-                                    Profile</a></td>
-                              </tr>
-                              <tr>
-                                <td><a href="/manager/<%= manager.username%>/changepassword"
-                                    class="list-group-item list-group-item-action">Change
-                                    password</a></td>
-                              </tr>
-                              <tr>
-                                <td><a href="/manager/<%= manager.username%>/addpayment"
-                                    class="list-group-item list-group-item-action">Add Payment</a></td>
-                              </tr>
-                              <tr class="table-active">
-                                <td><a href="/manager/<%= manager.username%>/viewfeedback"
-                                    class="list-group-item list-group-item-action">View Feedback</a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td><a href="/manager/<%= manager.username%>/viewinventory"
-                                    class="list-group-item list-group-item-action">View inventory</a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td><a href="/manager/<%= manager.username%>/inventoryupgrade"
-                                    class="list-group-item list-group-item-action">Edit inventory</a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td><a href="/manager/<%= manager.username%>/inventorydegrade"
-                                    class="list-group-item list-group-item-action">Remove inventory</a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td><a href="/manager/<%= manager.username%>/managercheck"
-                                    class="list-group-item list-group-item-action">Customer checklist</a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td><a href="/manager/<%= manager.username%>/viewpaymenthistorygraph"
-                                    class="list-group-item list-group-item-action">View Payment Statistics</a>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td><a href="/manager/<%= manager.username%>/deleteuser"
-                                    class="list-group-item list-group-item-action">Remove Customer/cadet</a>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                    
+
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <div class="profile my-4 table-striped-columns">
+                                            <div class="mb-3"><img src="/photos/person_logo.svg" alt="person"
+                                                    width="20%"></div>
+                                            <div class="fs-3">
+                                                <%= manager.fullname%>
+                                            </div>
+                                            <div class="fs-5">Manager</div>
+                                        </div>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>"
+                                                class="list-group-item list-group-item-action">Home</a></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/view"
+                                                class="list-group-item list-group-item-action">View
+                                                profile</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/edit"
+                                                class="list-group-item list-group-item-action">Edit
+                                                Profile</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/changepassword"
+                                                class="list-group-item list-group-item-action">Change
+                                                password</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/addpayment"
+                                                class="list-group-item list-group-item-action">Add Payment</a></td>
+                                    </tr>
+                                    <tr class="table-active">
+                                        <td><a href="/manager/<%= manager.username%>/viewfeedback"
+                                                class="list-group-item list-group-item-action">View Feedback</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/viewinventory"
+                                                class="list-group-item list-group-item-action">View inventory</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/inventoryupgrade"
+                                                class="list-group-item list-group-item-action">Edit inventory</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/inventorydegrade"
+                                                class="list-group-item list-group-item-action">Remove inventory</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/managercheck"
+                                                class="list-group-item list-group-item-action">Customer checklist</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/viewpaymenthistorygraph"
+                                                class="list-group-item list-group-item-action">View Payment
+                                                Statistics</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/deleteuser"
+                                                class="list-group-item list-group-item-action">Remove Customer/cadet</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
                         </div>
-                      </div>
+                    </div>
                     <div class="col-1 col-lg-0"></div>
 
 
@@ -100,92 +104,29 @@
                                 </div>
                             </div>
 
-                            <div class="row m-3 p-3 border rounded-3 mb-4">
-                                <div class="col-12 col-sm-8 fs-4">
-                                    Parth Prajapati
-                                </div>
-                                <div class="col-12 col-sm-4 fs-4">
-                                    Rating : 3
-                                </div>
-                                <div class="comments mt-3">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, ducimus eaque.
-                                    Praesentium, inventore? Reprehenderit, earum tempore veritatis consequatur facere
-                                    minus quam recusandae laudantium necessitatibus at nesciunt. Voluptate reprehenderit
-                                    fuga, eligendi mollitia nulla soluta repudiandae iusto ea quam cupiditate omnis unde
-                                    suscipit sit, exercitationem voluptatibus odit non cum voluptates animi labore?
+                            <% for (const i of feedback ) { %>
+                                <div class="row m-3 p-3 border rounded-3 mb-4">
 
+                                    <div class="col-12 col-sm-12 fs-4 mb-3">
+                                        <%= i.username %>
+                                    </div>
+                                    <div class="col-12 col-sm-12 fs-5">
+                                        <div class="row">
+                                            <div class="col-4">Cleanliness : <%= i.cleanliness%>
+                                            </div>
+                                            <div class="col-4">Food Quality : <%= i.food%>
+                                            </div>
+                                            <div class="col-4">Service : <%= i.service %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% if(i.comment) {%>
+                                        <div class="comments mt-3">
+                                            <%= i.comment %>
+                                        </div>
+                                    <%}%>
                                 </div>
-                            </div>
-
-                            <div class="row m-3 p-3 border rounded-3 mb-4">
-                                <div class="col-12 col-sm-8 fs-4">
-                                    Parth Prajapati
-                                </div>
-                                <div class="col-12 col-sm-4 fs-4">
-                                    Rating : 3
-                                </div>
-                                <div class="comments mt-3">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, ducimus eaque.
-                                    Praesentium, inventore? Reprehenderit, earum tempore veritatis consequatur facere
-                                    minus quam recusandae laudantium necessitatibus at nesciunt. Voluptate reprehenderit
-                                    fuga, eligendi mollitia nulla soluta repudiandae iusto ea quam cupiditate omnis unde
-                                    suscipit sit, exercitationem voluptatibus odit non cum voluptates animi labore?
-
-                                </div>
-                            </div>
-
-                            <div class="row m-3 p-3 border rounded-3 mb-4">
-                                <div class="col-12 col-sm-8 fs-4">
-                                    Parth Prajapati
-                                </div>
-                                <div class="col-12 col-sm-4 fs-4">
-                                    Rating : 3
-                                </div>
-                                <div class="comments mt-3">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, ducimus eaque.
-                                    Praesentium, inventore? Reprehenderit, earum tempore veritatis consequatur facere
-                                    minus quam recusandae laudantium necessitatibus at nesciunt. Voluptate reprehenderit
-                                    fuga, eligendi mollitia nulla soluta repudiandae iusto ea quam cupiditate omnis unde
-                                    suscipit sit, exercitationem voluptatibus odit non cum voluptates animi labore?
-
-                                </div>
-                            </div>
-
-                            <div class="row m-3 p-3 border rounded-3 mb-4">
-                                <div class="col-12 col-sm-8 fs-4">
-                                    Parth Prajapati
-                                </div>
-                                <div class="col-12 col-sm-4 fs-4">
-                                    Rating : 3
-                                </div>
-                                <div class="comments mt-3">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, ducimus eaque.
-                                    Praesentium, inventore? Reprehenderit, earum tempore veritatis consequatur facere
-                                    minus quam recusandae laudantium necessitatibus at nesciunt. Voluptate reprehenderit
-                                    fuga, eligendi mollitia nulla soluta repudiandae iusto ea quam cupiditate omnis unde
-                                    suscipit sit, exercitationem voluptatibus odit non cum voluptates animi labore?
-
-                                </div>
-                            </div>
-
-                            <div class="row m-3 p-3 border rounded-3 mb-4">
-                                <div class="col-12 col-sm-8 fs-4">
-                                    Parth Prajapati
-                                </div>
-                                <div class="col-12 col-sm-4 fs-4">
-                                    Rating : 3
-                                </div>
-                                <div class="comments mt-3">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam, ducimus eaque.
-                                    Praesentium, inventore? Reprehenderit, earum tempore veritatis consequatur facere
-                                    minus quam recusandae laudantium necessitatibus at nesciunt. Voluptate reprehenderit
-                                    fuga, eligendi mollitia nulla soluta repudiandae iusto ea quam cupiditate omnis unde
-                                    suscipit sit, exercitationem voluptatibus odit non cum voluptates animi labore?
-
-                                </div>
-                            </div>
-
-
+                            <%}%>
                         </div>
                     </div>
 

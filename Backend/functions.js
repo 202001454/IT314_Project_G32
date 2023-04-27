@@ -1176,3 +1176,39 @@ const cadet_viewinventory_get = async (req, res) => {
         console.log(error);
     }
 }
+
+
+const requireAuth = (req, res, next) => {
+    const token = req.cookies.jwt;
+    if (token) {
+        jwt.verify(token, varifying_token, async (err, decodedToken) => {
+            if (err) {
+                console.log(err.message);
+                res.status(500).render('login' , {err: `error occured in authentication`});
+            } else {
+                // console.log("Vrund");
+                // console.log("Vrund");
+                // console.log(decodedToken);
+                const username = req.params.username;
+                console.log("deep");
+                console.log(res.locals.user);
+                console.log(username);
+                console.log("deep");
+
+                const fraud = await User.findOne({ username: username });
+                if (fraud && fraud.username == res.locals.user.username) {
+                    next();
+                }
+                else {
+                    console.log("Bhai Bhai");
+                    res.status(500).render('login' , {err: `Login required`});
+
+                }
+                // next();
+            }
+        });
+    } else {
+        console.log("User not logged in");
+        res.status(500).render('login' , {err: `Login required`});
+    }
+}
