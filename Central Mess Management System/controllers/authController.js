@@ -215,7 +215,7 @@ const signup_post = async (req, res) => {
         //validate password
         const validpassword = validatepassword(password);
         if (!validpassword) {
-            res.render('signup', { err: "Password must be between 6 to 16 characters and must contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character" });
+            res.status(500).render('signup', { err: "Password must be between 6 to 16 characters and must contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character" });
         }
 
         if (password === cpassword) {
@@ -248,7 +248,7 @@ const signup_post = async (req, res) => {
             user.save().then(async (result) => {
                 // sendVerifyMail(req.body.fullname, req.body.email, result._id, req.body.role);
                 const sendMail = await sendVerifyMail(req.body.fullname, req.body.email, result._id, req.body.role, req);
-                res.render('login', { err: undefined });
+                res.status(200).render('login', { err: undefined });
             }).catch((err) => {
                 console.log(err);
             }

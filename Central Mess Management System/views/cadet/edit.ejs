@@ -134,7 +134,7 @@
                   
                             <div class="col-12 col-sm-4">
                               <div class="form-floating mb-3">
-                                <input type="date" class="form-control" id="birthdate" name="date" value="<%= cadet.date.toISOString().slice(0 ,10)%>" placeholder="name@example.com" required>
+                                <input type="date" class="form-control" id="birthdate" name="date" value="<%= cadet.date.toISOString().slice(0 ,10)%>" max="9999-12-31" placeholder="name@example.com" required>
                                 <label for="birthdate">birth date</label>
                               </div>
                             </div>
