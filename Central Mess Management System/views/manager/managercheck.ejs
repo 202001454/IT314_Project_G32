@@ -136,7 +136,7 @@
                                   <label for="foodtime">FoodTime</label>
                                 </div> -->
 
-                    <% var hour=manager.date.getHours(); %>
+                    <% var hour=(new Date(manager.date)).getUTCHours(); %>
                       <% if (hour>= 6 && hour < 10) { %>
                           <div class="form-floating mb-3">
                             <select id="foodtime" class="form-select selectpicker" name="time" placeholder="foodtime"

@@ -750,8 +750,10 @@ const manager_managercheck_get = async (req, res) => {
             // theDate.toLocaleString()
             // manager.date = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
             const date = new Date();
-            const ISTTime = new Date(date.getTime() + (330 * 60 * 1000));
+            let ISTTime = new Date(date.getTime() + (330 * 60 * 1000));
             manager.date = ISTTime;
+
+            console.log((new Date(manager.date)).getUTCHours());
 
             res.render('manager/managercheck', { manager, err: undefined });
         }
