@@ -156,9 +156,9 @@
                   <div class="col-12 col-sm-4">
                     <div class="form-floating mb-3">
                       <input type="date" class="form-control" id="birthdate"
-                        value="<%= customer.date.toISOString().slice(0 ,10)%>" name="date" placeholder="somedate"
+                        value="<%= customer.date.toISOString().slice(0 ,10)%>" name="date" placeholder="somedate" max="9999-12-31"
                         required>
-                      <label for="birthdate">birth date</label>
+                      <label for="birthdate">Birth date</label>
                     </div>
                   </div>
                 </div>

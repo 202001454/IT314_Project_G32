@@ -771,7 +771,7 @@ const manager_managercheck_get = async (req, res) => {
 
 const manager_managercheck_post = async (req, res) => {
     // try {
-    const username = req.params.username;
+    const username = req.params.username;//of manager
     let manager = await User.findOne({ username: username, role: 'manager' });
     if (manager) {
         const c_username = req.body.username;
@@ -779,20 +779,23 @@ const manager_managercheck_post = async (req, res) => {
         const cdate = new Date();
         const c_date = new Date(cdate.getTime() + (330 * 60 * 1000));
         let c_time = 'breakfast';
-        if (c_date.getHours() >= 10 && c_date.getHours() < 16) {
+        if (c_date.getUTCHours() >= 10 && c_date.getUTCHours() < 16) {
             c_time = 'lunch';
         }
-        else if (c_date.getHours() >= 16 && c_date.getHours() < 24) {
+        else if (c_date.getUTCHours() >= 16 && c_date.getUTCHours() < 24) {
             c_time = 'dinner';
         }
 
         console.log(c_time);
-
+        //time updation done above
 
         //finding the customer from payment database
         const paymentofcustomer = await Payment.findOne({ username: c_username });
+        // console.log(paymentofcustomer);
+        //if customers has already done payment
         if (paymentofcustomer) {
             // const _date = new Date();
+            //if payment is expired!
             if (paymentofcustomer.enddate - c_date < 0) {
                 const date = new Date();
                 const ISTTime = new Date(date.getTime() + (330 * 60 * 1000));
@@ -800,11 +803,17 @@ const manager_managercheck_post = async (req, res) => {
                 res.status(500).render('manager/managercheck', { manager, err: `Payment is expired` });
                 // res.send("payment is expired");
             }
-            //payment is done!
+            //payment is not expired!
             else {
                 // const customer = await Managercheck.findOne({ username: c_username, date: c_date });
-                const startOfDay = new Date(c_date.getFullYear(), c_date.getMonth(), c_date.getDate(), 0, 0, 0, 0);
-                const endOfDay = new Date(c_date.getFullYear(), c_date.getMonth(), c_date.getDate(), 23, 59, 59, 999);
+                let startOfDay = new Date(c_date.getFullYear(), c_date.getMonth(), c_date.getDate(), 0, 0, 0, 0);
+                let endOfDay = new Date(c_date.getFullYear(), c_date.getMonth(), c_date.getDate(), 23, 59, 59, 999);
+                
+                
+                console.log(c_date.toLocaleDateString());
+                console.log(cdate);
+                console.log(startOfDay);
+                console.log(endOfDay);
 
                 const customer = await Managercheck.findOne({
                     username: c_username,
@@ -915,7 +924,7 @@ const manager_managercheck_post = async (req, res) => {
                     const _customer = await User.findOne({ username: c_username, role: 'customer' });
                     if (_customer) {
 
-                        let newcustomer = new Managercheck({ username: c_username, date: customer.date, breakfast: Boolean(false), lunch: Boolean(false), dinner: Boolean(false) });
+                        let newcustomer = new Managercheck({ username: c_username, date: c_date, breakfast: Boolean(false), lunch: Boolean(false), dinner: Boolean(false) });
 
                         if (c_time == 'breakfast') {
                             newcustomer.breakfast = Boolean(true);
@@ -1058,23 +1067,22 @@ const manager_inventorydegrade_patch = async (req, res) => {
         const manager = await User.findOne({ username: username, role: 'manager' });
         if (inventory && manager) {
             //if both found
+            const qty = (inventory.quantity - Number(quantity));
+            if (qty >= 0) {
+                Inventory.updateOne({ item: item }, { $set: { quantity: qty } }).then((result) => {
+                    // console.log(result);
+                    res.render('manager/inventorydegrade', { manager: manager, err: undefined });
 
-            let qty = (inventory.quantity - Number(quantity) >= 0) ? inventory.quantity - Number(quantity) : 0;
-
-            Inventory.updateOne({ item: item }, { $set: { quantity: qty } })
-                .then((result) => {
-                    console.log(result);
-                    if (inventory.quantity - Number(quantity) >= 0)
-                        res.render('manager/inventorydegrade', { manager: manager, err: undefined });
-                    else
-                        res.render('manager/inventorydegrade', { manager: manager, err: `Quantity of ${item} is less than ${quantity}` });
                     // res.send("Updated successfully");
                 })
-                .catch((error) => {
-                    // console.log(error);
-                    // res.send("In 1st catch");
-                    res.status(404).render('404', { err: 'item updation error' });
-                });
+                    .catch((error) => {
+                        // console.log(error);
+                        // res.send("In 1st catch");
+                        res.status(404).render('404', { err: 'item updation error' });
+                    });
+            }
+            else
+                res.render('manager/inventorydegrade', { manager: manager, err: `Quantity of ${item} is less than ${quantity}` });
         }
         else {
             // console.log("Error");
@@ -1171,7 +1179,7 @@ const manager_addpayment_post = async (req, res) => {
                     console.log(ISTTime);
                     manager.date = ISTTime;
 
-                    res.status(500).render('manager/addpayment', { manager: manager, err: 'Startdate should be less or equal to the enddate.' });
+                    res.status(500).render('manager/addpayment', { manager: manager, err: 'Enddate should be greater than Startdate.' });
                 }
             }
             else {
@@ -1225,7 +1233,8 @@ const manager_addpayment_post = async (req, res) => {
                         console.log(ISTTime);
                         manager.date = ISTTime;
 
-                        res.status(500).render('manager/addpayment', { manager: manager, err: 'Enddate should be greater than startdate' });
+                        res.status(500).render('manager/addpayment', { manager: manager, err: 'Enddate should be greater than Startdate.' });
+
 
                     }
 

@@ -9,24 +9,26 @@
         <div class="row mb-5">
           <div class="col-12 col-lg-3">
             <div class="list-group text-center make-sticky ">
-        
+
               <table class="table table-hover">
                 <thead>
                   <tr>
                     <div class="profile my-4 table-striped-columns">
                       <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
-                      <div class="fs-3"><%= manager.fullname%></div>
+                      <div class="fs-3">
+                        <%= manager.fullname%>
+                      </div>
                       <div class="fs-5">Manager</div>
                     </div>
                   </tr>
                 </thead>
                 <tbody>
-        
+
                   <tr>
                     <td><a href="/manager/<%= manager.username%>"
                         class="list-group-item list-group-item-action">Home</a></td>
                   </tr>
-        
+
                   <tr>
                     <td><a href="/manager/<%= manager.username%>/view"
                         class="list-group-item list-group-item-action">View
@@ -83,7 +85,7 @@
                   </tr>
                 </tbody>
               </table>
-        
+
             </div>
           </div>
           <div class="col-1 col-lg-0"></div>
@@ -95,99 +97,104 @@
               <div class="text-center fs-2 mt-4 text-dark">Edit Your Profile</div>
               <div class="text-center mb-5 text-dark">Fill the details mentioned.</div>
 
-              <% if(err)  {%>
+              <% if(err) {%>
                 <div class="container col-md-6 col-xl-4 px-2 rounded-1">
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <%=err %>
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <%=err %>
                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                  </div>
-                  <% } %>
-
-              <form action="/manager/<%= manager.username%>/edit?_method=patch" method="post">
-
-                <div class="row">
-                  <div class="col-12 col-sm-6">
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="fullname" name = "fullname" value="<%= manager.fullname%>" placeholder="something" required>
-                      <label for="fullname">Full name</label>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm-6">
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="username" name="username" value="<%= manager.username%>" placeholder="something" disabled>
-                      <label for="username">User name</label>
-                    </div>
                   </div>
                 </div>
+                <% } %>
 
-                <div class="row">
-                  <div class="col-12 col-sm-6">
-                    <div class="form-floating mb-3">
-                      <input type="tel" class="form-control" id="phone-number" name="phone" value="<%= manager.phone%>" placeholder="012345678"
-                        pattern="[0-9]{10}" required>
-                      <label for="phone-number">Phone number</label>
+                  <form action="/manager/<%= manager.username%>/edit?_method=patch" method="post">
+
+                    <div class="row">
+                      <div class="col-12 col-sm-6">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="fullname" name="fullname"
+                            value="<%= manager.fullname%>" placeholder="something" required>
+                          <label for="fullname">Full name</label>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="username" name="username"
+                            value="<%= manager.username%>" placeholder="something" disabled>
+                          <label for="username">User name</label>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-12 col-sm-6">
-                    <div class="form-floating mb-3">
-                      <input type="email" class="form-control" id="email" name="email" value="<%= manager.email%>" placeholder="name@example.com" disabled>
-                      <label for="email">Email</label>
+
+                    <div class="row">
+                      <div class="col-12 col-sm-6">
+                        <div class="form-floating mb-3">
+                          <input type="tel" class="form-control" id="phone-number" name="phone"
+                            value="<%= manager.phone%>" placeholder="012345678" pattern="[0-9]{10}" required>
+                          <label for="phone-number">Phone number</label>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="form-floating mb-3">
+                          <input type="email" class="form-control" id="email" name="email" value="<%= manager.email%>"
+                            placeholder="name@example.com" disabled>
+                          <label for="email">Email</label>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                <div class="row">
-                  <div class="col-12 col-sm-4">
-                    <div class="form-floating mb-4">
+                    <div class="row">
+                      <div class="col-12 col-sm-4">
+                        <div class="form-floating mb-4">
 
-                      <select id="role" class="form-select selectpicker" placeholder="Role" name="role" value="<%= manager.role%>" data-width="auto" disabled>
-                        <option  value="customer"> Customer </option>
-                        <option value="cadet"> Cadet </option>
-                        <option selected value="manager"> Manager </option>
-                      </select>
-                      <label for="role">Role</label>
-                    </div>
-                  </div>
+                          <select id="role" class="form-select selectpicker" placeholder="Role" name="role"
+                            value="<%= manager.role%>" data-width="auto" disabled>
+                            <option value="customer"> Customer </option>
+                            <option value="cadet"> Cadet </option>
+                            <option selected value="manager"> Manager </option>
+                          </select>
+                          <label for="role">Role</label>
+                        </div>
+                      </div>
 
-                  <div class="col-12 col-sm-4">
-                    <div class="form-floating mb-3">
-                      <select id="gender" class="form-select selectpicker" placeholder="Gender" value="<%= manager.gender%>" name="gender" data-width="auto"
-                        required>
-                        <% if(manager.gender==='male' )  {%>
-                          <option selected value="male"> Male </option>
-                          <option value="female"> Female </option>
-                          <option value="other"> Other </option>
-
-                          <%} else if (manager.gender=='female' ) {%>
-                            <option value="male"> Male </option>
-                            <option selected value="female"> Female </option>
-                            <option value="other"> Other </option>
-                            <% } else {%>
-                              <option value="male"> Male </option>
+                      <div class="col-12 col-sm-4">
+                        <div class="form-floating mb-3">
+                          <select id="gender" class="form-select selectpicker" placeholder="Gender"
+                            value="<%= manager.gender%>" name="gender" data-width="auto" required>
+                            <% if(manager.gender==='male' ) {%>
+                              <option selected value="male"> Male </option>
                               <option value="female"> Female </option>
-                              <option selected value="other"> Other </option>
-                              <% }%>
-                      </select>
-                      <label for="gender">Gender</label>
+                              <option value="other"> Other </option>
+
+                              <%} else if (manager.gender=='female' ) {%>
+                                <option value="male"> Male </option>
+                                <option selected value="female"> Female </option>
+                                <option value="other"> Other </option>
+                                <% } else {%>
+                                  <option value="male"> Male </option>
+                                  <option value="female"> Female </option>
+                                  <option selected value="other"> Other </option>
+                                  <% }%>
+                          </select>
+                          <label for="gender">Gender</label>
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-sm-4">
+                        <div class="form-floating mb-3">
+                          <input type="date" class="form-control" id="birthdate" name="date"
+                            value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something" max="9999-12-31" required>
+                          <label for="birthdate">birth date</label>
+                        </div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="col-12 col-sm-4">
-                    <div class="form-floating mb-3">
-                      <input type="date" class="form-control" id="birthdate" name="date" value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something" required>
-                      <label for="birthdate">birth date</label>
+
+                    <div class="text-center mt-5 mb-4 text-center">
+                      <button class="btn btn-primary px-3" type="submit">Submit</button>
                     </div>
-                  </div>
-                </div>
 
 
-                <div class="text-center mt-5 mb-4 text-center">
-                  <button class="btn btn-primary px-3" type="submit">Submit</button>
-              </div>
-
-
-              </form>
+                  </form>
 
             </div>
 

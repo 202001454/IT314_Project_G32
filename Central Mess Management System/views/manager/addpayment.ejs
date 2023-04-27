@@ -108,7 +108,7 @@
                 <div class="container border rounded-5 p-5">
                   <div class="row mb-5">
                     <div class="col text-center fs-3">
-                      Add Payment.
+                      Add Payment
                     </div>
                   </div>
 
@@ -127,14 +127,14 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                      <input type="date" class="form-control" id="date" name="startdate"
-                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something" required>
-                      <label for="date">Start Date</label>
+                      <input type="date" class="form-control" id="birthdate" name="startdate"
+                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something" max="9999-12-31" required>
+                      <label for="birthdate">Start Date</label>
                     </div>
 
                     <div class="form-floating mb-3">
                       <input type="date" class="form-control" id="date" name="enddate"
-                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something" required>
+                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something" max="9999-12-31" required>
                       <label for="date">End Date</label>
                     </div>
 
