@@ -1447,6 +1447,54 @@ const manager_paymenthistorygraph_post = async (req, res) => {
 };
 
 
+const manager_viewpaymenthistory_get = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username});
+        if(manager)
+        {
+            const paymenthistory = await Paymenthistory.find().sort({_id:-1});
+            res.render('manager/viewpaymenthistory',{manager,paymenthistory,err:undefined});
+        }
+        else
+        {
+            res.status(500).render('login',{err : "Manager not found"});
+        }
+    }
+    catch (error) {
+        res.status(404).render('404',{err:"manager_viewpaymenthistory_get error"});
+    }
+}
+
+const manager_viewpaymenthistory_post = async (req,res) => {
+    try{
+        const username = req.params.username;
+        const manager = await User.findOne({username:username});
+        if(manager)
+        {
+            const uname = req.body.username;
+            const user = User.findOne({username:uname,role:'customer'});
+            if(user)
+            {
+                const paymenthistory = await Paymenthistory.find({username:uname}).sort({_id:-1});
+                res.render('manager/viewpaymenthistory',{manager,paymenthistory,err:`Payment history for '${uname}' found successfully`});
+            }
+            else
+            {
+                // const paymenthistory = await Paymenthistory.find().sort({_id:-1});
+                res.status(500).render('manager/viewpaymenthistory' , {manager , paymenthistory:undefined  , err:`Customer with username ${uname} not found`})
+            }
+
+        }
+        else
+        {
+            res.status(500).render('login',{err : "Manager not found"});
+        }
+    } catch (error) {
+        res.status(404).render('404',{err:"manager_viewpaymenthistory_post error"});
+    }
+}
+
 const cadet_viewprofile_get = async (req, res) => {
     try {
         const username = req.params.username;
@@ -1818,6 +1866,8 @@ module.exports = {
     manager_deleteuser_delete,
     manager_paymenthistorygraph_get,
     manager_paymenthistorygraph_post,
+    manager_viewpaymenthistory_get,
+    manager_viewpaymenthistory_post,
     manager_about_get,
     manager_faq_get,
     about_get,
