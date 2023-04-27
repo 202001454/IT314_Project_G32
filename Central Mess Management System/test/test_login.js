@@ -1,93 +1,69 @@
 // Description: This file contains the test cases for the login route
 
-let chai = require("chai");
-let chaiHttp = require("chai-http");
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const expect = chai.expect;
 chai.should();
 chai.use(chaiHttp);
-describe('Testing route /login', () => {
+
+describe('Testing route /login', function () {
     const host = `http://localhost:3000`;
     const path = "/login";
 
-    // Validating user
-    it("User valid", (done) => {
-        chai
-            .request(host)
+    // Test for invalid login details
+    it('should return an error message on invalid login', function (done) {
+        chai.request(host)
             .post(path)
-            .send({
-                username: 'deep9', password: 'working', role: 'manager'
-            })
-            .end(function (error, response, body) {
-                response.should.have.status(201);
-                done();
-            });
-    });
-    it("User doesn't exist", (done) => {
-        chai
-            .request(host)
-            .post(path)
-            .send({
-                username: 'gaurangggg', password: 'working', role: 'manager'
-            })
-            .end(function (error, response, body) {
-                response.should.have.status(400);
+            .send({ username: 'invaliduser', password: 'invalidpassword', role: 'customer' })
+            .end(function (err, res) {
+                expect(res).to.have.status(500);
+                expect(res).to.be.html;
+                expect(res.text).to.include('Invalid Login Details');
                 done();
             });
     });
 
-    // password checking
-    it("Password invalid", (done) => {
-        chai
-            .request(host)
+    // Test for unverified customer
+    it('should return an error message for unverified customer', function (done) {
+        chai.request(host)
             .post(path)
-            .send({
-                username: 'deep9', password: 'working22', role: 'manager'
-            })
-            .end(function (error, response, body) {
-                response.should.have.status(400);
+            .send({ username: 'unverifieduser', password: 'Un12@3', role: 'customer' })
+            .end(function (err, res) {
+                expect(res).to.have.status(500);
+                expect(res).to.be.html;
+                expect(res.text).to.include('Please verify your mail to login');
                 done();
             });
     });
 
-    // role checking
-    it("Role invalid", (done) => {
-        chai
-            .request(host)
+    // Test for successful login
+    it('should return a success message on valid login', function (done) {
+        chai.request(host)
             .post(path)
-            .send({
-                username: 'vrund1', password: 'T4#s9A', role: 'cadet'
-            })
-            .end(function (error, response, body) {
-                response.should.have.status(400);
-                done();
-            });
-    });
-    
-    // credentials checking
-    it("Credentials invalid", (done) => {
-        chai
-            .request(host)
-            .post(path)
-            .send({
-                username: 'deep9', password: 'working333', role: 'cadet'
-            })
-            .end(function (error, response, body) {
-                response.should.have.status(400);
+            .send({ username: 'user1', password: 'Us12@3', role: 'customer' })
+            .end(function (err, res) {
+                expect(res).to.have.status(201);
+                expect(res).to.be.html;
+                expect(res.text).to.include('Welcome');
                 done();
             });
     });
 
-    // null username
-    it("Null Username", (done) => {
-        chai
-            .request(host)
+    // Test for JWT token creation on successful login for customer
+    it('should create a JWT token and redirect to the customer dashboard upon successful login', (done) => {
+        chai.request(host)
             .post(path)
             .send({
-                username: '', password: 'working', role: 'manager'
+                username: 'user1',
+                password: 'Us12@3',
+                role: 'customer'
             })
-            .end(function (error, response, body) {
-                response.should.have.status(400);
+            .end((err, res) => {
+                res.should.have.status(201);
+                res.should.be.html;
+                res.text.should.contain('/login');
+                res.header['set-cookie'][0].should.include('jwt');
                 done();
             });
     });
-
 });
