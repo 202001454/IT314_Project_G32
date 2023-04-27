@@ -1134,54 +1134,17 @@ const manager_addpayment_post = async (req, res) => {
                 oldPayment.enddate = req.body.enddate;
                 oldPayment.amount = req.body.amount;
 
-                const updated = await Payment.updateOne({ username: customerusername }, { $set: { startdate: oldPayment.startdate, enddate: oldPayment.enddate, amount: oldPayment.amount }, validate: true });
-                if (updated) {
-                    const updateHistory = new Paymenthistory({
-                        username: customerusername,
-                        startdate: oldPayment.startdate,
-                        enddate: oldPayment.enddate,
-                        amount: oldPayment.amount
-                    });
-                    const historysave = await updateHistory.save();
-                    if (historysave) {
-                        const date = new Date();
+                if (req.body.enddate > req.body.startdate) {
 
-                        // theDate.toLocaleString()
-                        // manager.date = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
-                        const ISTTime = new Date(date.getTime() + (330 * 60 * 1000));
-                        console.log(ISTTime);
-                        manager.date = ISTTime;
-                        res.render('manager/addpayment', { manager: manager, err: undefined });
-                    }
-                    else {
-                        // res.send("An error occurred while updating the payment history.");
-                        res.status(404).render('404', { err: 'payment history save error' });
-                    }
-                }
-                else {
-                    // res.send("An error occurred while updating the payment details.");
-                    res.status(404).render('404', { err: 'payment details update error' });
-                }
-            }
-            else {
-                const customer = await User.findOne({ username: customerusername, role: 'customer' });
-                // console.log('customer', customer);
-                if (customer) {
-                    const payment = new Payment({
-                        username: req.body.username,
-                        startdate: req.body.startdate,
-                        enddate: req.body.enddate,
-                        amount: req.body.amount
-                    });
-                    const customerpaymentadded = await payment.save();
-                    if (customerpaymentadded) {
-                        const paymenthistory = new Paymenthistory({
+                    const updated = await Payment.updateOne({ username: customerusername }, { $set: { startdate: oldPayment.startdate, enddate: oldPayment.enddate, amount: oldPayment.amount }, validate: true });
+                    if (updated) {
+                        const updateHistory = new Paymenthistory({
                             username: customerusername,
-                            startdate: req.body.startdate,
-                            enddate: req.body.enddate,
-                            amount: req.body.amount
+                            startdate: oldPayment.startdate,
+                            enddate: oldPayment.enddate,
+                            amount: oldPayment.amount
                         });
-                        const historysave = await paymenthistory.save();
+                        const historysave = await updateHistory.save();
                         if (historysave) {
                             const date = new Date();
 
@@ -1190,7 +1153,6 @@ const manager_addpayment_post = async (req, res) => {
                             const ISTTime = new Date(date.getTime() + (330 * 60 * 1000));
                             console.log(ISTTime);
                             manager.date = ISTTime;
-
                             res.render('manager/addpayment', { manager: manager, err: undefined });
                         }
                         else {
@@ -1202,6 +1164,70 @@ const manager_addpayment_post = async (req, res) => {
                         // res.send("An error occurred while updating the payment details.");
                         res.status(404).render('404', { err: 'payment details update error' });
                     }
+                }
+                else {
+                    const date = new Date();
+                    const ISTTime = new Date(date.getTime() + (330 * 60 * 1000));
+                    console.log(ISTTime);
+                    manager.date = ISTTime;
+
+                    res.status(500).render('manager/addpayment', { manager: manager, err: 'Startdate should be less or equal to the enddate.' });
+                }
+            }
+            else {
+                const customer = await User.findOne({ username: customerusername, role: 'customer' });
+                // console.log('customer', customer);
+                if (customer) {
+
+                    if (req.body.enddate > req.body.startdate) {
+
+                        const payment = new Payment({
+                            username: req.body.username,
+                            startdate: req.body.startdate,
+                            enddate: req.body.enddate,
+                            amount: req.body.amount
+                        });
+
+
+                        const customerpaymentadded = await payment.save();
+                        if (customerpaymentadded) {
+                            const paymenthistory = new Paymenthistory({
+                                username: customerusername,
+                                startdate: req.body.startdate,
+                                enddate: req.body.enddate,
+                                amount: req.body.amount
+                            });
+                            const historysave = await paymenthistory.save();
+                            if (historysave) {
+                                const date = new Date();
+
+                                // theDate.toLocaleString()
+                                // manager.date = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+                                const ISTTime = new Date(date.getTime() + (330 * 60 * 1000));
+                                console.log(ISTTime);
+                                manager.date = ISTTime;
+
+                                res.render('manager/addpayment', { manager: manager, err: undefined });
+                            }
+                            else {
+                                // res.send("An error occurred while updating the payment history.");
+                                res.status(404).render('404', { err: 'payment history save error' });
+                            }
+                        }
+                        else {
+                            // res.send("An error occurred while updating the payment details.");
+                            res.status(404).render('404', { err: 'payment details update error' });
+                        }
+                    }
+                    else {
+                        const date = new Date();
+                        const ISTTime = new Date(date.getTime() + (330 * 60 * 1000));
+                        console.log(ISTTime);
+                        manager.date = ISTTime;
+
+                        res.status(500).render('manager/addpayment', { manager: manager, err: 'Enddate should be greater than startdate' });
+
+                    }
 
                 }
                 else {
@@ -1212,6 +1238,14 @@ const manager_addpayment_post = async (req, res) => {
         }
         else {
             // res.send("aap payment nahi kar sakte");
+            const date = new Date();
+
+            // theDate.toLocaleString()
+            // manager.date = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+            const ISTTime = new Date(date.getTime() + (330 * 60 * 1000));
+            console.log(ISTTime);
+            manager.date = ISTTime;
+
             res.status(500).render('manager/addpayment', { manager: manager, err: `User doesn't exist` });
 
         }
