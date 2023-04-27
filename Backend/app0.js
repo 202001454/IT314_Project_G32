@@ -261,3 +261,59 @@ const cadet_faq_get = async (req, res) => {
         console.log(error);
     }
 }
+
+/* function for resetpassword*/
+
+const resetpassword_get = async (req, res) => {
+    try{
+        const id = req.params.id;
+        const user = await User.findOne({ _id: id });
+        if(user)
+        {
+            res.render('resetpassword',{err:undefined});
+        }
+        else
+        {
+            res.status(404).render('404', { err: 'User not found' });
+        }
+    } catch (error) {
+        // console.log(error);
+        res.status(404).render('404', { err: 'resetpassword_get error' });
+    }
+}
+
+const resetpassword_patch = async (req, res) =>  {
+    try{
+        const id = req.params.id;
+        const user = await User.findOne({ _id: id });
+        if(user)
+        {
+            const password = req.body.password;
+            const cpassword = req.body.cpassword;
+            if(password === cpassword)
+            {
+                const hashedPassword = await bcrypt.hash(password, 12);
+                User.updateOne({_id :id },{$set:{password:hashedPassword}, validate: true})
+                .then((result) => {
+                    console.log(result);
+                    res.render('login', { err: undefined });
+                })
+                .catch((err) => {
+                    res.status(404).render('404', { err: 'cannot perform updation error' });
+                });
+            }
+            else
+            {
+                res.status(500).render('resetpassword', { err: 'Password does not match' });
+            }
+        }
+        else
+        {
+            res.status(500).render('login', { err: 'User not found' });
+        }
+    } catch(error) {
+        res.status(404).render('404', { err: 'resetpassword_patch error' });
+    }
+}
+
+module.exports={manager_addpayment_post,cadet_about_get,cadet_faq_get,resetpassword_get,resetpassword_patch};
