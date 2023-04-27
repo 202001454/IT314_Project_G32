@@ -1,0 +1,309 @@
+<%- include('../partials/header_manager') %>
+
+
+  <div id="wrapper">
+
+    <%- include('../partials/nav_home_manager') %>
+
+
+
+      <div class="container">
+
+
+        <div class="row mb-5">
+          <div class="col-12 col-lg-3">
+            <div class="list-group text-center make-sticky ">
+        
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <div class="profile my-4 table-striped-columns">
+                      <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
+                      <div class="fs-3"><%= manager.fullname%></div>
+                      <div class="fs-5">Manager</div>
+                    </div>
+                  </tr>
+                </thead>
+                <tbody>
+        
+                  <tr class="table-active">
+                    <td><a href="/manager/<%= manager.username%>"
+                        class="list-group-item list-group-item-action">Home</a></td>
+                  </tr>
+        
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/view"
+                        class="list-group-item list-group-item-action">View
+                        profile</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/edit"
+                        class="list-group-item list-group-item-action">Edit
+                        Profile</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/changepassword"
+                        class="list-group-item list-group-item-action">Change
+                        password</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/addpayment"
+                        class="list-group-item list-group-item-action">Add Payment</a></td>
+                  </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/viewfeedback"
+                        class="list-group-item list-group-item-action">View Feedback</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/viewinventory"
+                        class="list-group-item list-group-item-action">View inventory</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/inventoryupgrade"
+                        class="list-group-item list-group-item-action">Edit inventory</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/inventorydegrade"
+                        class="list-group-item list-group-item-action">Remove inventory</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/managercheck"
+                        class="list-group-item list-group-item-action">Customer checklist</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/viewpaymenthistorygraph"
+                        class="list-group-item list-group-item-action">View Payment Statistics</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><a href="/manager/<%= manager.username%>/deleteuser"
+                        class="list-group-item list-group-item-action">Remove Customer/cadet</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+        
+            </div>
+          </div>
+          <div class="col-12 col-lg-9">
+
+            <div class="container text-center fs-2 my-5">
+              Welcome <a href="/manager/<%= manager.username%>">
+                <%= manager.fullname%>
+              </a>, </br> <span class="fs-3">Look what delicious items are waiting for
+                you.</span>
+            </div>
+
+            <div class="container">
+              <div class="container mb-5">
+                <div class="accordion" id="accordionExample">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        Breakfast
+                      </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        <div class="row row-cols-1 row-cols-md-3 g-4">
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/breakfast/tea.webp" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Tea</h5>
+                                <p class="card-text">A warm and comforting beverage to start your day.</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/breakfast/coffee.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Coffee</h5>
+                                <p class="card-text">The perfect pick-me-up with a rich and bold flavor</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/breakfast/paratha.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Paratha</h5>
+                                <p class="card-text">Flaky, buttery, and delicious Indian flatbread.</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/breakfast/idli-sambhar.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">idliSambar</h5>
+                                <p class="card-text">A comforting South Indian staple with fluffy idlis</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/breakfast/upma.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Upma</h5>
+                                <p class="card-text">A savory and satisfying Indian breakfast dish</p>
+                              </div>
+                            </div>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Lunch
+                      </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        <div class="row row-cols-1 row-cols-md-3 g-4">
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/chhole-bhature.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Chole bhature</h5>
+                                <p class="card-text">A classic North Indian dish with fluffy bhature and spicy chole</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/gulab-jamun.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Gulab jamun</h5>
+                                <p class="card-text">Fried dough balls soaked in sweet syrup.</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/panner.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Paneer tikka masala</h5>
+                                <p class="card-text">a popular Indian vegetarian dish with grilled paneer cheese in a creamy spiced tomato sauce.</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/roti.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Buteer Roti</h5>
+                                <p class="card-text">A simple and delicious Indian flatbread with buttery goodness</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/rice.jfif" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">jeera rice</h5>
+                                <p class="card-text">Basmati rice cooked with cumin seeds for a flavorful twist</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/dal.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Dal tadka</h5>
+                                <p class="card-text">A comforting and nutritious lentil-based dish.</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/chhas.jpeg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Chhas</h5>
+                                <p class="card-text">A refreshing and healthy yogurt-based drink</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Dinner
+                      </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        <div class="row row-cols-1 row-cols-md-3 g-4">
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/dinner/papad.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Masala papad</h5>
+                                <p class="card-text">A crispy and crunchy Indian appetizer</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/dinner/bhaji.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Bhaji-Paw</h5>
+                                <p class="card-text">A popular Indian street food with spicy vegetable bhaji and soft buttered pav</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/dinner/pulav.jpg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Pulav</h5>
+                                <p class="card-text">A fragrant and flavorful rice dish with vegetables and spices.</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/dinner/kadhi.webp" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Kadhi</h5>
+                                <p class="card-text">A tangy and creamy yogurt-based curry with pakoras</p>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="card h-100">
+                              <img src="/photos/lunch/chhas.jpeg" class="card-img-top" alt="Food Photo" >
+                              <div class="card-body">
+                                <h5 class="card-title">Chhas</h5>
+                                <p class="card-text">A refreshing and healthy yogurt-based drink</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <%- include('../partials/footer') %>
