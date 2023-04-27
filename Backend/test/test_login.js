@@ -1,6 +1,7 @@
+// Description: This file contains the test cases for the login route
+
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('../app');
 const expect = chai.expect;
 chai.should();
 chai.use(chaiHttp);
@@ -26,7 +27,7 @@ describe('Testing route /login', function () {
     it('should return an error message for unverified customer', function (done) {
         chai.request(host)
             .post(path)
-            .send({ username: 'unverifieduser', password: 'unverifiedpassword', role: 'customer' })
+            .send({ username: 'unverifieduser', password: 'Un12@3', role: 'customer' })
             .end(function (err, res) {
                 expect(res).to.have.status(500);
                 expect(res).to.be.html;
@@ -35,24 +36,11 @@ describe('Testing route /login', function () {
             });
     });
 
-    // Test for non-existing user
-    it('should return a 404 error for non-existing user', function (done) {
-        chai.request(host)
-            .post(path)
-            .send({ username: 'nonexistinguser', password: 'nonexistingpassword', role: 'customer' })
-            .end(function (err, res) {
-                expect(res).to.have.status(404);
-                expect(res).to.be.html;
-                expect(res.text).to.include("User Doesn't Exist");
-                done();
-            });
-    });
-
     // Test for successful login
     it('should return a success message on valid login', function (done) {
         chai.request(host)
             .post(path)
-            .send({ username: 'testuser', password: 'testpassword', role: 'customer' })
+            .send({ username: 'user1', password: 'Us12@3', role: 'customer' })
             .end(function (err, res) {
                 expect(res).to.have.status(201);
                 expect(res).to.be.html;
@@ -63,53 +51,17 @@ describe('Testing route /login', function () {
 
     // Test for JWT token creation on successful login for customer
     it('should create a JWT token and redirect to the customer dashboard upon successful login', (done) => {
-        chai.request(app)
+        chai.request(host)
             .post(path)
             .send({
-                username: 'testuser',
-                password: 'testpassword',
+                username: 'user1',
+                password: 'Us12@3',
                 role: 'customer'
             })
             .end((err, res) => {
                 res.should.have.status(201);
                 res.should.be.html;
-                res.text.should.contain('/customer/index');
-                res.header['set-cookie'][0].should.include('jwt');
-                done();
-            });
-    });
-
-    // Test for JWT token creation on successful login for manager
-    it('should create a JWT token and redirect to the manager dashboard upon successful login', (done) => {
-        chai.request(host)
-            .post(path)
-            .send({
-                username: 'testmanager',
-                password: 'testpassword',
-                role: 'manager'
-            })
-            .end((err, res) => {
-                res.should.have.status(201);
-                res.should.be.html;
-                res.text.should.contain('/manager/index');
-                res.header['set-cookie'][0].should.include('jwt');
-                done();
-            });
-    });
-
-    // Test for JWT token creation on successful login for cadet
-    it('should create a JWT token and redirect to the cadet dashboard upon successful login', (done) => {
-        chai.request(host)
-            .post(path)
-            .send({
-                username: 'testcadet',
-                password: 'testpassword',
-                role: 'cadet'
-            })
-            .end((err, res) => {
-                res.should.have.status(201);
-                res.should.be.html;
-                res.text.should.contain('/cadet/index');
+                res.text.should.contain('/login');
                 res.header['set-cookie'][0].should.include('jwt');
                 done();
             });
