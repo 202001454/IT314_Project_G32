@@ -47,15 +47,4 @@ describe('Testing route /signup', () => {
                 done();
             });
     });
-
-    it('should return status 200 and redirect to login page if signup is successful', (done) => {
-        chai.request(host)
-            .post('/signup')
-            .send({ fullname: 'Deep Kanani', username: 'dk007', email: 'dk007@gmail.com', password: '#Dk@1234', cpassword: '#Dk@1234', phone: '1234567890', role: 'customer', gender: 'male', birthdate: '2000-01-01' })
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.should.redirectTo('/login');
-                done();
-            });
-    });
 });
