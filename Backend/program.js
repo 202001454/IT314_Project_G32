@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const Payment = require('../models/payment');
+const Managercheck = require('../models/managercheck');
 
 const login_get = (req, res) => {
 
@@ -324,6 +325,38 @@ const forgetpassword_post = async (req, res) => {
 }
 
 
+const manager_get = async (req, res) => {
+    try {
+        const username = req.params.username; // use req.params.username to get the username
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        // console.log(manager);
+        res.render('manager/index', { manager: manager });
+    } catch (error) {
+        res.status(404).render('404', { err: `manager_get error` });
+        // console.log(error);
+        // res.send('An error occurred while finding the manager.');
+    }
+}
+
+const manager_edit_get = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            res.render('manager/edit', { manager: manager, err: undefined });
+            // res.send(manager);
+        }
+        else {
+            res.status(500).render('signup', { err: `manager doesn't exist` });
+            // res.send("Error occured!");
+        }
+    } catch (error) {
+        res.status(404).render('404', { err: `manager_edit_get error` });
+        // res.send("Unable to find Manager");
+    }
+}
+
+
 module.exports = {
     login_get,
     login_post,
@@ -333,5 +366,7 @@ module.exports = {
     manager_managercheck_post,
     sendForgetPasswordMail,
     forgetpassword_get,
-    forgetpassword_post
+    forgetpassword_post,
+    manager_edit_get,
+    manager_get
 };
