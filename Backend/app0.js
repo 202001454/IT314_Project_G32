@@ -315,5 +315,43 @@ const resetpassword_patch = async (req, res) =>  {
         res.status(404).render('404', { err: 'resetpassword_patch error' });
     }
 }
+const manager_viewfeedback_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            const feedback = await Feedback.find().sort({ _id: -1 }).limit(10);
+            if (feedback) {
+                console.log(manager.username);
+                console.log("ok");
+                res.render('manager/viewfeedback', { manager: manager, feedback: feedback });
+            }
+            else {
+                res.send("No feedback found");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-module.exports={manager_addpayment_post,cadet_about_get,cadet_faq_get,resetpassword_get,resetpassword_patch};
+const manager_viewinventory_get = async (req, res) => {
+    try {
+        const username = req.params.username;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            const inventory = await Inventory.find();
+            if (inventory) {
+                console.log(inventory);
+                res.render('manager/viewinventory', { manager: manager, inventory: inventory });
+            }
+            else {
+                res.send("No inventory found");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports={manager_addpayment_post,cadet_about_get,cadet_faq_get,resetpassword_get,resetpassword_patch,manager_viewfeedback_get,manager_viewinventory_get};
