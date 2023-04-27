@@ -1473,7 +1473,7 @@ const manager_viewpaymenthistory_post = async (req,res) => {
         if(manager)
         {
             const uname = req.body.username;
-            const user = User.findOne({username:uname,role:'customer'});
+            const user = await User.findOne({username:uname,role:'customer'});
             if(user)
             {
                 const paymenthistory = await Paymenthistory.find({username:uname}).sort({_id:-1});
