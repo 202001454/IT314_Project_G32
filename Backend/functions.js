@@ -1184,7 +1184,7 @@ const requireAuth = (req, res, next) => {
         jwt.verify(token, varifying_token, async (err, decodedToken) => {
             if (err) {
                 console.log(err.message);
-                res.render('login' , {err: `error occured in authentication`});
+                res.status(500).render('login' , {err: `error occured in authentication`});
             } else {
                 // console.log("Vrund");
                 // console.log("Vrund");
@@ -1201,7 +1201,7 @@ const requireAuth = (req, res, next) => {
                 }
                 else {
                     console.log("Bhai Bhai");
-                    res.render('login' , {err: `Login required`});
+                    res.status(500).render('login' , {err: `Login required`});
 
                 }
                 // next();
@@ -1209,6 +1209,6 @@ const requireAuth = (req, res, next) => {
         });
     } else {
         console.log("User not logged in");
-        res.render('login' , {err: `Login required`});
+        res.status(500).render('login' , {err: `Login required`});
     }
 }
