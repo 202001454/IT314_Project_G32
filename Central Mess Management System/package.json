@@ -2,7 +2,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js -e js,ejs",
-    "test": "mocha ./test/test_login.js"
+    "test": "mocha ./test/test_customer.js"
+
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
