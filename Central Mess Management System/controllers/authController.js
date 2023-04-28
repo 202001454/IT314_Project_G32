@@ -1456,7 +1456,7 @@ const manager_viewpaymenthistory_get = async (req, res) => {
         const manager = await User.findOne({ username: username });
         if (manager) {
             const paymenthistory = await Paymenthistory.find().sort({ _id: -1 });
-            res.render('manager/viewpaymenthistory', { manager, paymenthistory });
+            res.render('manager/viewpaymenthistory', { manager, paymenthistory  , err: undefined });
         }
         else {
             res.status(500).render('login', { err: "Manager not found" });
