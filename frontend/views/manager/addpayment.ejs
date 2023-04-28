@@ -1,0 +1,158 @@
+<%- include('../partials/header_manager') %>
+
+
+    <div id="wrapper">
+
+
+        <%- include('../partials/nav_home_manager') %>
+
+
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col-12 col-lg-3">
+                        <div class="list-group text-center make-sticky ">
+                    
+                          <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <div class="profile my-4 table-striped-columns">
+                                  <div class="mb-3"><img src="/photos/person_logo.svg" alt="person" width="20%"></div>
+                                  <div class="fs-3"><%= manager.fullname%></div>
+                                  <div class="fs-5">Manager</div>
+                                </div>
+                              </tr>
+                            </thead>
+                            <tbody>
+                    
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>"
+                                    class="list-group-item list-group-item-action">Home</a></td>
+                              </tr>
+                    
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/view"
+                                    class="list-group-item list-group-item-action">View
+                                    profile</a></td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/edit"
+                                    class="list-group-item list-group-item-action">Edit
+                                    Profile</a></td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/changepassword"
+                                    class="list-group-item list-group-item-action">Change
+                                    password</a></td>
+                              </tr>
+                              <tr class="table-active">
+                                <td><a href="/manager/<%= manager.username%>/addpayment"
+                                    class="list-group-item list-group-item-action">Add Payment</a></td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/viewfeedback"
+                                    class="list-group-item list-group-item-action">View Feedback</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/viewinventory"
+                                    class="list-group-item list-group-item-action">View inventory</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/inventoryupgrade"
+                                    class="list-group-item list-group-item-action">Edit inventory</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/inventorydegrade"
+                                    class="list-group-item list-group-item-action">Remove inventory</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/managercheck"
+                                    class="list-group-item list-group-item-action">Customer checklist</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/viewpaymenthistorygraph"
+                                    class="list-group-item list-group-item-action">View Payment Statistics</a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td><a href="/manager/<%= manager.username%>/deleteuser"
+                                    class="list-group-item list-group-item-action">Remove Customer/cadet</a>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                    
+                        </div>
+                      </div>
+                    <div class="col-1 col-md-2"></div>
+
+
+                    <div class="col-12 col-md-8 col-lg-5 mt-5 py-5">
+                        <div class="text-center fs-2 mb-5">Welcome <a href="/manager/<%= manager.username%>">
+                                <%= manager.fullname%>
+                            </a></div>
+
+                        <div class="container border rounded-5 p-5">
+                            <div class="row mb-5">
+                                <div class="col text-center fs-3">
+                                    Add Payment.
+                                </div>
+                            </div>
+                            <% if(err)  {%>
+                              <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                      <%=err %>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                  </div>
+                                </div>
+                                <% } %>
+
+                            <form action="/manager/<%=manager.username%>/addpayment" method="post"
+                                class="mt-4">
+
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="username" name="username"
+                                        placeholder="something" required>
+                                    <label for="username">Username</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control" id="amount" name="amount"
+                                        placeholder="something" min="0" max="10000" required>
+                                    <label for="amount">Amount</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" id="date" name="startdate"
+                                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something"
+                                        required>
+                                    <label for="date">Start Date</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" id="date" name="enddate"
+                                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something"
+                                        required>
+                                    <label for="date">End Date</label>
+                                </div>
+
+                                <div class="text-center mt-5 text-center">
+                                    <button class="btn btn-primary px-3" type="submit">Submit</button>
+                                </div>
+
+                            </form>
+
+
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-1 col-lg-0"></div>
+                </div>
+
+
+                <%- include('../partials/footer') %>

@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const Payment = require('../models/payment');
+const Managercheck = require('../models/managercheck');
 
 const login_get = (req, res) => {
 
@@ -258,6 +259,103 @@ const manager_managercheck_post = async (req, res) => {
     }
 }
 
+//----------------------Functions for forget password-----------------------------
+
+const sendForgetPasswordMail = async (name, email, user_id, req) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: process.env.MAIL,
+                pass: process.env.PASS,
+            },
+        });
+
+        const remaining = `/resetpassword/${user_id}`;
+        const protocol = req.protocol || 'http';
+        const hostname = req.headers.host || 'localhost:3000';
+        const url_ = protocol + '://' + hostname + remaining;
+
+        let mailOptions = {
+            from: process.env.MAIL,
+            to: email,
+            subject: 'Password reset for central mess portal',
+            html: `<p>Hii '${name}', please click <a href="${url_}">here</a> to reset your password.</p>`
+        };
+        
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`Email has been sent to ${email}: ${info.messageId}`);
+    } catch (error) {
+        console.error(error.message);
+        throw error;
+    }
+};
+
+
+const forgetpassword_get = async (req, res) => {
+    try{
+        res.render('forgetpassword',{err:undefined});
+    }
+    catch (error) {
+        // console.log(error);
+        res.status(404).render('404', { err: 'forgetpassword_get error' });
+    }
+}
+
+const forgetpassword_post = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const user = await User.findOne({ email: email });
+        if (user) {
+            const mailSend = await sendForgetPasswordMail(user.fullname,email,user._id,req);
+            // res.render('cadet/edit', { cadet: cadet });
+            // res.send(cadet);
+            res.render('login', { err: 'Email sent to your email id. Please check your email to reset password.'});
+        }
+        else {
+            res.status(500).render('forgetpassword', { err: 'Email not found' });
+        }
+    } catch (error) {
+        // res.send("Unable to find cadet");
+        res.status(400).render('404', { err: 'forgetpassword_post error' });
+    }
+}
+
+
+const manager_get = async (req, res) => {
+    try {
+        const username = req.params.username; // use req.params.username to get the username
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        // console.log(manager);
+        res.render('manager/index', { manager: manager });
+    } catch (error) {
+        res.status(404).render('404', { err: `manager_get error` });
+        // console.log(error);
+        // res.send('An error occurred while finding the manager.');
+    }
+}
+
+const manager_edit_get = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const manager = await User.findOne({ username: username, role: 'manager' });
+        if (manager) {
+            res.render('manager/edit', { manager: manager, err: undefined });
+            // res.send(manager);
+        }
+        else {
+            res.status(500).render('signup', { err: `manager doesn't exist` });
+            // res.send("Error occured!");
+        }
+    } catch (error) {
+        res.status(404).render('404', { err: `manager_edit_get error` });
+        // res.send("Unable to find Manager");
+    }
+}
+
 
 module.exports = {
     login_get,
@@ -265,5 +363,10 @@ module.exports = {
     signup_get,
     signup_post,
     manager_managercheck_get,
-    manager_managercheck_post
+    manager_managercheck_post,
+    sendForgetPasswordMail,
+    forgetpassword_get,
+    forgetpassword_post,
+    manager_edit_get,
+    manager_get
 };
