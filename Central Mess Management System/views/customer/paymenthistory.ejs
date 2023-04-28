@@ -61,7 +61,27 @@
                         <div class="container text-center fs-2 my-5">
                             Welcome <a href="./customer/<%= customer.username%>"> <%= customer.fullname%></a>, </br> <span class="fs-3"></span>
                         </div>
+                        <% if(err)  {%>
 
+                            <% if(err.includes("Success") || err.includes("success") || err.includes("Successfully") || err.includes("successfully") || err.includes("Successfull") || err.includes("successfull") )  {%>
+                    
+                                <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <%=err %>
+                                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                  </div>
+                                  <% } else { %>
+                    
+                    
+                        <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <%=err %>
+                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                          </div>
+                          <% } %>
+                          <% } %>
                         <div class="container border rounded-5 p-5">
                             <div class="row mb-5">
                                 <div class="col text-center fs-3">

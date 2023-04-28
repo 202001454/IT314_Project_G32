@@ -76,6 +76,11 @@
                     </td>
                   </tr>
                   <tr>
+                    <td><a href="/manager/<%= manager.username%>/viewpaymenthistory"
+                            class="list-group-item list-group-item-action">View payment history</a>
+                    </td>
+                </tr>
+                  <tr>
                     <td><a href="/manager/<%= manager.username%>/viewpaymenthistorygraph"
                         class="list-group-item list-group-item-action">View Payment Statistics</a>
                     </td>
@@ -92,19 +97,32 @@
           </div>
           <div class="col-1 col-md-2"></div>
 
-
           <div class="col-12 col-md-8 col-lg-5 mt-5 py-5">
             <div class="text-center fs-2 mb-5">Welcome <a href="/manager/<%= manager.username%>">
                 <%= manager.fullname%>
               </a> </div>
-            <% if(err) {%>
-              <div class="container px-2 rounded-1">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                  <%=err %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-              </div>
-              <% } %>
+           
+          <% if(err)  {%>
+
+            <% if(err.includes("Success") || err.includes("success") || err.includes("Successfully") || err.includes("successfully") || err.includes("Successfull") || err.includes("successfull") )  {%>
+    
+                <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <%=err %>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                  </div>
+                  <% } else { %>
+    
+    
+        <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%=err %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
+          <% } %>
+          <% } %>
                 <div class="container border rounded-5 p-5">
                   <div class="row mb-5">
                     <div class="col text-center fs-3">
@@ -137,7 +155,7 @@
                                 </div> -->
 
                     <% var hour=(new Date(manager.date)).getUTCHours(); %>
-                      <% if (hour>= 6 && hour < 10) { %>
+                      <% if (hour>= 0 && hour < 10) { %>
                           <div class="form-floating mb-3">
                             <select id="foodtime" class="form-select selectpicker" name="time" placeholder="foodtime"
                               data-width="auto" required disabled>

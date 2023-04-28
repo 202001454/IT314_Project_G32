@@ -57,7 +57,27 @@
                 </div>
             </div>
                 <div class="col-1 col-lg-0"></div>
+                <% if(err)  {%>
 
+                  <% if(err.includes("Success") || err.includes("success") || err.includes("Successfully") || err.includes("successfully") || err.includes("Successfull") || err.includes("successfull") )  {%>
+          
+                      <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                          <div class="alert alert-success alert-dismissible fade show" role="alert">
+                              <%=err %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                          </div>
+                        </div>
+                        <% } else { %>
+          
+          
+              <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                      <%=err %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                </div>
+                <% } %>
+                <% } %>
 
                 <div class="col-12 col-lg-7 my-5">
                     <div class="container border rounded-5 text-center">
@@ -134,7 +154,7 @@
                   
                             <div class="col-12 col-sm-4">
                               <div class="form-floating mb-3">
-                                <input type="date" class="form-control" id="birthdate" name="date" value="<%= cadet.date.toISOString().slice(0 ,10)%>" placeholder="name@example.com" required>
+                                <input type="date" class="form-control" id="birthdate" name="date" value="<%= cadet.date.toISOString().slice(0 ,10)%>" max="9999-12-31" placeholder="name@example.com" required>
                                 <label for="birthdate">birth date</label>
                               </div>
                             </div>
