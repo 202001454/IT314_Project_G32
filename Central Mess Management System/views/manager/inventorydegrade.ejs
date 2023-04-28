@@ -77,9 +77,9 @@
                   </tr>
                   <tr>
                     <td><a href="/manager/<%= manager.username%>/viewpaymenthistory"
-                            class="list-group-item list-group-item-action">View payment history</a>
+                        class="list-group-item list-group-item-action">View payment history</a>
                     </td>
-                </tr>
+                  </tr>
                   <tr>
                     <td><a href="/manager/<%= manager.username%>/viewpaymenthistorygraph"
                         class="list-group-item list-group-item-action">View Payment Statistics</a>
@@ -96,65 +96,69 @@
             </div>
           </div>
           <div class="col-1 col-md-2"></div>
-          
+
 
           <div class="col-12 col-md-8 col-lg-5 mt-5 py-5">
             <div class="text-center fs-2 mb-5">Welcome <a href="/manager/<%= manager.username%>">
                 <%= manager.fullname%>
               </a></div>
-              <% if(err)  {%>
 
-                <% if(err.includes("Success") || err.includes("success") || err.includes("Successfully") || err.includes("successfully") || err.includes("Successfull") || err.includes("successfull") )  {%>
-        
-                    <div class="container col-md-6 col-xl-4 px-2 rounded-1">
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <%=err %>
-                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                      </div>
-                      <% } else { %>
-        
-        
-            <div class="container col-md-6 col-xl-4 px-2 rounded-1">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <%=err %>
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-              </div>
-              <% } %>
-              <% } %>
-                <div class="container border rounded-5 p-5">
-                  <div class="row mb-5">
-                    <div class="col text-center fs-3">
-                      Remove From Your Inventory.
+            <% if(err) {%>
+
+              <% if(err.includes("Success") || err.includes("success") || err.includes("Successfully") ||
+                err.includes("successfully") || err.includes("Successfull") || err.includes("successfull") ) {%>
+                <div class="container">
+                  <div class="container  px-2 rounded-1 text-center">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                      <%=err %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                   </div>
-
-
-                  <form action="/manager/<%=manager.username%>/inventorydegrade?_method=patch" method="post"
-                    class="mt-4">
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="item-name" name="item" placeholder="something"
-                        required>
-                      <label for="item-name">Item name</label>
-                    </div>
-
-                    <div class="form-floating mb-3">
-                      <input type="number" class="form-control" id="quantity" name="quantity" placeholder="something"
-                        min="0" required>
-                      <label for="quantity">Quantity</label>
-                    </div>
-
-                    <div class="text-center mt-5 text-center">
-                      <button class="btn btn-primary px-3" type="submit">Submit</button>
-                    </div>
-
-
-                  </form>
-
-
-
                 </div>
+                <% } else { %>
+
+                  <div class="container">
+                    <div class="container px-2 rounded-1 text-center">
+                      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <%=err %>
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                    </div>
+                  </div>
+                  <% } %>
+                    <% } %>
+                      <div class="container border rounded-5 p-5">
+                        <div class="row mb-5">
+                          <div class="col text-center fs-3">
+                            Remove From Your Inventory.
+                          </div>
+                        </div>
+
+
+                        <form action="/manager/<%=manager.username%>/inventorydegrade?_method=patch" method="post"
+                          class="mt-4">
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="item-name" name="item" placeholder="something"
+                              required>
+                            <label for="item-name">Item name</label>
+                          </div>
+
+                          <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="quantity" name="quantity"
+                              placeholder="something" min="0" required>
+                            <label for="quantity">Quantity</label>
+                          </div>
+
+                          <div class="text-center mt-5 text-center">
+                            <button class="btn btn-primary px-3" type="submit">Submit</button>
+                          </div>
+
+
+                        </form>
+
+
+
+                      </div>
           </div>
 
 
