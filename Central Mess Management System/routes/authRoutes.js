@@ -90,6 +90,9 @@ router.delete('/manager/:username/deleteuser', requireAuth, authController.manag
 router.get('/manager/:username/viewpaymenthistorygraph', requireAuth, authController.manager_paymenthistorygraph_get);
 router.post('/manager/:username/viewpaymenthistorygraph', requireAuth, authController.manager_paymenthistorygraph_post);
 
+router.get('/manager/:username/viewpaymenthistory',requireAuth, authController.manager_viewpaymenthistory_get);
+router.post('/manager/:username/viewpaymenthistory',requireAuth, authController.manager_viewpaymenthistory_post);
+
 router.get('/cadet/:username/view' , requireAuth, authController.cadet_viewprofile_get);
 router.get('/cadet/:username/changepassword', requireAuth, authController.cadet_changepassword_get);
 router.patch('/cadet/:username/changepassword', requireAuth, authController.cadet_changepassword_patch);

@@ -1,0 +1,217 @@
+<%- include('../partials/header_manager') %>
+
+
+    <div id="wrapper">
+        <%- include('../partials/nav_home_manager') %>
+
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col-12 col-lg-3">
+                        <div class="list-group text-center make-sticky ">
+
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <div class="profile my-4 table-striped-columns">
+                                            <div class="mb-3"><img src="/photos/person_logo.svg" alt="person"
+                                                    width="20%"></div>
+                                            <div class="fs-3">
+                                                <%= manager.fullname%>
+                                            </div>
+                                            <div class="fs-5">Manager</div>
+                                        </div>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>"
+                                                class="list-group-item list-group-item-action">Home</a></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/view"
+                                                class="list-group-item list-group-item-action">View
+                                                profile</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/edit"
+                                                class="list-group-item list-group-item-action">Edit
+                                                Profile</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/changepassword"
+                                                class="list-group-item list-group-item-action">Change
+                                                password</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/addpayment"
+                                                class="list-group-item list-group-item-action">Add Payment</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/viewfeedback"
+                                                class="list-group-item list-group-item-action">View Feedback</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/viewinventory"
+                                                class="list-group-item list-group-item-action">View inventory</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/inventoryupgrade"
+                                                class="list-group-item list-group-item-action">Edit inventory</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/inventorydegrade"
+                                                class="list-group-item list-group-item-action">Remove inventory</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/managercheck"
+                                                class="list-group-item list-group-item-action">Customer checklist</a>
+                                        </td>
+                                    </tr>
+                                    <tr class="table-active">
+                                        <td><a href="/manager/<%= manager.username%>/viewpaymenthistory"
+                                                class="list-group-item list-group-item-action">View payment history</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/viewpaymenthistorygraph"
+                                                class="list-group-item list-group-item-action">View Payment
+                                                Statistics</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="/manager/<%= manager.username%>/deleteuser"
+                                                class="list-group-item list-group-item-action">Remove Customer/cadet</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-9">
+
+                        <div class="container text-center fs-2 my-5">
+                            Welcome <a href="/manager/<%= manager.username%>">
+                                <%= manager.fullname%>
+                            </a>, </br> <span class="fs-3"></span>
+                        </div>
+                        <% if(err) {%>
+
+                            <% if(err.includes("Success") || err.includes("success") || err.includes("Successfully") ||
+                                err.includes("successfully") || err.includes("Successfull") ||
+                                err.includes("successfull") ) {%>
+
+                                <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <%=err %>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                    </div>
+                                </div>
+                                <% } else { %>
+
+
+                                    <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <%=err %>
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                        <% } %>
+                                            <div class="container border rounded-5 p-5">
+                                                <div class="row mb-5">
+                                                    <div class="col text-center fs-3">
+                                                        Here are the recent payment history.
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row mb-4">
+                                                    <div class="col-sm-1"></div>
+                                                    <div class="col-12  col-sm-5 mb-3 mb-sm-0">
+                                                        <a class="btn btn-primary"
+                                                            href="/manager/<%= manager.username%>/viewpaymenthistory"
+                                                            role="button">View all</a>
+                                                    </div>
+                                                    <div class="col-0 col-sm-1"></div>
+                                                    <div class="col-12 col-sm-4">
+                                                        <form
+                                                            action="/manager/<%= manager.username%>/viewpaymenthistory"
+                                                            method="post">
+                                                            <div class="row">
+                                                                <div class="col-9">
+
+                                                                    <div class="form-floating ">
+                                                                        <input type="text" class="form-control"
+                                                                            id="username" name="username"
+                                                                            placeholder="something" required>
+                                                                        <label for="username">User name</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-1">
+                                                                    <div class="text-center">
+                                                                        <button class="btn btn-primary mt-2"
+                                                                            type="submit">Apply</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+
+                                                </div>
+
+
+                                                <table class="table text-center table-hover border">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Username</th>
+                                                            <th scope="col">Amount</th>
+                                                            <th scope="col">start date</th>
+                                                            <th scope="col">end date</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        <%if(paymenthistory){%>
+                                                            <% for(const payment of paymenthistory) {%>
+                                                                <tr>
+                                                                    <td>
+                                                                        <%= payment.username %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= payment.amount %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= payment.startdate.toLocaleDateString() %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= payment.enddate.toLocaleDateString() %>
+                                                                    </td>
+
+                                                                </tr>
+                                                                <%}%>
+                                                                    <%}%>
+                                                    </tbody>
+                                                </table>
+
+
+                                            </div>
+                    </div>
+
+                    <div class="col-1 col-lg-0"></div>
+                </div>
+
+            </div>
+    </div>
+    </div>
+
+
+    <%- include('../partials/footer') %>
