@@ -3,15 +3,32 @@
 
 <div id="wrapper">
     <%- include('./partials/nav') %>
+    <% if(err) {%>
 
-    <% if(err)  {%>
-        <div class="container col-md-6 col-xl-4 px-2 rounded-1">
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <%=err %>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <% if(err.includes("Success") || err.includes("success") || err.includes("Successfully") ||
+            err.includes("successfully") || err.includes("Successfull") || err.includes("successfull") )
+            {%>
+
+            <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <%=err %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                </div>
             </div>
-          </div>
-          <% } %>
+            <% } else { %>
+
+
+                <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <%=err %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                    </div>
+                </div>
+                <% } %>
+                    <% } %>
+
 
     <div class="container bg-dark mt-3 col-md-6 col-xl-6 px-5 py-4 mb-5 rounded-5">
         <div class="text-center fs-2 mt-4 text-light">SignUp</div>

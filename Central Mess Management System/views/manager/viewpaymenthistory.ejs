@@ -107,7 +107,7 @@
                                 err.includes("successfully") || err.includes("Successfull") ||
                                 err.includes("successfull") ) {%>
 
-                                    <div class="row mb-3">
+                                <div class="container col-md-6 col-xl-4 px-2 rounded-1">
                                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                                         <%=err %>
                                             <button type="button" class="btn-close" data-bs-dismiss="alert"
@@ -117,7 +117,7 @@
                                 <% } else { %>
 
 
-                                    <div class="row mb-3">
+                                    <div class="container col-md-6 col-xl-4 px-2 rounded-1">
                                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                             <%=err %>
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
@@ -137,7 +137,9 @@
                                                 <div class="row mb-4">
                                                     <div class="col-sm-1"></div>
                                                     <div class="col-12  col-sm-5 mb-3 mb-sm-0">
-                                                        <a class="btn btn-primary" href="/manager/<%= manager.username%>/viewpaymenthistory" role="button">View all</a>
+                                                        <a class="btn btn-primary"
+                                                            href="/manager/<%= manager.username%>/viewpaymenthistory"
+                                                            role="button">View all</a>
                                                     </div>
                                                     <div class="col-0 col-sm-1"></div>
                                                     <div class="col-12 col-sm-4">
