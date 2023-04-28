@@ -76,6 +76,11 @@
                     </td>
                   </tr>
                   <tr>
+                    <td><a href="/manager/<%= manager.username%>/viewpaymenthistory"
+                            class="list-group-item list-group-item-action">View payment history</a>
+                    </td>
+                </tr>
+                  <tr>
                     <td><a href="/manager/<%= manager.username%>/viewpaymenthistorygraph"
                         class="list-group-item list-group-item-action">View Payment Statistics</a>
                     </td>
@@ -97,18 +102,31 @@
             <div class="text-center fs-2 mb-5">Welcome <a href="/manager/<%= manager.username%>">
                 <%= manager.fullname%>
               </a></div>
-            <% if(err) {%>
-              <div class="container px-2 rounded-1">
+              <% if(err)  {%>
+
+                <% if(err.includes("Success") || err.includes("success") || err.includes("Successfully") || err.includes("successfully") || err.includes("Successfull") || err.includes("successfull") )  {%>
+        
+                    <div class="container col-md-6 col-xl-4 px-2 rounded-1">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <%=err %>
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                      </div>
+                      <% } else { %>
+        
+        
+            <div class="container col-md-6 col-xl-4 px-2 rounded-1">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                  <%=err %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <%=err %>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               </div>
+              <% } %>
               <% } %>
                 <div class="container border rounded-5 p-5">
                   <div class="row mb-5">
                     <div class="col text-center fs-3">
-                      Add Payment.
+                      Add Payment
                     </div>
                   </div>
 
@@ -127,14 +145,14 @@
                     </div>
 
                     <div class="form-floating mb-3">
-                      <input type="date" class="form-control" id="date" name="startdate"
-                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something" required>
-                      <label for="date">Start Date</label>
+                      <input type="date" class="form-control" id="birthdate" name="startdate"
+                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something" max="9999-12-31" required>
+                      <label for="birthdate">Start Date</label>
                     </div>
 
                     <div class="form-floating mb-3">
                       <input type="date" class="form-control" id="date" name="enddate"
-                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something" required>
+                        value="<%= manager.date.toISOString().slice(0 ,10)%>" placeholder="something" max="9999-12-31" required>
                       <label for="date">End Date</label>
                     </div>
 
